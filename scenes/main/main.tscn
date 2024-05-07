@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://clmgo8ks4p6nq"]
+[gd_scene load_steps=11 format=3 uid="uid://clmgo8ks4p6nq"]
 
 [ext_resource type="Script" path="res://scripts/main/main.gd" id="1_gki4g"]
 [ext_resource type="Texture2D" uid="uid://lfd7f65wc5wk" path="res://V2PlacehoderGraphics/ButtonBoarders.png" id="2_0cnop"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://ct4ih24uetd5l" path="res://V2PlacehoderGraphics/Logo.png" id="4_jhlw2"]
 [ext_resource type="Texture2D" uid="uid://bnn0gkrylq35w" path="res://V2PlacehoderGraphics/BlankWideLarge.png" id="5_ynt45"]
 [ext_resource type="Script" path="res://scripts/ui/startButton.gd" id="6_uis1v"]
+[ext_resource type="FontFile" uid="uid://dj7526p1lgksr" path="res://fonts/First-Coffee.ttf" id="7_ac7ua"]
 [ext_resource type="Script" path="res://scripts/ui/settingsButton.gd" id="7_ubnra"]
 [ext_resource type="Script" path="res://scripts/ui/quitButton.gd" id="8_3fxlc"]
 [ext_resource type="Script" path="res://scripts/ui/profileButton.gd" id="9_qxaep"]
@@ -37,6 +38,15 @@ scale = Vector2(1.4269, 0.859808)
 texture_normal = ExtResource("3_t8lyg")
 script = ExtResource("6_uis1v")
 
+[node name="Label" type="Label" parent="ButtonBoarders/startButton"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+scale = Vector2(16.4558, 10.8013)
+theme_override_fonts/font = ExtResource("7_ac7ua")
+text = "Play"
+horizontal_alignment = 1
+
 [node name="settingsButton" type="TextureButton" parent="ButtonBoarders"]
 offset_left = -516.667
 offset_top = 203.333
@@ -46,6 +56,14 @@ scale = Vector2(1.4269, 0.859808)
 texture_normal = ExtResource("3_t8lyg")
 script = ExtResource("7_ubnra")
 
+[node name="Label" type="Label" parent="ButtonBoarders/settingsButton"]
+offset_right = 40.0
+offset_bottom = 23.0
+scale = Vector2(10.4943, 10.8013)
+theme_override_fonts/font = ExtResource("7_ac7ua")
+text = "Settings"
+horizontal_alignment = 1
+
 [node name="quitButton" type="TextureButton" parent="ButtonBoarders"]
 offset_left = -516.667
 offset_top = 460.0
@@ -54,6 +72,14 @@ offset_bottom = 709.0
 scale = Vector2(1.4269, 0.859808)
 texture_normal = ExtResource("3_t8lyg")
 script = ExtResource("8_3fxlc")
+
+[node name="Label" type="Label" parent="ButtonBoarders/quitButton"]
+offset_right = 40.0
+offset_bottom = 23.0
+scale = Vector2(16.4558, 10.8013)
+theme_override_fonts/font = ExtResource("7_ac7ua")
+text = "Quit"
+horizontal_alignment = 1
 
 [node name="profileButton" type="TextureButton" parent="ButtonBoarders"]
 offset_left = -1596.67
