@@ -40,10 +40,13 @@ script = ExtResource("6_uis1v")
 
 [node name="Label" type="Label" parent="ButtonBoarders/startButton"]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-scale = Vector2(16.4558, 10.8013)
+offset_left = 100.451
+offset_top = 0.000118312
+offset_right = 228.451
+offset_bottom = 84.0001
+scale = Vector2(3.58182, 2.94979)
 theme_override_fonts/font = ExtResource("7_ac7ua")
+theme_override_font_sizes/font_size = 69
 text = "Play"
 horizontal_alignment = 1
 
@@ -57,10 +60,13 @@ texture_normal = ExtResource("3_t8lyg")
 script = ExtResource("7_ubnra")
 
 [node name="Label" type="Label" parent="ButtonBoarders/settingsButton"]
-offset_right = 40.0
-offset_bottom = 23.0
-scale = Vector2(10.4943, 10.8013)
+offset_left = 4.67238
+offset_top = 27.1382
+offset_right = 275.672
+offset_bottom = 111.138
+scale = Vector2(2.42593, 2.47984)
 theme_override_fonts/font = ExtResource("7_ac7ua")
+theme_override_font_sizes/font_size = 69
 text = "Settings"
 horizontal_alignment = 1
 
@@ -74,11 +80,15 @@ texture_normal = ExtResource("3_t8lyg")
 script = ExtResource("8_3fxlc")
 
 [node name="Label" type="Label" parent="ButtonBoarders/quitButton"]
-offset_right = 40.0
-offset_bottom = 23.0
-scale = Vector2(16.4558, 10.8013)
+offset_left = 100.451
+offset_top = 0.000118312
+offset_right = 228.451
+offset_bottom = 84.0001
+scale = Vector2(3.58182, 2.94979)
 theme_override_fonts/font = ExtResource("7_ac7ua")
-text = "Quit"
+theme_override_font_sizes/font_size = 69
+text = "Quit
+"
 horizontal_alignment = 1
 
 [node name="profileButton" type="TextureButton" parent="ButtonBoarders"]
