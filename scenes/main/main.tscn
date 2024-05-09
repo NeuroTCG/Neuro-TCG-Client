@@ -1,12 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://clmgo8ks4p6nq"]
+[gd_scene load_steps=9 format=3 uid="uid://clmgo8ks4p6nq"]
 
 [ext_resource type="Script" path="res://scripts/main/main.gd" id="1_gki4g"]
 [ext_resource type="Texture2D" uid="uid://lfd7f65wc5wk" path="res://V2PlacehoderGraphics/ButtonBoarders.png" id="2_0cnop"]
-[ext_resource type="Texture2D" uid="uid://hs8g6r0yciql" path="res://V2PlacehoderGraphics/BlankWideMedium.png" id="3_t8lyg"]
+[ext_resource type="Theme" uid="uid://bc2o2wqjkqbbe" path="res://Themes/Default-UI.tres" id="2_5g6gd"]
 [ext_resource type="Texture2D" uid="uid://ct4ih24uetd5l" path="res://V2PlacehoderGraphics/Logo.png" id="4_jhlw2"]
-[ext_resource type="Texture2D" uid="uid://bnn0gkrylq35w" path="res://V2PlacehoderGraphics/BlankWideLarge.png" id="5_ynt45"]
 [ext_resource type="Script" path="res://scripts/ui/startButton.gd" id="6_uis1v"]
-[ext_resource type="FontFile" uid="uid://dj7526p1lgksr" path="res://fonts/First-Coffee.ttf" id="7_ac7ua"]
 [ext_resource type="Script" path="res://scripts/ui/settingsButton.gd" id="7_ubnra"]
 [ext_resource type="Script" path="res://scripts/ui/quitButton.gd" id="8_3fxlc"]
 [ext_resource type="Script" path="res://scripts/ui/profileButton.gd" id="9_qxaep"]
@@ -14,88 +12,94 @@
 [node name="Main" type="Node2D"]
 script = ExtResource("1_gki4g")
 
-[node name="ButtonBoarders" type="Sprite2D" parent="."]
-position = Vector2(576, 324)
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 422.0
+offset_top = 304.0
+offset_right = 462.0
+offset_bottom = 344.0
+theme = ExtResource("2_5g6gd")
+
+[node name="ButtonBoarders" type="TextureRect" parent="UI"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 3.85
+anchor_top = 0.5
+anchor_right = 3.85
+anchor_bottom = 0.5
+offset_left = -576.0
+offset_top = -324.0
+offset_right = 3264.0
+offset_bottom = 1836.0
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("2_0cnop")
 
-[node name="BlankWideLarge2" type="Sprite2D" parent="ButtonBoarders"]
-position = Vector2(1078.33, 296.667)
-scale = Vector2(1.61145, 1.34579)
-texture = ExtResource("5_ynt45")
-
-[node name="Logo" type="Sprite2D" parent="ButtonBoarders"]
-position = Vector2(-46.6667, -513.333)
+[node name="Logo" type="TextureRect" parent="UI/ButtonBoarders"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -560.0
+offset_top = -813.333
+offset_right = 265.0
+offset_bottom = -326.333
+grow_horizontal = 2
+grow_vertical = 2
 scale = Vector2(1.3596, 1.04381)
 texture = ExtResource("4_jhlw2")
 
-[node name="startButton" type="TextureButton" parent="ButtonBoarders"]
-offset_left = -516.667
-offset_top = -56.6668
-offset_right = 148.333
-offset_bottom = 192.333
-scale = Vector2(1.4269, 0.859808)
-texture_normal = ExtResource("3_t8lyg")
+[node name="Profile-Button" type="Button" parent="UI/ButtonBoarders"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -1680.0
+offset_top = -40.0
+offset_right = -720.0
+offset_bottom = 680.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 170
+text = "You"
+script = ExtResource("9_qxaep")
+
+[node name="Panel" type="Panel" parent="UI/ButtonBoarders"]
+layout_mode = 0
+offset_left = 2640.0
+offset_top = 1040.0
+offset_right = 3600.0
+offset_bottom = 1760.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/ButtonBoarders"]
+layout_mode = 0
+offset_left = 1360.0
+offset_top = 1040.0
+offset_right = 2480.0
+offset_bottom = 1760.0
+
+[node name="Play-Button" type="Button" parent="UI/ButtonBoarders/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 2
+theme_override_font_sizes/font_size = 170
+text = "Play"
 script = ExtResource("6_uis1v")
 
-[node name="Label" type="Label" parent="ButtonBoarders/startButton"]
-layout_mode = 0
-offset_left = 100.451
-offset_top = 0.000118312
-offset_right = 228.451
-offset_bottom = 84.0001
-scale = Vector2(3.58182, 2.94979)
-theme_override_fonts/font = ExtResource("7_ac7ua")
-theme_override_font_sizes/font_size = 69
-text = "Play"
-horizontal_alignment = 1
-
-[node name="settingsButton" type="TextureButton" parent="ButtonBoarders"]
-offset_left = -516.667
-offset_top = 203.333
-offset_right = 148.333
-offset_bottom = 452.333
-scale = Vector2(1.4269, 0.859808)
-texture_normal = ExtResource("3_t8lyg")
+[node name="Settings-Button" type="Button" parent="UI/ButtonBoarders/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+theme_override_font_sizes/font_size = 170
+text = "Settings
+"
 script = ExtResource("7_ubnra")
 
-[node name="Label" type="Label" parent="ButtonBoarders/settingsButton"]
-offset_left = 4.67238
-offset_top = 27.1382
-offset_right = 275.672
-offset_bottom = 111.138
-scale = Vector2(2.42593, 2.47984)
-theme_override_fonts/font = ExtResource("7_ac7ua")
-theme_override_font_sizes/font_size = 69
-text = "Settings"
-horizontal_alignment = 1
-
-[node name="quitButton" type="TextureButton" parent="ButtonBoarders"]
-offset_left = -516.667
-offset_top = 460.0
-offset_right = 148.333
-offset_bottom = 709.0
-scale = Vector2(1.4269, 0.859808)
-texture_normal = ExtResource("3_t8lyg")
+[node name="Quit-Button" type="Button" parent="UI/ButtonBoarders/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 10
+theme_override_font_sizes/font_size = 170
+text = "Quit"
 script = ExtResource("8_3fxlc")
-
-[node name="Label" type="Label" parent="ButtonBoarders/quitButton"]
-offset_left = 100.451
-offset_top = 0.000118312
-offset_right = 228.451
-offset_bottom = 84.0001
-scale = Vector2(3.58182, 2.94979)
-theme_override_fonts/font = ExtResource("7_ac7ua")
-theme_override_font_sizes/font_size = 69
-text = "Quit
-"
-horizontal_alignment = 1
-
-[node name="profileButton" type="TextureButton" parent="ButtonBoarders"]
-offset_left = -1596.67
-offset_top = -60.0001
-offset_right = -932.667
-offset_bottom = 475.0
-scale = Vector2(1.45384, 1.33231)
-texture_normal = ExtResource("5_ynt45")
-script = ExtResource("9_qxaep")

@@ -1,0 +1,36 @@
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://bc2o2wqjkqbbe"]
+
+[ext_resource type="FontFile" uid="uid://dj7526p1lgksr" path="res://fonts/First-Coffee.ttf" id="1_bisqp"]
+[ext_resource type="Texture2D" uid="uid://bnn0gkrylq35w" path="res://V2PlacehoderGraphics/BlankWideLarge.png" id="2_yvt3n"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_njawh"]
+texture = ExtResource("2_yvt3n")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_iu7s7"]
+texture = ExtResource("2_yvt3n")
+
+[resource]
+Button/colors/font_color = Color(1, 1, 1, 1)
+Button/colors/font_disabled_color = Color(0, 0, 0, 1)
+Button/colors/font_focus_color = Color(0, 0, 0, 1)
+Button/colors/font_hover_color = Color(0, 0, 0, 1)
+Button/colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+Button/colors/font_outline_color = Color(0, 0, 0, 1)
+Button/colors/font_pressed_color = Color(0, 0, 0, 1)
+Button/colors/icon_disabled_color = Color(0, 0, 0, 1)
+Button/colors/icon_focus_color = Color(0, 0, 0, 1)
+Button/colors/icon_hover_color = Color(0, 0, 0, 1)
+Button/colors/icon_hover_pressed_color = Color(0, 0, 0, 1)
+Button/colors/icon_normal_color = Color(0, 0, 0, 1)
+Button/colors/icon_pressed_color = Color(0, 0, 0, 1)
+Button/constants/h_separation = 0
+Button/constants/icon_max_width = 0
+Button/constants/outline_size = 0
+Button/font_sizes/font_size = 16
+Button/fonts/font = ExtResource("1_bisqp")
+Button/styles/disabled = null
+Button/styles/focus = null
+Button/styles/hover = null
+Button/styles/normal = SubResource("StyleBoxTexture_njawh")
+Button/styles/pressed = null
+Panel/styles/panel = SubResource("StyleBoxTexture_iu7s7")

@@ -1,3 +1,3 @@
 extends Node
 
-var client: Client 
+var client: Client

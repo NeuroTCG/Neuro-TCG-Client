@@ -1,4 +1,4 @@
-extends TextureButton
+extends Button
 class_name ButtonClickHandler
 
 func onClick(action: int):
