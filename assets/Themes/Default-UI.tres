@@ -1,7 +1,7 @@
 [gd_resource type="Theme" load_steps=5 format=3 uid="uid://bc2o2wqjkqbbe"]
 
 [ext_resource type="FontFile" uid="uid://dj7526p1lgksr" path="res://fonts/First-Coffee.ttf" id="1_bisqp"]
-[ext_resource type="Texture2D" uid="uid://bnn0gkrylq35w" path="res://V2PlacehoderGraphics/BlankWideLarge.png" id="2_yvt3n"]
+[ext_resource type="Texture2D" uid="uid://bnn0gkrylq35w" path="res://assets/V2PlacehoderGraphics/BlankWideLarge.png" id="2_yvt3n"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_njawh"]
 texture = ExtResource("2_yvt3n")

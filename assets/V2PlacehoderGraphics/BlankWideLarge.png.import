@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://hs8g6r0yciql"
-path="res://.godot/imported/BlankWideMedium.png-0f473fa72e0be6ac622194e4f86eceda.ctex"
+uid="uid://bnn0gkrylq35w"
+path="res://.godot/imported/BlankWideLarge.png-1371ae65f5c9886fdf99270c09141535.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://V2PlacehoderGraphics/BlankWideMedium.png"
-dest_files=["res://.godot/imported/BlankWideMedium.png-0f473fa72e0be6ac622194e4f86eceda.ctex"]
+source_file="res://assets/V2PlacehoderGraphics/BlankWideLarge.png"
+dest_files=["res://.godot/imported/BlankWideLarge.png-1371ae65f5c9886fdf99270c09141535.ctex"]
 
 [params]
 

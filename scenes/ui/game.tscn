@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://b6dy802mg5uvg"]
+
+[ext_resource type="Script" path="res://scripts/ui/game.gd" id="1_06elg"]
+[ext_resource type="Theme" uid="uid://bc2o2wqjkqbbe" path="res://assets/Themes/Default-UI.tres" id="2_skgg2"]
+
+[node name="Game" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_06elg")
+
+[node name="ReturnButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 51.0
+offset_top = 464.0
+offset_right = 291.0
+offset_bottom = 555.0
+theme = ExtResource("2_skgg2")
+theme_override_font_sizes/font_size = 75
+text = "Return"
+
+[connection signal="pressed" from="ReturnButton" to="." method="_on_return_button_pressed"]

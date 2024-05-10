@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bp8qws68ye5xd"
-path="res://.godot/imported/RamStickCut.png-9e38a2cfa732bd0948b3e665a643a727.ctex"
+uid="uid://dev6bykgymvs8"
+path="res://.godot/imported/V2BlankWide.png-a98497ef7b0920bd84995732b0b1b7c3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://V2PlacehoderGraphics/RamStickCut.png"
-dest_files=["res://.godot/imported/RamStickCut.png-9e38a2cfa732bd0948b3e665a643a727.ctex"]
+source_file="res://assets/V2PlacehoderGraphics/V2BlankWide.png"
+dest_files=["res://.godot/imported/V2BlankWide.png-a98497ef7b0920bd84995732b0b1b7c3.ctex"]
 
 [params]
 

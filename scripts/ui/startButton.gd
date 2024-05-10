@@ -7,4 +7,5 @@ func _ready() -> void:
 
 func _on_pressed():
 	# clickHandler.onClick(0)
-	print("starting the game not implemented")
+	
+	

@@ -1,5 +1,7 @@
 extends Node
 
+signal do_something
+
 var client: Client
 
 class Command:
@@ -27,3 +29,11 @@ func send_command(command: String, arguments: Array[String]):
 	assert(command_exists, "Command '%s' does not exist" % command)
 
 	client.ws.send_text(",".join([command] + arguments))
+
+func receive_command(msg: String): 
+	# msg is the unformated string recieved from the server. Format to get the command
+	
+	# You can use the following to have the client do something
+	# Connect this signal to any function that does the thing  
+	# See example in the game scene 
+	do_something.emit() 

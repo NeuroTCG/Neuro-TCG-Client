@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://lfd7f65wc5wk"
-path="res://.godot/imported/ButtonBoarders.png-c8e35911067e34eae190c7b9495e0118.ctex"
+uid="uid://bp8qws68ye5xd"
+path="res://.godot/imported/RamStickCut.png-5bc45c70af083e9da869e87cb3c2a04e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://V2PlacehoderGraphics/ButtonBoarders.png"
-dest_files=["res://.godot/imported/ButtonBoarders.png-c8e35911067e34eae190c7b9495e0118.ctex"]
+source_file="res://assets/V2PlacehoderGraphics/RamStickCut.png"
+dest_files=["res://.godot/imported/RamStickCut.png-5bc45c70af083e9da869e87cb3c2a04e.ctex"]
 
 [params]
 

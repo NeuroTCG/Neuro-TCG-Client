@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bnn0gkrylq35w"
-path="res://.godot/imported/BlankWideLarge.png-a11cb3498fcf328e702aaee8fc9a0b5a.ctex"
+uid="uid://lfd7f65wc5wk"
+path="res://.godot/imported/ButtonBoarders.png-8348bcef117c98481cc936acd80d7db0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://V2PlacehoderGraphics/BlankWideLarge.png"
-dest_files=["res://.godot/imported/BlankWideLarge.png-a11cb3498fcf328e702aaee8fc9a0b5a.ctex"]
+source_file="res://assets/V2PlacehoderGraphics/ButtonBoarders.png"
+dest_files=["res://.godot/imported/ButtonBoarders.png-8348bcef117c98481cc936acd80d7db0.ctex"]
 
 [params]
 

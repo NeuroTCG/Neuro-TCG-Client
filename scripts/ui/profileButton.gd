@@ -1,6 +1,6 @@
 extends Button 
 
-var clickHandler: ButtonClickHandler
+var clickHandler
 
 func _ready() -> void:
 	pressed.connect(_on_pressed) # You can also do this directly from editor.

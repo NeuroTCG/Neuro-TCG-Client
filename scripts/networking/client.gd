@@ -17,16 +17,16 @@ func wait_until_connection_opened():
 		if timeout_timer.time_left == 0:
 			return
 
-func is_connection_valid() -> bool:
-	if ws.get_ready_state() == WebSocketPeer.STATE_OPEN:
-		var error = ws.send_text("Test msg!")
-		if error == OK:
-			print("Connection seems OK (server feedback yet to be tested)")
-			return true
-		else:
-			print("ERROR: Connection failed!")
-			
-	return false
+#func is_connection_valid() -> bool:
+	#if ws.get_ready_state() == WebSocketPeer.STATE_OPEN:
+		#var error = ws.send_text("Test")
+		#if error == OK:
+			#print("Connection seems OK (server feedback yet to be tested)")
+			#return true
+		#else:
+			#print("ERROR: Connection failed!")
+			#
+	#return false
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
@@ -50,6 +50,6 @@ func _process(_delta):
 func parse_msg() -> bool:
 	var parsed = ws.get_packet().get_string_from_utf8()
 	
-	print(parsed)
+	User.receive_command(parsed)
 	
 	return true
