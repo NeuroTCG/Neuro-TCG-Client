@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://b6dy802mg5uvg"]
+[gd_scene load_steps=3 format=3 uid="uid://hg2daahu5cai"]
 
 [ext_resource type="Script" path="res://scripts/ui/game.gd" id="1_06elg"]
 [ext_resource type="Theme" uid="uid://bc2o2wqjkqbbe" path="res://assets/Themes/Default-UI.tres" id="2_skgg2"]
@@ -10,16 +10,38 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_skgg2")
 script = ExtResource("1_06elg")
 
-[node name="ReturnButton" type="Button" parent="."]
-layout_mode = 0
-offset_left = 51.0
-offset_top = 464.0
-offset_right = 291.0
-offset_bottom = 555.0
-theme = ExtResource("2_skgg2")
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+
+[node name="Panel" type="Panel" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Spacer" type="Control" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="ReturnButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
 theme_override_font_sizes/font_size = 75
 text = "Return"
 
-[connection signal="pressed" from="ReturnButton" to="." method="_on_return_button_pressed"]
+[node name="Panel2" type="Panel" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_vertical = 8
+
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/ReturnButton" to="." method="_on_return_button_pressed"]
