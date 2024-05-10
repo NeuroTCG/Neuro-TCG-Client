@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://c8hyuvt7sklqp"]
+[gd_scene load_steps=4 format=3 uid="uid://c8hyuvt7sklqp"]
 
 [ext_resource type="Theme" uid="uid://bc2o2wqjkqbbe" path="res://assets/Themes/Default-UI.tres" id="1_4sm8r"]
 [ext_resource type="Script" path="res://scripts/ui/settings.gd" id="1_vjma1"]
+[ext_resource type="Texture2D" uid="uid://lfd7f65wc5wk" path="res://assets/V2PlacehoderGraphics/ButtonBoarders.png" id="3_eumim"]
 
 [node name="Settings" type="Control"]
 layout_mode = 3
@@ -12,14 +13,23 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_vjma1")
 
-[node name="ReturnButton" type="Button" parent="."]
+[node name="ButtonBoarders" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+offset_right = 3840.0
+offset_bottom = 2160.0
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("3_eumim")
+
+[node name="ReturnButton" type="Button" parent="ButtonBoarders"]
 layout_mode = 0
-offset_left = 59.0
-offset_top = 496.0
-offset_right = 299.0
-offset_bottom = 587.0
+offset_left = 183.333
+offset_top = 1670.0
+offset_right = 423.333
+offset_bottom = 1761.0
+scale = Vector2(2.49512, 2.69929)
 theme = ExtResource("1_4sm8r")
 theme_override_font_sizes/font_size = 75
 text = "Return"
 
-[connection signal="pressed" from="ReturnButton" to="." method="_on_return_button_pressed"]
+[connection signal="pressed" from="ButtonBoarders/ReturnButton" to="." method="_on_return_button_pressed"]
