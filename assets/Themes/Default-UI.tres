@@ -1,13 +1,14 @@
-[gd_resource type="Theme" load_steps=5 format=3 uid="uid://bc2o2wqjkqbbe"]
+[gd_resource type="Theme" load_steps=6 format=3 uid="uid://bc2o2wqjkqbbe"]
 
 [ext_resource type="FontFile" uid="uid://dj7526p1lgksr" path="res://fonts/First-Coffee.ttf" id="1_bisqp"]
-[ext_resource type="Texture2D" uid="uid://bnn0gkrylq35w" path="res://assets/V2PlacehoderGraphics/BlankWideLarge.png" id="2_yvt3n"]
+[ext_resource type="Texture2D" uid="uid://c26tbr6u40unn" path="res://assets/V2PlacehoderGraphics/Button.png" id="2_lm6sm"]
+[ext_resource type="Texture2D" uid="uid://dev6bykgymvs8" path="res://assets/V2PlacehoderGraphics/Panel.png" id="3_110vl"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_njawh"]
-texture = ExtResource("2_yvt3n")
+texture = ExtResource("2_lm6sm")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_iu7s7"]
-texture = ExtResource("2_yvt3n")
+texture = ExtResource("3_110vl")
 
 [resource]
 Button/colors/font_color = Color(1, 1, 1, 1)
