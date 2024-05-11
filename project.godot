@@ -19,8 +19,14 @@ config/icon="res://icon.svg"
 
 User="*res://scripts/networking/user.gd"
 Global="*res://scripts/global/global.gd"
+AudioSystem="*res://scripts/global/audio_system.gd"
+SavedSettings="*res://scripts/global/saved_settings.gd"
 
 [display]
 
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+
+[gui]
+
+theme/custom="res://assets/Themes/Default-UI.tres"

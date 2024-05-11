@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://cnf8r80mqe73u"]
+
+[ext_resource type="Script" path="res://scripts/ui/music_slider.gd" id="1_eijqd"]
+
+[node name="MusicSlider" type="HSlider"]
+custom_minimum_size = Vector2(350, 0)
+max_value = 1.0
+step = 0.001
+value = 1.0
+script = ExtResource("1_eijqd")
