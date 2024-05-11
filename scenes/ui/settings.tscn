@@ -119,9 +119,14 @@ bus_name = "soundfx"
 layout_mode = 2
 size_flags_vertical = 8
 
-[node name="ReturnButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="Padding" type="Label" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 75
+text = "      "
+
+[node name="ReturnButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(175, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 42
 text = "Return"
 
 [node name="Panel2" type="Panel" parent="VBoxContainer"]
