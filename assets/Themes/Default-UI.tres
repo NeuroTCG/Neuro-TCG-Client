@@ -33,4 +33,5 @@ Button/styles/focus = null
 Button/styles/hover = null
 Button/styles/normal = SubResource("StyleBoxTexture_njawh")
 Button/styles/pressed = null
+Label/fonts/font = ExtResource("1_bisqp")
 Panel/styles/panel = SubResource("StyleBoxTexture_iu7s7")
