@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://ddfx7ajnnbf3l"
+path="res://.godot/imported/NeuroSama-Never gonna give you up.ogg-0593b3af276f3036cd6337675f6dffe0.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/music/NeuroSama-Never gonna give you up.ogg"
+dest_files=["res://.godot/imported/NeuroSama-Never gonna give you up.ogg-0593b3af276f3036cd6337675f6dffe0.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
