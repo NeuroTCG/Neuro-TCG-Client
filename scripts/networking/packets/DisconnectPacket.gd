@@ -10,9 +10,9 @@ class Reason:
 
 var message: String
 var reason: String
-var type: String = PacketType.Disconnect
 
 func _init(reason_: String, message_: String):
+	super(PacketType.Disconnect)
 	reason = reason_
 	message = message_
 

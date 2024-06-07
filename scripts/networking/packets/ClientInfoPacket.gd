@@ -4,9 +4,9 @@ class_name ClientInfoPacket
 var client_name: String
 var client_version: String
 var protocol_version: int
-var type: String = PacketType.ClientInfo
 
 func _init(client_name_: String, client_version_: String, protocol_version_: int):
+	super(PacketType.ClientInfo)
 	assert(len(client_name_) <= 25)
 	assert(len(client_version_) <= 40)
 	client_name = client_name_

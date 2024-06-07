@@ -1,10 +1,8 @@
 extends Packet
 class_name ClientInfoAcceptPacket
 
-var type: String = PacketType.ClientInfoAccept
-
 func _init():
-	pass
+	super(PacketType.ClientInfoAccept)
 
 func to_dict() -> Dictionary:
 	return {

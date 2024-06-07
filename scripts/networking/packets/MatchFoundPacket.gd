@@ -2,11 +2,11 @@ extends Packet
 class_name MatchFoundPacket
 
 var opponent: UserInfo
-var game_id: String
+var game_id: int
 var is_reconnect: bool
-var type: String = PacketType.MatchFound
 
-func _init(opponent_: UserInfo, game_id_: String, is_reconnect_: bool):
+func _init(opponent_: UserInfo, game_id_: int, is_reconnect_: bool):
+	super(PacketType.MatchFound)
 	opponent = opponent_
 	game_id = game_id_
 	is_reconnect = is_reconnect_

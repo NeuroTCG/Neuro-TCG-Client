@@ -8,9 +8,9 @@ class Response:
 	var valid: bool
 	var target_card: FullCardState
 	var attacker_card: FullCardState
-	var type: String = PacketType.AttackResponse
 
 	func _init(valid_: bool, target_card_: FullCardState, attacker_card_: FullCardState, response_id_: int=Packet.get_next_response_id()):
+		super(PacketType.AttackResponse)
 		valid = valid_
 		target_card = target_card_
 		attacker_card = attacker_card_
@@ -25,8 +25,14 @@ class Response:
 			"vaild": valid,
 		}
 
+	func get_response_id() -> int:
+		return response_id
+		
 	static func from_dict(d: Dictionary):
-		return AttackPacket.Response.new(d["valid"], FullCardState.from_dict(d["target_card"]), FullCardState.from_dict(d["attacker_card"]), d["response_id"])
+		if d["valid"]:
+			return AttackPacket.Response.new(d["valid"], FullCardState.from_dict(d["target_card"]), FullCardState.from_dict(d["attacker_card"]), d["response_id"])
+		else:
+			return AttackPacket.Response.new(d["valid"], null, null, d["response_id"])
 
 class Opponent:
 	extends Packet
@@ -35,9 +41,9 @@ class Opponent:
 	var attacker_position: CardPosition
 	var target_card: FullCardState
 	var attacker_card: FullCardState
-	var type: String = PacketType.AttackOpponent
 
 	func _init(target_position_: CardPosition, attacker_position_: CardPosition, target_card_: FullCardState, attacker_card_: FullCardState):
+		super(PacketType.AttackOpponent)
 		target_position = target_position_
 		attacker_position = attacker_position_
 		target_card = target_card_
@@ -58,9 +64,9 @@ class Opponent:
 var response_id: int
 var target_position: CardPosition
 var attacker_position: CardPosition
-var type: String = PacketType.Attack
 
 func _init(target_position_: CardPosition, attacker_position_: CardPosition, response_id_: int=Packet.get_next_response_id()):
+	super(PacketType.Attack)
 	response_id = response_id_
 	target_position = target_position_
 	attacker_position = attacker_position_
@@ -72,6 +78,9 @@ func to_dict() -> Dictionary:
 		"target_position": target_position.to_array(),
 		"attacker_position": attacker_position.to_array(),
 	}
+
+func get_response_id() -> int:
+	return response_id
 
 static func from_dict(d: Dictionary):
 	return AttackPacket.new(CardPosition.from_array(d["target_position"]), CardPosition.from_array(d["attacker_position"]), d["response_id"])

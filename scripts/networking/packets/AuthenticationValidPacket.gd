@@ -2,9 +2,9 @@ extends Packet
 class_name AuthenticationValidPacket
 
 var has_running_game: bool
-var type: String = PacketType.AuthenticationValid
 
 func _init(has_running_game_: bool):
+	super(PacketType.AuthenticationValid)
 	has_running_game = has_running_game_
 
 func to_dict() -> Dictionary:

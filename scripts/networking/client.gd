@@ -6,8 +6,6 @@ var ws = WebSocketPeer.new()
 
 # Called when the node enters the scene tree for the first time.
 func _init():
-	print(PacketUtils.deserialize(PacketUtils.serialize(AttackPacket.new(CardPosition.new(0,0), CardPosition.new(1,1)))))
-
 	var error = ws.connect_to_url(url)
 	if error != OK:
 		print("ERROR: Cannot connect to url!")
@@ -17,6 +15,7 @@ func wait_until_connection_opened():
 	while ws.get_ready_state() != WebSocketPeer.STATE_OPEN:
 		await get_tree().process_frame
 		if timeout_timer.time_left == 0:
+			print("Connection failed")
 			return
 
 #func is_connection_valid() -> bool:

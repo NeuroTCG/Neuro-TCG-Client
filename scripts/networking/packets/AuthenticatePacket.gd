@@ -2,9 +2,9 @@ extends Packet
 class_name AuthenticatePacket
 
 var username: String
-var type: String = PacketType.Authenticate
 
 func _init(username_: String):
+	super(PacketType.Authenticate)
 	username = username_
 
 func to_dict() -> Dictionary:
