@@ -18,46 +18,45 @@ func _ready():
 	User.start_initial_packet_sequence()
 
 func _on_game_start() -> void:
+	print("Requesting game state")
+	User.send_packet_expecting_type(
+		GetBoardStatePacket.new(GetBoardStatePacket.Reason.connect),
+		PacketType.GetBoardStateResponse,
+		func(packet: GetBoardStatePacket.Response):
+			print("Received game state")
+			print(packet.board.cards)
+			# TODO: store it somewhere smart
+	)
+
 	print("Summoning at 1,2")
-	User.send_packet_with_response_callback(
+	User.send_packet_expecting_type(
 		SummonPacket.new(0, CardPosition.new(1, 2)),
-		func(packet: Packet):
-			match packet.type:
-				PacketType.SummonResponse:
-					var s_packet=packet as SummonPacket.Response
-					if (s_packet.valid):
-						print("Summon successfull. Card has %d hp." % s_packet.new_card.health)
-					else:
-						print("Summon failed")
-				var type:
-					print("Unexpected packet type '%s'" % type)
+		PacketType.SummonResponse,
+		func(packet: SummonPacket.Response):
+			if (packet.valid):
+				print("Summon successfull. Card has %d hp." % packet.new_card.health)
+			else:
+				print("Summon failed")
 	)
 	
 	print("Summoning at 1,2 again")
-	User.send_packet_with_response_callback(
+	User.send_packet_expecting_type(
 		SummonPacket.new(0, CardPosition.new(1, 2)),
-		func(packet: Packet):
-			match packet.type:
-				PacketType.SummonResponse:
-					var s_packet=packet as SummonPacket.Response
-					if (s_packet.valid):
-						print("Summon successfull. Card has %d hp." % s_packet.new_card.health)
-					else:
-						print("Summon failed")
-				var type:
-					print("Unexpected packet type '%s'" % type)
+		PacketType.SummonResponse,
+		func(packet: SummonPacket.Response):
+			if (packet.valid):
+				print("Summon successfull. Card has %d hp." % packet.new_card.health)
+			else:
+				print("Summon failed")
 	)
 	print("Attacking 0,0 with 1,2")
-	User.send_packet_with_response_callback(
-		AttackPacket.new(CardPosition.new(0,0), CardPosition.new(1, 2)),
-		func(packet: Packet):
-			match packet.type:
-				PacketType.AttackResponse:
-					var s_packet=packet as AttackPacket.Response
-					if (s_packet.valid):
-						print("Attack successfull. Attacked card now has %d hp." % s_packet.target_card.health)
-					else:
-						print("Attack failed")
-				var type:
-					print("Unexpected packet type '%s'" % type)
+	User.send_packet_expecting_type(
+		AttackPacket.new(CardPosition.new(0, 0), CardPosition.new(1, 2)),
+		PacketType.AttackResponse,
+		func(packet: AttackPacket.Response):
+			if (packet.valid):
+				print("Attack successfull. Attacked card now has %d hp." % packet.target_card.health)
+			else:
+				print("Attack failed")
 	)
+	

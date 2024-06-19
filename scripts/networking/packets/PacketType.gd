@@ -7,7 +7,8 @@ const Authenticate: String = "authenticate"
 const AuthenticationValid: String = "authentication_valid"
 const MatchFound: String = "match_found"
 const UnknownPacket: String = "unknown_packet"
-const GetGameState: String = "get_game_state"
+const GetBoardState: String = "get_board_state"
+const GetBoardStateResponse: String = "get_board_state_response"
 
 const Summon: String = "summon"
 const SummonResponse: String = "summon_response"
@@ -25,7 +26,8 @@ const allTypes: Array[String] = [
 	AuthenticationValid,
 	MatchFound,
 	UnknownPacket,
-	GetGameState,
+	GetBoardState,
+	GetBoardStateResponse,
 
 	Summon,
 	SummonResponse,

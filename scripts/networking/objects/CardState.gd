@@ -1,4 +1,4 @@
-class_name FullCardState
+class_name CardState
 
 var id: int
 var health: int
@@ -14,4 +14,4 @@ func to_dict() -> Dictionary:
 	}
 
 static func from_dict(d: Dictionary):
-	return FullCardState.new(d["id"], d["health"])
+	return CardState.new(d["id"], d["health"])

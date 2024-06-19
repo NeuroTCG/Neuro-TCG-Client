@@ -6,10 +6,10 @@ class Response:
 
 	var response_id: int
 	var valid: bool
-	var target_card: FullCardState
-	var attacker_card: FullCardState
+	var target_card: CardState
+	var attacker_card: CardState
 
-	func _init(valid_: bool, target_card_: FullCardState, attacker_card_: FullCardState, response_id_: int=Packet.get_next_response_id()):
+	func _init(valid_: bool, target_card_: CardState, attacker_card_: CardState, response_id_: int=Packet.get_next_response_id()):
 		super(PacketType.AttackResponse)
 		valid = valid_
 		target_card = target_card_
@@ -30,7 +30,7 @@ class Response:
 		
 	static func from_dict(d: Dictionary):
 		if d["valid"]:
-			return AttackPacket.Response.new(d["valid"], FullCardState.from_dict(d["target_card"]), FullCardState.from_dict(d["attacker_card"]), d["response_id"])
+			return AttackPacket.Response.new(d["valid"], CardState.from_dict(d["target_card"]), CardState.from_dict(d["attacker_card"]), d["response_id"])
 		else:
 			return AttackPacket.Response.new(d["valid"], null, null, d["response_id"])
 
@@ -39,10 +39,10 @@ class Opponent:
 
 	var target_position: CardPosition
 	var attacker_position: CardPosition
-	var target_card: FullCardState
-	var attacker_card: FullCardState
+	var target_card: CardState
+	var attacker_card: CardState
 
-	func _init(target_position_: CardPosition, attacker_position_: CardPosition, target_card_: FullCardState, attacker_card_: FullCardState):
+	func _init(target_position_: CardPosition, attacker_position_: CardPosition, target_card_: CardState, attacker_card_: CardState):
 		super(PacketType.AttackOpponent)
 		target_position = target_position_
 		attacker_position = attacker_position_
@@ -59,7 +59,7 @@ class Opponent:
 		}
 
 	static func from_dict(d: Dictionary):
-		return AttackPacket.Opponent.new(CardPosition.from_array(d["target_position"]), CardPosition.from_array(d["attacker_position"]), FullCardState.from_dict(d["target_card"]), FullCardState.from_dict(d["attacker_card"]))
+		return AttackPacket.Opponent.new(CardPosition.from_array(d["target_position"]), CardPosition.from_array(d["attacker_position"]), CardState.from_dict(d["target_card"]), CardState.from_dict(d["attacker_card"]))
 
 var response_id: int
 var target_position: CardPosition
