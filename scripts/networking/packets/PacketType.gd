@@ -5,6 +5,7 @@ const ClientInfoAccept: String = "client_info_accept"
 const Disconnect: String = "disconnect"
 const Authenticate: String = "authenticate"
 const AuthenticationValid: String = "authentication_valid"
+const RuleInfo: String = "rule_info"
 const MatchFound: String = "match_found"
 const UnknownPacket: String = "unknown_packet"
 const GetBoardState: String = "get_board_state"
@@ -24,6 +25,7 @@ const allTypes: Array[String] = [
 	Disconnect,
 	Authenticate,
 	AuthenticationValid,
+	RuleInfo,
 	MatchFound,
 	UnknownPacket,
 	GetBoardState,

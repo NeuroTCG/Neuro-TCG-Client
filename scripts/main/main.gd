@@ -22,41 +22,45 @@ func _on_game_start() -> void:
 	User.send_packet_expecting_type(
 		GetBoardStatePacket.new(GetBoardStatePacket.Reason.connect),
 		PacketType.GetBoardStateResponse,
-		func(packet: GetBoardStatePacket.Response):
+		func(packet: GetBoardStatePacket.Response) -> bool:
 			print("Received game state")
 			print(packet.board.cards)
 			# TODO: store it somewhere smart
+			return true
 	)
 
 	print("Summoning at 1,2")
 	User.send_packet_expecting_type(
 		SummonPacket.new(0, CardPosition.new(1, 2)),
 		PacketType.SummonResponse,
-		func(packet: SummonPacket.Response):
+		func(packet: SummonPacket.Response) -> bool:
 			if (packet.valid):
 				print("Summon successfull. Card has %d hp." % packet.new_card.health)
 			else:
 				print("Summon failed")
+			return true
 	)
 	
 	print("Summoning at 1,2 again")
 	User.send_packet_expecting_type(
 		SummonPacket.new(0, CardPosition.new(1, 2)),
 		PacketType.SummonResponse,
-		func(packet: SummonPacket.Response):
+		func(packet: SummonPacket.Response) -> bool:
 			if (packet.valid):
 				print("Summon successfull. Card has %d hp." % packet.new_card.health)
 			else:
 				print("Summon failed")
+			return true
 	)
 	print("Attacking 0,0 with 1,2")
 	User.send_packet_expecting_type(
 		AttackPacket.new(CardPosition.new(0, 0), CardPosition.new(1, 2)),
 		PacketType.AttackResponse,
-		func(packet: AttackPacket.Response):
+		func(packet: AttackPacket.Response) -> bool:
 			if (packet.valid):
 				print("Attack successfull. Attacked card now has %d hp." % packet.target_card.health)
 			else:
 				print("Attack failed")
+			return true
 	)
 	

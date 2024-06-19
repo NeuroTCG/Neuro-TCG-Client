@@ -6,8 +6,10 @@ static var _type_to_class: Dictionary = {
 	PacketType.Disconnect: DisconnectPacket,
 	PacketType.Authenticate: AuthenticatePacket,
 	PacketType.AuthenticationValid: AuthenticationValidPacket,
+	PacketType.RuleInfo: RuleInfoPacket,
 	PacketType.MatchFound: MatchFoundPacket,
 	PacketType.UnknownPacket: UnknownPacketPacket,
+
 	PacketType.GetBoardState: GetBoardStatePacket,
 	PacketType.GetBoardStateResponse: GetBoardStatePacket.Response,
 
