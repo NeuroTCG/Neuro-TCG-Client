@@ -1,5 +1,10 @@
 extends Node
 
+#region COMMAND SIGNALS
+signal summon(packet: SummonPacket)
+signal attack(packet: AttackPacket)
+#endregion 
+
 var version = "early development build"
 
 var main_menu_template = preload ("res://scenes/ui/main_menu.tscn")

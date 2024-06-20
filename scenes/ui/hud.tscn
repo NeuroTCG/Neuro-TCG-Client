@@ -1,25 +1,18 @@
 [gd_scene load_steps=3 format=3 uid="uid://b6dy802mg5uvg"]
 
-[ext_resource type="Script" path="res://scripts/ui/game.gd" id="1_06elg"]
-[ext_resource type="Theme" uid="uid://bc2o2wqjkqbbe" path="res://assets/Themes/Default-UI.tres" id="2_skgg2"]
+[ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1_7kgdp"]
+[ext_resource type="Theme" uid="uid://bc2o2wqjkqbbe" path="res://assets/Themes/Default-UI.tres" id="1_iq6lo"]
 
-[node name="Game" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = ExtResource("2_skgg2")
-script = ExtResource("1_06elg")
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_7kgdp")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_iq6lo")
 theme_override_constants/separation = 15
 
 [node name="Panel" type="Panel" parent="VBoxContainer"]

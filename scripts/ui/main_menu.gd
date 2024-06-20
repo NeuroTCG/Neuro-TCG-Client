@@ -1,6 +1,6 @@
 extends Control
 
-var game = load("res://scenes/ui/game.tscn")
+var game = load("res://scenes/game/game.tscn")
 var settings = load("res://scenes/ui/settings.tscn")
 
 func _on_play_button_pressed():
