@@ -4,3 +4,13 @@
 
 [node name="Hand" type="Node2D"]
 script = ExtResource("1_sdsvq")
+
+[node name="Pos1" type="Marker2D" parent="."]
+
+[node name="Pos2" type="Marker2D" parent="."]
+
+[node name="Pos3" type="Marker2D" parent="."]
+
+[node name="Pos4" type="Marker2D" parent="."]
+
+[node name="Pos5" type="Marker2D" parent="."]
