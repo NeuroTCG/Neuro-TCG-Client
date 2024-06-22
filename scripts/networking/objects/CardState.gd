@@ -13,5 +13,8 @@ func to_dict() -> Dictionary:
 		"health": health,
 	}
 
-static func from_dict(d: Dictionary):
+static func from_dict(d):
+	if d == null:
+		return null
+
 	return CardState.new(d["id"], d["health"])

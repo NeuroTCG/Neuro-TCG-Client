@@ -11,15 +11,13 @@ static var _type_to_class: Dictionary = {
 	PacketType.UnknownPacket: UnknownPacketPacket,
 
 	PacketType.GetBoardState: GetBoardStatePacket,
-	PacketType.GetBoardStateResponse: GetBoardStatePacket.Response,
+	PacketType.GetBoardStateResponse: GetBoardStateResponsePacket,
 
 	PacketType.Summon: SummonPacket,
-	PacketType.SummonResponse: SummonPacket.Response,
-	PacketType.SummonOpponent: SummonPacket.Opponent,
+	PacketType.SummonRequest: SummonRequestPacket,
 
 	PacketType.Attack: AttackPacket,
-	PacketType.AttackResponse: AttackPacket.Response,
-	PacketType.AttackOpponent: AttackPacket.Opponent,
+	PacketType.AttackRequest: AttackRequestPacket,
 }
 
 static func deserialize(s: String) -> Packet:
