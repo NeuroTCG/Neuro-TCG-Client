@@ -2,6 +2,7 @@ extends Node2D
 class_name Card 
 
 @onready var animation_player = $AnimationPlayer
+@onready var card_hover_sprite = $CardBack/CardHover
 
 #region CARD ATTRIBUTES
 var card_name: String 
@@ -12,12 +13,16 @@ var attack_m1: float
 var placement: Placement 
 #endregion
 
+var mouse_over := false  
+var selected := false 
+var anchor_position: Vector2
+var hover_tween: Tween 
+
 enum Placement {
-	DECK,
+	DECK,  # Place in deck anytime you don't want the card to interact with mouse 
 	HAND,
 	PLAYMAT 
 }
-
 
 static func create_card(card_name: String, id: int, health: float, attack: float, attack_m1: float) -> Card:
 	var new_card: Card = load("res://scenes/game/card.tscn").instantiate() 
@@ -30,12 +35,49 @@ static func create_card(card_name: String, id: int, health: float, attack: float
 	
 	return new_card
 
-func move_card(end_pos: Vector2, time := 0.5) -> void:
+func _process(delta: float) -> void:
+	if Input.is_action_just_pressed("click"):
+		if mouse_over and not selected: 
+			if placement == Placement.HAND: 
+				select_card() 
+			if placement == Placement.PLAYMAT: 
+				pass  
+		else: 
+			if placement == Placement.HAND: 
+				unselect_card() 
+
+func select_card() -> void: 
+	selected = true 
+	if hover_tween: hover_tween.kill() 
+	hover_tween = get_tree().create_tween() 
+	hover_tween.tween_property(card_hover_sprite, "modulate:a", 1.0, 0.5)
+	shift_card_y(-30)
+	Global.display_card.emit(self)
+
+func unselect_card() -> void: 
+	selected = false 
+	if hover_tween: hover_tween.kill() 
+	hover_tween = get_tree().create_tween()
+	hover_tween.tween_property(card_hover_sprite, "modulate:a", 0.0, 0.5)
+	shift_card_y(0)
+	Global.hide_card.emit(self)
+
+func move_card(end_pos: Vector2, anchor:= false, time := 0.5):
+	if anchor: 
+		anchor_position = end_pos 
 	var tween = get_tree().create_tween() 
-	await tween.tween_property(self, "position", end_pos, time)
+	await tween.tween_property(self, "position", end_pos, time).finished
+
+func shift_card_y(amount: float, time := 0.1):
+	var tween = get_tree().create_tween()
+	tween.tween_property(self, "position:y", anchor_position.y + amount, time)
 
 func flip_card() -> void:
 	animation_player.play("flip")
 
 func _on_mouse_hover():
-	pass # Replace with function body.
+	mouse_over = true 
+
+func _on_mouse_exit():
+	mouse_over = false 
+

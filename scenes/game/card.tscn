@@ -82,7 +82,7 @@ position = Vector2(2.95639e-05, -1.14441e-05)
 texture = ExtResource("3_jao2l")
 
 [node name="CardHover" type="Sprite2D" parent="CardBack"]
-visible = false
+modulate = Color(1, 1, 1, 0)
 scale = Vector2(1, 1)
 texture = ExtResource("4_c1awe")
 
@@ -96,4 +96,6 @@ libraries = {
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("RectangleShape2D_qnkpt")
 
+[connection signal="input_event" from="Area2D" to="." method="_on_input_event"]
 [connection signal="mouse_entered" from="Area2D" to="." method="_on_mouse_hover"]
+[connection signal="mouse_exited" from="Area2D" to="." method="_on_mouse_exit"]
