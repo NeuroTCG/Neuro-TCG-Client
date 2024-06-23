@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://tdxda77swjlw"
-path="res://.godot/imported/cavsas.png-dc2e5b205ad65273b6a339f00a63cbd8.ctex"
+uid="uid://csbgur3qt4rgv"
+path="res://.godot/imported/AngelUnhover.png-080d879470013ae30ea30d003b5d7b90.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/game/cavsas.png"
-dest_files=["res://.godot/imported/cavsas.png-dc2e5b205ad65273b6a339f00a63cbd8.ctex"]
+source_file="res://assets/game/AngelUnhover.png"
+dest_files=["res://.godot/imported/AngelUnhover.png-080d879470013ae30ea30d003b5d7b90.ctex"]
 
 [params]
 

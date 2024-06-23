@@ -1,9 +1,9 @@
 [gd_scene load_steps=2 format=3 uid="uid://buorw4d055t0m"]
 
-[ext_resource type="Texture2D" uid="uid://c0llghfolxtsg" path="res://assets/game/card_cover_placeholder.png" id="1_22vy7"]
+[ext_resource type="Texture2D" uid="uid://b20ivgjyf57nr" path="res://assets/game/Back.png" id="1_s3wyn"]
 
 [node name="Deck" type="Node2D"]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.13625, 0.13625)
-texture = ExtResource("1_22vy7")
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("1_s3wyn")

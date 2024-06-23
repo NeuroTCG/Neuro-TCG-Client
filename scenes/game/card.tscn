@@ -1,36 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://boe1h3a26dhro"]
+[gd_scene load_steps=9 format=3 uid="uid://boe1h3a26dhro"]
 
 [ext_resource type="Script" path="res://scripts/game/card.gd" id="1_5rey8"]
-[ext_resource type="Texture2D" uid="uid://bq10o6356ginh" path="res://assets/game/image.png" id="2_hfjhi"]
-[ext_resource type="Texture2D" uid="uid://c0llghfolxtsg" path="res://assets/game/card_cover_placeholder.png" id="2_sbkmo"]
-
-[sub_resource type="Animation" id="Animation_gdxax"]
-resource_name = "flip"
-length = 0.6
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("CardBack:scale")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.6),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(0.136, 0.136), Vector2(0.009, 0.136), Vector2(0.136, 0.136)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("CardBack/CardFront:z_index")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [-1, 0]
-}
+[ext_resource type="Texture2D" uid="uid://b20ivgjyf57nr" path="res://assets/game/Back.png" id="2_u5h17"]
+[ext_resource type="Texture2D" uid="uid://csbgur3qt4rgv" path="res://assets/game/AngelUnhover.png" id="3_jao2l"]
+[ext_resource type="Texture2D" uid="uid://8fyp0otk6dsw" path="res://assets/game/Angel.png" id="4_c1awe"]
 
 [sub_resource type="Animation" id="Animation_qmg2o"]
 length = 0.001
@@ -44,7 +17,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0.136, 0.136)]
+"values": [Vector2(0.1, 0.1)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -59,26 +32,68 @@ tracks/1/keys = {
 "values": [-1]
 }
 
+[sub_resource type="Animation" id="Animation_gdxax"]
+resource_name = "flip"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CardBack:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.1, 0.1), Vector2(0.01, 0.1), Vector2(0.1, 0.1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CardBack/CardFront:z_index")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [-1, 0]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_hqb7t"]
 _data = {
 "RESET": SubResource("Animation_qmg2o"),
 "flip": SubResource("Animation_gdxax")
 }
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qnkpt"]
+size = Vector2(74, 106)
+
 [node name="Card" type="Node2D"]
 script = ExtResource("1_5rey8")
 
 [node name="CardBack" type="Sprite2D" parent="."]
-scale = Vector2(0.136, 0.136)
-texture = ExtResource("2_sbkmo")
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_u5h17")
 
 [node name="CardFront" type="Sprite2D" parent="CardBack"]
 z_index = -1
 position = Vector2(2.95639e-05, -1.14441e-05)
-scale = Vector2(1.43343, 1.43343)
-texture = ExtResource("2_hfjhi")
+texture = ExtResource("3_jao2l")
+
+[node name="CardHover" type="Sprite2D" parent="CardBack"]
+visible = false
+scale = Vector2(1, 1)
+texture = ExtResource("4_c1awe")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_hqb7t")
 }
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_qnkpt")
+
+[connection signal="mouse_entered" from="Area2D" to="." method="_on_mouse_hover"]

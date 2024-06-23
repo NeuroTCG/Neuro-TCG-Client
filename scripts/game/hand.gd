@@ -1,4 +1,6 @@
 extends Node2D
+class_name Hand
+
 
 const CARD_LENGTH := 111
 
@@ -19,18 +21,19 @@ func _process(delta) -> void:
 		summon(0, [0, 0])
 
 func add_card(id: int) -> void:
-	if cards.size() >= 5:
-		push_error("The hand can only store 5 cards!")
-		return 
+	assert(cards.size() >= 5, "Hand should only store 5 cards")
 	
 	var new_card = Card.create_card("test card", id, 0, 0, 0) 
 	game.add_child(new_card)
 	new_card.global_position = game.get_node("Deck").global_position
 	new_card.flip_card()
 	new_card.move_card(card_positions[cards.size()].global_position)
+	
 	cards.append(new_card)
 
 func summon(hand_pos: int, board_pos: Array) -> void:
+	assert(cards.size() > 0, "Cards should exist in hand when summoning")
+	
 	# Convert board_pos to vector2 position. 
 	# (Using a board static method) 
 	# Board is currently not implemented.

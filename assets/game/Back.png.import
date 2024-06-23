@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c0llghfolxtsg"
-path="res://.godot/imported/card_cover_placeholder.png-5e13b4472b94e969b5babf5f7927c9b3.ctex"
+uid="uid://b20ivgjyf57nr"
+path="res://.godot/imported/Back.png-0bd72251ad46953894c0217af04b0bbf.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/game/card_cover_placeholder.png"
-dest_files=["res://.godot/imported/card_cover_placeholder.png-5e13b4472b94e969b5babf5f7927c9b3.ctex"]
+source_file="res://assets/game/Back.png"
+dest_files=["res://.godot/imported/Back.png-0bd72251ad46953894c0217af04b0bbf.ctex"]
 
 [params]
 
