@@ -1,117 +1,91 @@
 extends Node
 
-var was_packet_handled: bool = false
+#region COMMAND SIGNALS
+signal get_board_state_response(packet: GetBoardStateResponsePacket)
+signal authentication_valid(packet: AuthenticationValidPacket)
+signal client_info_accept(packet: ClientInfoAcceptPacket)
+signal disconnect(packet: DisconnectPacket)
+signal rule_info(packet: RuleInfoPacket)
+signal match_found(packet: MatchFoundPacket)
+signal unknown_packet(packet: UnknownPacketPacket)
+signal attack(packet: AttackPacket)
+signal summon(packet: SummonPacket)
+#endregion
+
 signal on_packet_received(packet: Packet)
-signal on_game_start
 
 var client: Client
 
 const protocol_version = 1
 
 func start_initial_packet_sequence():
-	on_game_start.connect(__print_game_start_text)
-	on_packet_received.connect(__on_client_info_answer, CONNECT_ONE_SHOT)
-	on_packet_received.connect(__on_match_found)
-
+	client_info_accept.connect(__on_client_info_answer, CONNECT_ONE_SHOT)
+	authentication_valid.connect(__on_authenticate_answer, CONNECT_ONE_SHOT)
+	disconnect.connect(__on_disconnect, CONNECT_ONE_SHOT)
+	rule_info.connect(__on_rules_packet, CONNECT_ONE_SHOT)
+	match_found.connect(__on_match_found, CONNECT_ONE_SHOT)
 	send_packet(ClientInfoPacket.new("Official Client", "0.0.1", protocol_version))
 
-func __print_game_start_text():
-	print("Game is starting")
 
-func __on_client_info_answer(packet: Packet):
-	match packet.type:
-		PacketType.ClientInfoAccept:
-			print("Connected to server (protocol v%d)" % protocol_version)
-			on_packet_received.connect(__on_authenticate_answer, CONNECT_ONE_SHOT)
-			send_packet(AuthenticatePacket.new("Neuro"))
-			was_packet_handled = true
-		PacketType.Disconnect:
-			var dpacket = packet as DisconnectPacket
-			print("Client info was invalid: '%s' (%s)" % [dpacket.message, dpacket.reason])
-			was_packet_handled = true
-		var type:
-			print("Received unexpected packet type '%s' from server" % type)
+func __on_unknown_packet(packet: UnknownPacketPacket):
+	print("Unknown packet with message '%s' was sent to server" % packet.message)
+	assert (false, "unknown packets should not exist")
+
+
+func __on_disconnect(packet: DisconnectPacket):
+	print("Client info was invalid: '%s' (%s)" % [packet.message, packet.reason])
+
+func __on_client_info_answer(_packet: ClientInfoAcceptPacket):
+	print("Connected to server (protocol v%d)" % protocol_version)
+	send_packet(AuthenticatePacket.new("Neuro"))
 
 func __on_authenticate_answer(packet: Packet):
-	match packet.type:
-		PacketType.AuthenticationValid:
-			print("User authenticated")
-			if ((packet as AuthenticationValidPacket).has_running_game):
-				print("Reconnecting to existing game...")
-			else:
-				print("Waiting for matchmaking")
+	print("User authenticated")
+	if ((packet as AuthenticationValidPacket).has_running_game):
+		print("Reconnecting to existing game...")
+	else:
+		print("Waiting for matchmaking")
 			
-			on_packet_received.connect(__on_rules_packet, CONNECT_ONE_SHOT)
-			was_packet_handled = true
-
-		PacketType.Disconnect:
-			var dpacket = packet as DisconnectPacket
-			print("User authentication failed: '%s' (%s)" % [dpacket.message, dpacket.reason])
-			was_packet_handled = true
-		var type:
-			print("Received unexpected packet type '%s' from server" % type)
-
 func __on_rules_packet(packet: Packet):
-	match packet.type:
-		PacketType.RuleInfo:
-			# TODO: store them somewhere
-			print("Rules received")
-			print((packet as RuleInfoPacket).card_id_mapping)
-			was_packet_handled = true
-		var type:
-			print("Received unexpected packet type '%s' from server" % type)
+	# TODO: store them somewhere
+	print("Rules received")
+	print((packet as RuleInfoPacket).card_id_mapping)
 
-func __on_match_found(packet: Packet):
-	match packet.type:
-		PacketType.MatchFound:
-			print("Match found")
-			on_game_start.emit()
-			on_packet_received.disconnect(__on_match_found)
-			was_packet_handled = true
-		var type:
-			print("[on_match_found] Received packet type '%s'. Ignoring. " % type)
+func __on_match_found(_packet: Packet):
+	print("Match found")
+	on_packet_received.disconnect(__on_match_found)
 
-## The callback `on_response` must take a `Packet` as its only argument and return true if the
-## packet was handled by this callback. It should return false otherwise
-func send_packet_with_response_callback(packet: Packet, on_response: Callable):
-	var response_id = packet.get_response_id()
-	var callback = func(recv_packet: Packet, f_self: Callable):
-		print("'%s' packet with rid %d was seen by response handler for rid %d" % [recv_packet.type, recv_packet.get_response_id(), response_id])
-		if recv_packet.get_response_id() == response_id:
-			print("'%s' packet with rid %d was handled by response handler for rid %d" % [recv_packet.type, recv_packet.get_response_id(), response_id])
-			was_packet_handled = on_response.call(recv_packet) or was_packet_handled
-			on_packet_received.disconnect(f_self)
-	
-	callback = callback.bind(callback)
-
-	on_packet_received.connect(callback)
-	send_packet(packet)
-	print("'%s' packet with rid %d was sent" % [packet.type, response_id])
-
-## The callback `on_response` must take a `Packet` as its only argument and return true if the
-## packet was handled by this callback. It should return false otherwise
-func send_packet_expecting_type(packet: Packet, expected_response_type: String, on_response: Callable):
-	send_packet_with_response_callback(packet, func(response: Packet) -> bool:
-		match response.type:
-			expected_response_type:
-				return on_response.call(response)
-				
-			var type:
-				print("Unexpected packet type '%s'. (was expecting %s)" % [type, expected_response_type])
-				return false
-	)
 
 func send_packet(packet: Packet):
 	var data = PacketUtils.serialize(packet)
 	client.ws.send_text(data)
-	print("'%s' packet with rid %d was sent" % [packet.type, packet.get_response_id()])
+	print("'%s' packet was sent" % packet.type)
 
 func receive_command(msg: String):
 	var packet = PacketUtils.deserialize(msg)
-	print("'%s' packet with rid %d received by packet logger" % [packet.type, packet.get_response_id()])
+	print("'%s' packet received by packet logger" % [packet.type])
 
-	was_packet_handled = false
 	on_packet_received.emit(packet)
-	
-	# can change this to a print if it gets annoying
-	assert(was_packet_handled, "A '%s' packet with rid %d wasn't handled" % [packet.type, packet.get_response_id()])
+
+	match packet.type:
+		PacketType.ClientInfoAccept:
+			client_info_accept.emit(packet)
+		PacketType.Disconnect:
+			disconnect.emit(packet)
+		PacketType.AuthenticationValid:
+			authentication_valid.emit(packet)
+		PacketType.RuleInfo:
+			rule_info.emit(packet)
+		PacketType.MatchFound:
+			match_found.emit(packet)
+		PacketType.UnknownPacket:
+			unknown_packet.emit(packet)
+		PacketType.GetBoardStateResponse:
+			get_board_state_response.emit(packet)
+		PacketType.Summon:
+			summon.emit(packet)
+		PacketType.Attack:
+			attack.emit(packet)
+		
+		var type:
+			print("Received unhandled packet type '%s'" % type)

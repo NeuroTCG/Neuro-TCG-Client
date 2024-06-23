@@ -1,19 +1,17 @@
 extends Packet
 class_name UnknownPacketPacket
 
-var response_id #: int|null
+var message: String
 
-func _init(response_id_):
+func _init(message_:String):
 	super(PacketType.UnknownPacket)
-	response_id = response_id_
+	message = message_
 
 func to_dict() -> Dictionary:
 	return {
 		"type": type,
-		"response_id": response_id,
+		"message": message,
 	}
 
-# has no get_response_id because it is not supposed to have a response
-
 static func from_dict(d: Dictionary):
-	return UnknownPacketPacket.new(d["response_id"])
+	return UnknownPacketPacket.new(d["message"])

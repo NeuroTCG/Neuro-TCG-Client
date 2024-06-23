@@ -1,4 +1,4 @@
-class_name GameState
+class_name BoardState
 
 var cards: Array # really Array[Array[Array[CardState|null]]], but godot doesn't like that
 var traps: Array
@@ -35,4 +35,4 @@ static func from_dict(d: Dictionary):
 					lcards[- 1][ - 1].append(CardState.from_dict(card))
 
 	assert(d["traps"] == [[null, null],[null, null]],"Traps aren't implemented yet.")
-	return GameState.new(lcards, d["traps"])
+	return BoardState.new(lcards, d["traps"])
