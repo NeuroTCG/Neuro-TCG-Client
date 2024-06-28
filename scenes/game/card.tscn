@@ -83,7 +83,6 @@ texture = ExtResource("3_jao2l")
 
 [node name="CardHover" type="Sprite2D" parent="CardBack"]
 modulate = Color(1, 1, 1, 0)
-scale = Vector2(1, 1)
 texture = ExtResource("4_c1awe")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

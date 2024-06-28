@@ -1,13 +1,21 @@
-[gd_scene load_steps=6 format=3 uid="uid://dh5lnd7qcyrg1"]
+[gd_scene load_steps=8 format=3 uid="uid://dh5lnd7qcyrg1"]
 
 [ext_resource type="Script" path="res://scripts/game/game.gd" id="1_kfv8y"]
 [ext_resource type="PackedScene" uid="uid://b6dy802mg5uvg" path="res://scenes/ui/hud.tscn" id="2_846mn"]
+[ext_resource type="Texture2D" uid="uid://bx2qg0oof7dn1" path="res://assets/game/cavsas.png" id="2_wnvry"]
 [ext_resource type="PackedScene" uid="uid://bopel3gld2b6o" path="res://scenes/game/hand.tscn" id="3_tjohb"]
 [ext_resource type="PackedScene" uid="uid://buorw4d055t0m" path="res://scenes/game/deck.tscn" id="4_kbisd"]
 [ext_resource type="PackedScene" uid="uid://dh37g4ide4hun" path="res://scenes/game/card_displayer.tscn" id="5_l5tpl"]
+[ext_resource type="PackedScene" uid="uid://7p238k7khnvn" path="res://scenes/game/card_slots.tscn" id="7_vh228"]
 
 [node name="Game" type="Node2D" groups=["game"]]
 script = ExtResource("1_kfv8y")
+
+[node name="Cavsas" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(576, 324)
+scale = Vector2(0.898596, 0.89011)
+texture = ExtResource("2_wnvry")
 
 [node name="HUD" parent="." instance=ExtResource("2_846mn")]
 
@@ -20,3 +28,6 @@ position = Vector2(1053, 513)
 
 [node name="CardDisplayer" parent="." instance=ExtResource("5_l5tpl")]
 position = Vector2(1001, 274)
+
+[node name="CardSlots" parent="." instance=ExtResource("7_vh228")]
+position = Vector2(262, 301)

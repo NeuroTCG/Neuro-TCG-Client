@@ -39,28 +39,24 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("click"):
 		if mouse_over and not selected: 
 			if placement == Placement.HAND: 
-				select_card() 
+				Global.hand_card_selected.emit(self)  
 			if placement == Placement.PLAYMAT: 
 				pass  
 		else: 
 			if placement == Placement.HAND: 
-				unselect_card() 
+				Global.hand_card_unselected.emit(self) 
 
-func select_card() -> void: 
+func display_info() -> void: 
 	selected = true 
 	if hover_tween: hover_tween.kill() 
 	hover_tween = get_tree().create_tween() 
 	hover_tween.tween_property(card_hover_sprite, "modulate:a", 1.0, 0.5)
-	shift_card_y(-30)
-	Global.display_card.emit(self)
 
-func unselect_card() -> void: 
+func hide_info() -> void: 
 	selected = false 
 	if hover_tween: hover_tween.kill() 
 	hover_tween = get_tree().create_tween()
 	hover_tween.tween_property(card_hover_sprite, "modulate:a", 0.0, 0.5)
-	shift_card_y(0)
-	Global.hide_card.emit(self)
 
 func move_card(end_pos: Vector2, anchor:= false, time := 0.5):
 	if anchor: 
