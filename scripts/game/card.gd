@@ -21,7 +21,7 @@ var hover_tween: Tween
 enum Placement {
 	DECK,  # Place in deck anytime you don't want the card to interact with mouse 
 	HAND,
-	PLAYMAT 
+	PLAYMAT
 }
 
 static func create_card(card_name: String, id: int, health: float, attack: float, attack_m1: float) -> Card:
@@ -40,19 +40,21 @@ func _process(delta: float) -> void:
 		if mouse_over and not selected: 
 			if placement == Placement.HAND: 
 				Global.hand_card_selected.emit(self)  
-			if placement == Placement.PLAYMAT: 
-				pass  
-		else: 
-			if placement == Placement.HAND: 
+			elif placement == Placement.PLAYMAT: 
+				Global.playmat_card_selected.emit(self)  
+		elif selected: 
+			if placement == Placement.HAND:	
 				Global.hand_card_unselected.emit(self) 
+			elif placement == Placement.PLAYMAT:
+				Global.playmat_card_unselected.emit(self)
 
-func display_info() -> void: 
+func select() -> void: 
 	selected = true 
 	if hover_tween: hover_tween.kill() 
 	hover_tween = get_tree().create_tween() 
 	hover_tween.tween_property(card_hover_sprite, "modulate:a", 1.0, 0.5)
 
-func hide_info() -> void: 
+func unselect() -> void: 
 	selected = false 
 	if hover_tween: hover_tween.kill() 
 	hover_tween = get_tree().create_tween()

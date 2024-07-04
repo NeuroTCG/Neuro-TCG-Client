@@ -5,5 +5,6 @@
 [node name="Deck" type="Node2D"]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.1, 0.1)
+rotation = 1.5708
+scale = Vector2(0.08, 0.08)
 texture = ExtResource("1_s3wyn")

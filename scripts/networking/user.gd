@@ -56,7 +56,7 @@ func __on_match_found(_packet: Packet):
 	on_packet_received.disconnect(__on_match_found)
 
 
-func send_packet(packet: Packet):
+func send_packet(packet: Packet):	
 	var data = PacketUtils.serialize(packet)
 	client.ws.send_text(data)
 	print("'%s' packet was sent" % packet.type)

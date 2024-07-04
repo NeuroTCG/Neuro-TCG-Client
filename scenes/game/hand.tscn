@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/game/hand.gd" id="1_sdsvq"]
 
-[node name="Hand" type="Node2D"]
+[node name="Hand" type="Node2D" groups=["hand"]]
 script = ExtResource("1_sdsvq")
 
 [node name="Pos1" type="Marker2D" parent="."]

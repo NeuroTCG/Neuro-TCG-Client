@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/game/game.gd" id="1_kfv8y"]
 [ext_resource type="PackedScene" uid="uid://b6dy802mg5uvg" path="res://scenes/ui/hud.tscn" id="2_846mn"]
-[ext_resource type="Texture2D" uid="uid://bx2qg0oof7dn1" path="res://assets/game/cavsas.png" id="2_wnvry"]
+[ext_resource type="Texture2D" uid="uid://cmfje43hqra1p" path="res://assets/game/FullBoardLayoutV2-5-GrayOut.png" id="2_rdgcq"]
 [ext_resource type="PackedScene" uid="uid://bopel3gld2b6o" path="res://scenes/game/hand.tscn" id="3_tjohb"]
 [ext_resource type="PackedScene" uid="uid://buorw4d055t0m" path="res://scenes/game/deck.tscn" id="4_kbisd"]
 [ext_resource type="PackedScene" uid="uid://dh37g4ide4hun" path="res://scenes/game/card_displayer.tscn" id="5_l5tpl"]
@@ -11,23 +11,42 @@
 [node name="Game" type="Node2D" groups=["game"]]
 script = ExtResource("1_kfv8y")
 
-[node name="Cavsas" type="Sprite2D" parent="."]
-visible = false
+[node name="FullBoardLayoutV2-5-grayOut" type="Sprite2D" parent="."]
 position = Vector2(576, 324)
-scale = Vector2(0.898596, 0.89011)
-texture = ExtResource("2_wnvry")
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("2_rdgcq")
 
 [node name="HUD" parent="." instance=ExtResource("2_846mn")]
 
 [node name="Hand" parent="." node_paths=PackedStringArray("game") instance=ExtResource("3_tjohb")]
-position = Vector2(294, 542)
+position = Vector2(431, 566)
 game = NodePath("..")
 
 [node name="Deck" parent="." instance=ExtResource("4_kbisd")]
-position = Vector2(1053, 513)
+position = Vector2(1069, 571)
 
 [node name="CardDisplayer" parent="." instance=ExtResource("5_l5tpl")]
-position = Vector2(1001, 274)
+position = Vector2(1041, 292)
 
 [node name="CardSlots" parent="." instance=ExtResource("7_vh228")]
-position = Vector2(262, 301)
+position = Vector2(266, 378)
+
+[node name="Slot2" parent="CardSlots" index="1"]
+position = Vector2(206, -1)
+
+[node name="Slot3" parent="CardSlots" index="2"]
+position = Vector2(414, -1)
+
+[node name="Slot4" parent="CardSlots" index="3"]
+position = Vector2(617, -2)
+
+[node name="Slot5" parent="CardSlots" index="4"]
+position = Vector2(104, 94)
+
+[node name="Slot6" parent="CardSlots" index="5"]
+position = Vector2(317, 94)
+
+[node name="Slot7" parent="CardSlots" index="6"]
+position = Vector2(517, 93)
+
+[editable path="CardSlots"]

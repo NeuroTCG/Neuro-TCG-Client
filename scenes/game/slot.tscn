@@ -4,20 +4,21 @@
 [ext_resource type="Texture2D" uid="uid://bjqh15hjcpew1" path="res://assets/game/CardSlotHighlight.png" id="2_5ipoa"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ecfpc"]
-size = Vector2(74, 104)
+size = Vector2(60, 84)
 
 [node name="Slot" type="Node2D"]
+visible = false
+z_index = 100
 script = ExtResource("1_wey8m")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 modulate = Color(1, 1, 1, 0.588235)
-scale = Vector2(0.1, 0.1)
+scale = Vector2(0.08, 0.08)
 texture = ExtResource("2_5ipoa")
 
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-z_index = 10
 shape = SubResource("RectangleShape2D_ecfpc")
 
 [connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]

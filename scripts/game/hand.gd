@@ -2,7 +2,7 @@ extends Node2D
 class_name Hand
 
 
-const CARD_LENGTH := 80
+const CARD_LENGTH := 31*2+10
 
 @export var game: Node2D
 
@@ -40,12 +40,18 @@ func add_card(id: int) -> void:
 
 func summon(hand_pos: int, slot_no: int) -> void:
 	assert(cards.size() > 0, "Cards should exist at hand when summoning")
-	
+
 	var slot_pos = game.get_node("CardSlots").get_slot_pos(slot_no)
 	
+	# Summon card 
 	var summon_card = cards.pop_at(hand_pos)
 	summon_card.move_card(slot_pos, true) 
 	summon_card.placement = Card.Placement.PLAYMAT 
+	
+	# Update slot
+	Global.fill_slot.emit(slot_no, summon_card)
+	
+	selected_card = null 
 	
 	# Shift all cards right of summoned card
 	for i in range(hand_pos, cards.size()):
@@ -54,18 +60,20 @@ func summon(hand_pos: int, slot_no: int) -> void:
 func _on_card_selected(card: Card) -> void:
 	selected_card = card  
 	card.shift_card_y(-30)
-	card.display_info()
-	Global.show_slot.emit(true)
+	card.select()
+	Global.show_slots.emit(true)
 
 func _on_card_unselected(card: Card) -> void:
 	if card == selected_card:
+		# If another card has been selected, this section either
+		# won't run or will be overwritten by _on_card_selected
 		selected_card = null 
-		Global.show_slot.emit(false)
+		Global.show_slots.emit(false)
 	card.shift_card_y(0)
-	card.hide_info()
+	card.unselect()
 
-func _on_slot_chosen(slot_no: int) -> void:
+func _on_slot_chosen(slot_no: int, _card: Card) -> void:
 	if selected_card:
-		Global.show_slot.emit(false)
+		Global.show_slots.emit(false)
+		selected_card.unselect()
 		summon(cards.find(selected_card), slot_no)
-
