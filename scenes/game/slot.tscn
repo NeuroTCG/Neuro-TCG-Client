@@ -7,7 +7,6 @@
 size = Vector2(60, 84)
 
 [node name="Slot" type="Node2D"]
-visible = false
 z_index = 100
 script = ExtResource("1_wey8m")
 

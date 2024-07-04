@@ -1,6 +1,8 @@
 ## For global signals 
 extends Node
 
+var input_paused = false 
+
 # HAND TO OTHER 
 signal hand_card_selected(card: Card)
 signal hand_card_unselected(card: Card)

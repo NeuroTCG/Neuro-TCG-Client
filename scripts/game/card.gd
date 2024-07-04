@@ -3,6 +3,7 @@ class_name Card
 
 @onready var animation_player = $AnimationPlayer
 @onready var card_hover_sprite = $CardBack/CardHover
+@onready var collision = $Area2D/CollisionShape2D
 
 #region CARD ATTRIBUTES
 var card_name: String 
@@ -36,6 +37,9 @@ static func create_card(card_name: String, id: int, health: float, attack: float
 	return new_card
 
 func _process(delta: float) -> void:
+	if Global.input_paused:
+		return 
+	
 	if Input.is_action_just_pressed("click"):
 		if mouse_over and not selected: 
 			if placement == Placement.HAND: 
@@ -64,7 +68,9 @@ func move_card(end_pos: Vector2, anchor:= false, time := 0.5):
 	if anchor: 
 		anchor_position = end_pos 
 	var tween = get_tree().create_tween() 
+	Global.input_paused = true 
 	await tween.tween_property(self, "position", end_pos, time).finished
+	Global.input_paused = false 
 
 func shift_card_y(amount: float, time := 0.1):
 	var tween = get_tree().create_tween()
