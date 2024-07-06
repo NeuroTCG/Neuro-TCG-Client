@@ -8,9 +8,10 @@ signal disconnect(packet: DisconnectPacket)
 signal rule_info(packet: RuleInfoPacket)
 signal match_found(packet: MatchFoundPacket)
 signal unknown_packet(packet: UnknownPacketPacket)
-signal attack(packet: AttackPacket)
-signal summon(packet: SummonPacket)
 #endregion
+
+# Maybe good idea to replace error with an object with more details, idk. 
+signal invalid_command(error: String) 
 
 signal on_packet_received(packet: Packet)
 
@@ -82,10 +83,14 @@ func receive_command(msg: String):
 			unknown_packet.emit(packet)
 		PacketType.GetBoardStateResponse:
 			get_board_state_response.emit(packet)
-		PacketType.Summon:
-			summon.emit(packet)
-		PacketType.Attack:
-			attack.emit(packet)
+		
+		# For PacketType.SummonResponse and other
+		# response packets that verify a move by the client
+		# verify if valid, and if true, do nothing.
+		# If false, emit invalid_command 
+		
+		# For PacketType.SummonOpponent, emit RenderOpponentCommand.summon 
+		# and so on for anything for rendering opponent commands
 		
 		var type:
 			print("Received unhandled packet type '%s'" % type)

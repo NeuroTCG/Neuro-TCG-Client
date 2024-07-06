@@ -21,6 +21,8 @@ User="*res://scripts/networking/user.gd"
 Global="*res://scripts/global/global.gd"
 AudioSystem="*res://scripts/global/audio_system.gd"
 SavedSettings="*res://scripts/global/saved_settings.gd"
+RenderOpponentCommand="*res://scripts/networking/commands/render_opponent_command.gd"
+VerifyClientCommand="*res://scripts/networking/commands/verify_client_command.gd"
 
 [display]
 
