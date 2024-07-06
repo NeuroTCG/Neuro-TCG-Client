@@ -83,14 +83,18 @@ func receive_command(msg: String):
 			unknown_packet.emit(packet)
 		PacketType.GetBoardStateResponse:
 			get_board_state_response.emit(packet)
-		
-		# For PacketType.SummonResponse and other
-		# response packets that verify a move by the client
-		# verify if valid, and if true, do nothing.
-		# If false, emit invalid_command 
-		
-		# For PacketType.SummonOpponent, emit RenderOpponentCommand.summon 
-		# and so on for anything for rendering opponent commands
+		PacketType.Summon:
+			if packet.is_you: 
+				if not packet.valid:
+					invalid_command.emit("Summon by client failed!") 
+			else: 
+				RenderOpponentCommand.summon.emit(packet)
+		PacketType.Attack:
+			if packet.is_you:
+				if not packet.valid:
+					invalid_command.emit("Attack by client failed!")
+			else:
+				RenderOpponentCommand.attack.emit(packet)
 		
 		var type:
 			print("Received unhandled packet type '%s'" % type)
