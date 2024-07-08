@@ -11,7 +11,7 @@ signal unknown_packet(packet: UnknownPacketPacket)
 #endregion
 
 # Maybe good idea to replace error with an object with more details, idk. 
-signal invalid_command(error: String) 
+signal invalid_command(error: String)
 
 signal on_packet_received(packet: Packet)
 
@@ -27,11 +27,9 @@ func start_initial_packet_sequence():
 	match_found.connect(__on_match_found, CONNECT_ONE_SHOT)
 	send_packet(ClientInfoPacket.new("Official Client", "0.0.1", protocol_version))
 
-
 func __on_unknown_packet(packet: UnknownPacketPacket):
 	print("Unknown packet with message '%s' was sent to server" % packet.message)
-	assert (false, "unknown packets should not exist")
-
+	assert(false, "unknown packets should not exist")
 
 func __on_disconnect(packet: DisconnectPacket):
 	print("Client info was invalid: '%s' (%s)" % [packet.message, packet.reason])
@@ -52,12 +50,20 @@ func __on_rules_packet(packet: Packet):
 	print("Rules received")
 	print((packet as RuleInfoPacket).card_id_mapping)
 
-func __on_match_found(_packet: Packet):
+func __on_match_found(packet: MatchFoundPacket):
 	print("Match found")
-	on_packet_received.disconnect(__on_match_found)
+	if packet.is_first_player:
+		print("We are first")
+	else:
+		print("We are second")
 
+	client_info_accept.disconnect(__on_client_info_answer)
+	authentication_valid.disconnect(__on_authenticate_answer)
+	disconnect.disconnect(__on_disconnect)
+	rule_info.disconnect(__on_rules_packet)
+	match_found.disconnect(__on_match_found)
 
-func send_packet(packet: Packet):	
+func send_packet(packet: Packet):
 	var data = PacketUtils.serialize(packet)
 	client.ws.send_text(data)
 	print("'%s' packet was sent" % packet.type)
@@ -84,10 +90,10 @@ func receive_command(msg: String):
 		PacketType.GetBoardStateResponse:
 			get_board_state_response.emit(packet)
 		PacketType.Summon:
-			if packet.is_you: 
+			if packet.is_you:
 				if not packet.valid:
-					invalid_command.emit("Summon by client failed!") 
-			else: 
+					invalid_command.emit("Summon by client failed!")
+			else:
 				RenderOpponentCommand.summon.emit(packet)
 		PacketType.Attack:
 			if packet.is_you:
