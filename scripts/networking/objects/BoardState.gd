@@ -2,10 +2,12 @@ class_name BoardState
 
 var cards: Array # really Array[Array[Array[CardState|null]]], but godot doesn't like that
 var traps: Array
+var first_player_active: bool
 
-func _init(cards_: Array, traps_: Array):
+func _init(cards_: Array, traps_: Array, first_player_active_: bool):
 	cards = cards_
 	traps = traps_
+	first_player_active = first_player_active_
 
 func to_dict() -> Dictionary:
 	var lcards = []
@@ -20,6 +22,7 @@ func to_dict() -> Dictionary:
 	return {
 		"cards": lcards,
 		"traps": traps,
+		"first_player_active": first_player_active
 	}
 
 static func from_dict(d: Dictionary):
@@ -35,4 +38,4 @@ static func from_dict(d: Dictionary):
 					lcards[- 1][ - 1].append(CardState.from_dict(card))
 
 	assert(d["traps"] == [[null, null],[null, null]],"Traps aren't implemented yet.")
-	return BoardState.new(lcards, d["traps"])
+	return BoardState.new(lcards, d["traps"], d["first_player_active"])
