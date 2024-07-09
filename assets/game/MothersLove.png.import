@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://csbgur3qt4rgv"
-path="res://.godot/imported/AngelUnhover.png-080d879470013ae30ea30d003b5d7b90.ctex"
+uid="uid://dc2uqxqvuorvy"
+path="res://.godot/imported/MothersLove.png-1dd19fd248f9613337c1d7241403ede0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/game/AngelUnhover.png"
-dest_files=["res://.godot/imported/AngelUnhover.png-080d879470013ae30ea30d003b5d7b90.ctex"]
+source_file="res://assets/game/MothersLove.png"
+dest_files=["res://.godot/imported/MothersLove.png-1dd19fd248f9613337c1d7241403ede0.ctex"]
 
 [params]
 

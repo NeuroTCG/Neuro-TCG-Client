@@ -56,7 +56,6 @@ func __on_match_found(_packet: Packet):
 	print("Match found")
 	on_packet_received.disconnect(__on_match_found)
 
-
 func send_packet(packet: Packet):	
 	var data = PacketUtils.serialize(packet)
 	client.ws.send_text(data)
@@ -88,13 +87,13 @@ func receive_command(msg: String):
 				if not packet.valid:
 					invalid_command.emit("Summon by client failed!") 
 			else: 
-				RenderOpponentCommand.summon.emit(packet)
+				RenderOpponentAction.summon.emit(packet)
 		PacketType.Attack:
 			if packet.is_you:
 				if not packet.valid:
 					invalid_command.emit("Attack by client failed!")
 			else:
-				RenderOpponentCommand.attack.emit(packet)
-		
+				RenderOpponentAction.attack.emit(packet)
+
 		var type:
 			print("Received unhandled packet type '%s'" % type)

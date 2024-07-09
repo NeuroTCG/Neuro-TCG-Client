@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://dh37g4ide4hun"]
+[gd_scene load_steps=2 format=3 uid="uid://dh37g4ide4hun"]
 
 [ext_resource type="Script" path="res://scripts/game/card_displayer.gd" id="1_cp7jy"]
-[ext_resource type="Texture2D" uid="uid://8fyp0otk6dsw" path="res://assets/game/Angel.png" id="2_mgoce"]
 
 [node name="CardDisplayer" type="Node2D"]
 script = ExtResource("1_cp7jy")
@@ -9,4 +8,3 @@ script = ExtResource("1_cp7jy")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 visible = false
 scale = Vector2(0.2, 0.2)
-texture = ExtResource("2_mgoce")

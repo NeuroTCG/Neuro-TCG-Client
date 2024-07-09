@@ -1,10 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://7p238k7khnvn"]
 
-[ext_resource type="Script" path="res://scripts/game/card_slots.gd" id="1_ghiq4"]
+[ext_resource type="Script" path="res://scripts/game/card_slots_player.gd" id="1_4wtxn"]
 [ext_resource type="PackedScene" uid="uid://cajh3bao81ymy" path="res://scenes/game/slot.tscn" id="2_tpyu5"]
 
 [node name="CardSlots" type="Node2D" groups=["card_slots"]]
-script = ExtResource("1_ghiq4")
+script = ExtResource("1_4wtxn")
 
 [node name="Slot1" parent="." instance=ExtResource("2_tpyu5")]
 slot_no = 1

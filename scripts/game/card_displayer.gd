@@ -14,6 +14,7 @@ func _ready():
 func _on_hand_card_selected(card: Card) -> void:
 	#TODO: When card types are implemented set sprite using the card 
 	display.show() 
+	display.texture = card.card_sprite.texture
 	current_displaid_card = card 
 	 
 func _on_hand_card_unselected(card: Card) -> void:

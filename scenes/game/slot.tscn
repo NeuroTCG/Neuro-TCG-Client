@@ -7,7 +7,7 @@
 size = Vector2(60, 84)
 
 [node name="Slot" type="Node2D"]
-z_index = 100
+z_index = 50
 script = ExtResource("1_wey8m")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

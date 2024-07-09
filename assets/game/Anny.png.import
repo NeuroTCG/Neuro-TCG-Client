@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c6d2nkbr2rrol"
-path="res://.godot/imported/Angel.png-9e391abb8a751b3efbe63c13cbe8ae89.ctex"
+uid="uid://de5i3xswimbg4"
+path="res://.godot/imported/Anny.png-9310f1b0d7b7e0c421986115a0a5e4b9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/game/Angel.png"
-dest_files=["res://.godot/imported/Angel.png-9e391abb8a751b3efbe63c13cbe8ae89.ctex"]
+source_file="res://assets/game/Anny.png"
+dest_files=["res://.godot/imported/Anny.png-9310f1b0d7b7e0c421986115a0a5e4b9.ctex"]
 
 [params]
 

@@ -3,6 +3,8 @@ extends Node
 signal summon(card_id: int, position: Array)
 signal attack(card_id: int, target_position: Array, attacker_position: Array) 
 
+signal player_finished 
+
 func _ready() -> void:
 	summon.connect(_on_summon)
 	attack.connect(_on_attack)

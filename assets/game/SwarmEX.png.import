@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c6d2nkbr2rrol"
-path="res://.godot/imported/Angel.png-9e391abb8a751b3efbe63c13cbe8ae89.ctex"
+uid="uid://ceqm8rucaml1f"
+path="res://.godot/imported/SwarmEX.png-e6d0d36616e67a5fbff22ad24997b1fa.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/game/Angel.png"
-dest_files=["res://.godot/imported/Angel.png-9e391abb8a751b3efbe63c13cbe8ae89.ctex"]
+source_file="res://assets/game/SwarmEX.png"
+dest_files=["res://.godot/imported/SwarmEX.png-e6d0d36616e67a5fbff22ad24997b1fa.ctex"]
 
 [params]
 

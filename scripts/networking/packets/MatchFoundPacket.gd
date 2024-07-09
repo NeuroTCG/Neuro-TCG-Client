@@ -19,7 +19,7 @@ func to_dict() -> Dictionary:
 		"opponent": opponent.to_dict(),
 		"game_id": game_id,
 		"is_reconnect": is_reconnect,
-	    "is_first_player": is_first_player,
+		"is_first_player": is_first_player,
 	}
 
 static func from_dict(d: Dictionary):

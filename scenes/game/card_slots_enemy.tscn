@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3 uid="uid://dt020trjt7st3"]
+
+[ext_resource type="Script" path="res://scripts/game/card_slots_enemy.gd" id="1_ogjia"]
+[ext_resource type="PackedScene" uid="uid://cajh3bao81ymy" path="res://scenes/game/slot.tscn" id="2_n7lfh"]
+
+[node name="CardSlotsEnemy" type="Node2D"]
+script = ExtResource("1_ogjia")
+
+[node name="Slot8" parent="." instance=ExtResource("2_n7lfh")]
+enemy = true
+slot_no = 8
+
+[node name="Slot9" parent="." instance=ExtResource("2_n7lfh")]
+enemy = true
+slot_no = 9
+
+[node name="Slot10" parent="." instance=ExtResource("2_n7lfh")]
+enemy = true
+slot_no = 10
+
+[node name="Slot11" parent="." instance=ExtResource("2_n7lfh")]
+enemy = true
+slot_no = 11
+
+[node name="Slot12" parent="." instance=ExtResource("2_n7lfh")]
+enemy = true
+slot_no = 12
+
+[node name="Slot13" parent="." instance=ExtResource("2_n7lfh")]
+enemy = true
+slot_no = 13
+
+[node name="Slot14" parent="." instance=ExtResource("2_n7lfh")]
+enemy = true
+slot_no = 14
