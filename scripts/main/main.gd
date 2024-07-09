@@ -17,6 +17,7 @@ func _ready():
 	VerifyClientAction.attack.connect(__tmp_on_attack)
 	VerifyClientAction.summon.connect(__tmp_on_summon)
 	User.get_board_state_response.connect(__tmp_on_game_state_received)
+	User.disconnect.connect(__tmp_on_disconnect)
 	User.match_found.connect(_on_game_start, CONNECT_ONE_SHOT)
 	User.start_initial_packet_sequence()
 	
@@ -24,17 +25,8 @@ func _ready():
 func __tmp_on_game_state_received(_packet: GetBoardStateResponsePacket):
 	print("Game State received")
 
-func __tmp_on_summon(packet: SummonPacket):
-	if (packet.valid):
-		print("Summon successfull. Card has %d hp." % packet.new_card.health)
-	else:
-		print("Summon failed")
-
-func __tmp_on_attack(packet: AttackPacket):
-	if (packet.valid):
-		print("Attack successfull. Attacked card now has %d hp." % packet.target_card.health)
-	else:
-		print("Attack failed")
+func __tmp_on_disconnect(packet: DisconnectPacket):
+	print("Disconnected with message %s" % packet.message)
 
 func _on_game_start(_packet: MatchFoundPacket) -> void:
 	print("Requesting game state")

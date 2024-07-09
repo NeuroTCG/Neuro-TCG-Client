@@ -5,8 +5,9 @@ class Reason:
 	const auth_invalid: String = "auth_invalid"
 	const auth_user_banned: String = "auth_user_banned"
 	const protocol_too_old: String = "protocol_too_old"
+	const opponent_disconnect: String = "opponent_disconnect"
 
-	static var allReasons = [auth_invalid, auth_user_banned, protocol_too_old]
+	static var allReasons = [auth_invalid, auth_user_banned, protocol_too_old, opponent_disconnect]
 
 var message: String
 var reason: String

@@ -1,7 +1,7 @@
 extends Node
 
 signal summon(card_id: int, position: Array)
-signal attack(card_id: int, target_position: Array, attacker_position: Array) 
+signal attack(card_id: int, target_position: Array, attacker_position: Array)
 
 signal player_finished 
 
@@ -10,12 +10,9 @@ func _ready() -> void:
 	attack.connect(_on_attack)
 
 func _on_summon(card_id, position) -> void:
-	# TODO: Use info to create a packet and send data to server 
+	print("Summon")
+	User.send_packet(SummonRequestPacket.new(card_id, CardPosition.from_array(position)))
 	
-	pass 
-	
-func _on_attack(card_id, target_pos, attack_pos) -> void:
-	# TODO: Use info to create a packet and send data to server 
-	
-	pass
-
+func _on_attack(_card_id, target_pos, attack_pos) -> void:
+	print("Attack")
+	User.send_packet(AttackRequestPacket.new(CardPosition.from_array(attack_pos), CardPosition.from_array(target_pos)))
