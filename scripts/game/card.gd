@@ -1,8 +1,6 @@
 extends Node2D
 class_name Card 
 
-signal click_registered 
-
 @onready var animation_player = $AnimationPlayer
 @onready var card_hover_sprite = $CardBack/CardHover
 @onready var card_unhover_sprite = $CardBack/CardUnhover
@@ -46,25 +44,23 @@ static func create_card(parent_scene: Node2D, id: int) -> Card:
 	
 	return new_card
 
-func _process(delta: float) -> void:	
-	if Input.is_action_just_pressed("click"):
-		if mouse_over:
-			print("click registered ... ")
-		if MatchManager.input_paused:
-			print(" ... but input disabled")
-			return 
-		
-		if mouse_over and not selected: 
-			if placement == Placement.HAND: 
-				Global.hand_card_selected.emit(self)  
-			elif placement == Placement.PLAYMAT: 
+func _ready() -> void:
+	Global.mouse_input_functions.append(_on_mouse_clicked)
 
-				Global.playmat_card_selected.emit(self)  
-		elif selected: 
-			if placement == Placement.HAND:	
-				Global.hand_card_unselected.emit(self) 
-			elif placement == Placement.PLAYMAT:
-				Global.playmat_card_unselected.emit(self)
+func _on_mouse_clicked() -> void:
+	if MatchManager.input_paused:
+		return
+	
+	if mouse_over and not selected: 
+		if placement == Placement.HAND: 
+			Global.hand_card_selected.emit(self)  
+		elif placement == Placement.PLAYMAT: 
+			Global.playmat_card_selected.emit(self)  
+	elif selected: 
+		if placement == Placement.HAND:	
+			Global.hand_card_unselected.emit(self) 
+		elif placement == Placement.PLAYMAT:
+			Global.playmat_card_unselected.emit(self)
 
 func select() -> void:
 	selected = true 
@@ -94,6 +90,7 @@ func move_card(end_pos: Vector2, anchor:= false, time := 0.5):
 	var tween = get_tree().create_tween() 
 	tween.tween_property(self, "position", end_pos, time)
 
+	await get_tree().create_timer(0.01).timeout 
 	MatchManager.input_paused = true 
 	await get_tree().create_timer(time).timeout 
 	MatchManager.input_paused = false 

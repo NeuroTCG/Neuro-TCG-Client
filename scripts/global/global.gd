@@ -21,6 +21,15 @@ signal unhighlight_enemy_cards(card: Card)
 # TO PLAYER CARD SLOTS 
 signal show_slots(flag: bool)
 
-# Simple mouse input implementation 
-signal mouse_clicked
+## Simple mouse input implementation 
+## This is done so that mouse input is only registered once and
+## activated in a controlled manner 
+## all functions that process mouse input should be added 
+## to the following array 
+var mouse_input_functions = [] 
 
+func _process(delta: float) -> void:
+	if Input.is_action_just_pressed("click"): 
+		for callable in mouse_input_functions: 
+			print(callable)
+			callable.call() 

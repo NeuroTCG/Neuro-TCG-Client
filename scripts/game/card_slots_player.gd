@@ -16,10 +16,12 @@ func _ready() -> void:
 		slot.visible = false 
 
 func _on_fill_slot(slot_no: int, card: Card) -> void:
-	cards.append(card)
+	if slot_no < 8:
+		cards.append(card)
 
 func _on_unfill_slot(slot_no: int, card: Card) -> void:
-	cards.erase(card)
+	if slot_no < 8:
+		cards.erase(card)
 
 func show_slots(flag: bool) -> void:
 	if flag:
@@ -83,4 +85,5 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 		Global.fill_slot.emit(slot_no, selected_card)
 		
 		# Change visuals 
+		print("Moving card in process ... ")
 		selected_card.move_card(get_slot_pos(slot_no), true) 

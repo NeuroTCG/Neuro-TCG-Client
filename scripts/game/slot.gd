@@ -6,10 +6,12 @@ extends Node2D
 @onready var sprite_2d = $Sprite2D
 
 var stored_card = null 
+var mouse_over := false 
 
 func _ready() -> void: 
 	Global.fill_slot.connect(_on_fill_slot)
 	Global.unfill_slot.connect(_on_unfill_slot)
+	Global.mouse_input_functions.append(_on_mouse_clicked)
 	
 	if enemy:
 		sprite_2d.texture = preload("res://assets/game/CardSlotHighlightRed.png")
@@ -26,13 +28,20 @@ func _on_unfill_slot(slot_no: int, card: Card) -> void:
 		
 	stored_card = null 
 
-func _on_area_2d_input_event(viewport, event, shape_idx):
+func _on_mouse_clicked():
 	if MatchManager.input_paused:
 		return 
 	
-	if event.is_action_pressed("click"):
+	if mouse_over: 
 		if enemy:
 			if stored_card:
 				stored_card.attack_card() 
 		else:
+			print("Mouse click registered in slot!")
 			Global.slot_chosen.emit(slot_no, stored_card) 
+
+func _on_area_2d_mouse_entered():
+	mouse_over = true 
+
+func _on_area_2d_mouse_exited():
+	mouse_over = false 
