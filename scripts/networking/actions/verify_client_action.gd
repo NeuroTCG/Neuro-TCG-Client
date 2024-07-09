@@ -8,6 +8,7 @@ signal player_finished
 func _ready() -> void:
 	summon.connect(_on_summon)
 	attack.connect(_on_attack)
+	player_finished.connect(_on_player_finished)
 
 func _on_summon(card_id, position) -> void:
 	print("Summon")
@@ -16,3 +17,7 @@ func _on_summon(card_id, position) -> void:
 func _on_attack(_card_id, target_pos, attack_pos) -> void:
 	print("Attack")
 	User.send_packet(AttackRequestPacket.new(CardPosition.from_array(attack_pos), CardPosition.from_array(target_pos)))
+
+func _on_player_finished() -> void:
+	# TODO: implement 
+	pass 
