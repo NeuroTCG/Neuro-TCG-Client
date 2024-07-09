@@ -94,7 +94,7 @@ func receive_command(msg: String):
 				if not packet.valid:
 					invalid_command.emit("Summon by client failed!")
 			else:
-				RenderOpponentCommand.summon.emit(packet)
+				RenderOpponentAction.summon.emit(packet)
 		PacketType.Attack:
 			if packet.is_you:
 				if not packet.valid:

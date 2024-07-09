@@ -14,8 +14,6 @@ func _ready():
 	User.client = Client.new()
 	add_child(User.client)
 	await User.client.wait_until_connection_opened()
-	VerifyClientAction.attack.connect(__tmp_on_attack)
-	VerifyClientAction.summon.connect(__tmp_on_summon)
 	User.get_board_state_response.connect(__tmp_on_game_state_received)
 	User.disconnect.connect(__tmp_on_disconnect)
 	User.match_found.connect(_on_game_start, CONNECT_ONE_SHOT)
