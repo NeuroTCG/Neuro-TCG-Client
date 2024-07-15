@@ -7,6 +7,8 @@ func _ready() -> void:
 	Global.hand_card_selected.connect(_on_card_selected)
 	Global.hand_card_unselected.connect(_on_card_unselected)
 	Global.slot_chosen.connect(_on_slot_chosen)
+	MatchManager.action_summon.connect(_on_action_summon)
+	MatchManager.action_view.connect(_on_action_view)
 	
 	# Set hand positions  
 	for i in range(5):
@@ -37,8 +39,8 @@ func summon(hand_pos: int, slot_no: int) -> void:
 	var summon_card = cards.pop_at(hand_pos)
 	
 	Global.fill_slot.emit(slot_no, summon_card)  # Update slot 
-	selected_card = null  # Update hand  
-	summon_card.placement = Card.Placement.PLAYMAT # Update card 
+	
+	summon_card.placement = Card.Placement.PLAYMAT  # Update card 
 	
 	# Shift all cards right of summoned card
 	for i in range(hand_pos, cards.size()):
@@ -52,20 +54,37 @@ func _on_card_selected(card: Card) -> void:
 	selected_card = card  
 	card.shift_card_y(-30)
 	card.select()
+	card.show_buttons([MatchManager.Actions.SUMMON, MatchManager.Actions.VIEW])
 	card.set_card_visibility(100)
-	Global.show_slots.emit(true)
 
 func _on_card_unselected(card: Card) -> void:
-	if card == selected_card:
-		# If another card has been selected, this section either
-		# won't run or will be overwritten by _on_card_selected
-		selected_card = null 
-		Global.show_slots.emit(false)
 	card.shift_card_y(0)
+	Global.show_slots.emit(false)
+	card.hide_buttons()
 	card.unselect()
+	
+	if not another_card_selected(card):
+		selected_card = null 
+
+func another_card_selected(card: Card) -> bool:
+	for c in cards:
+		if c != card and c.mouse_over:
+			return true 
+	
+	return false
+
+func _on_action_summon() -> void:
+	Global.show_slots.emit(true)
+
+func _on_action_view() -> void:
+	if selected_card:
+		Global.view_card.emit(selected_card)
 
 func _on_slot_chosen(slot_no: int, _card: Card) -> void:
 	if selected_card:
-		Global.show_slots.emit(false)
-		selected_card.unselect()
-		summon(cards.find(selected_card), slot_no)
+		var summoned_card: Card = selected_card
+		
+		_on_card_unselected(summoned_card)
+		VerifyClientAction.summon.emit(summoned_card.id, CardSlots.convert_to_array(slot_no))
+		summon(cards.find(summoned_card), slot_no)
+		

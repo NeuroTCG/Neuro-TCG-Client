@@ -7,6 +7,7 @@ class_name Card
 @onready var collision = $Area2D/CollisionShape2D
 @onready var card_sprite = $CardBack/CardFront
 @onready var attack_sprite = $AttackSprite
+@onready var buttons = %Buttons
 
 #region CARD ATTRIBUTES
 var card_name: String 
@@ -22,6 +23,8 @@ var selected := false
 var anchor_position: Vector2
 var hover_tween: Tween 
 var unhover_tween: Tween 
+var button_y_pos: float  
+var movement_tween: Tween 
 
 enum Placement {
 	DECK,
@@ -46,10 +49,15 @@ static func create_card(parent_scene: Node2D, id: int) -> Card:
 
 func _ready() -> void:
 	Global.mouse_input_functions.append(_on_mouse_clicked)
+	button_y_pos = buttons.position.y 
 
-func _on_mouse_clicked() -> void:
+func _on_mouse_clicked() -> void:	
 	if MatchManager.input_paused:
-		return
+		return 
+	
+	for button in buttons.get_children():
+		if button.mouse_over:
+			return 
 	
 	if mouse_over and not selected: 
 		if placement == Placement.HAND: 
@@ -73,6 +81,19 @@ func select() -> void:
 	unhover_tween = get_tree().create_tween() 
 	unhover_tween.tween_property(card_unhover_sprite, "modulate:a", 0.0, 0.5)
 
+func show_buttons(actions: Array) -> void:
+	buttons.visible = true 
+	buttons.position.y = button_y_pos - actions.size() * 13
+	
+	for button in buttons.get_children():
+		if not button.button_action in actions: 
+			button.visible = false 
+		else:
+			button.visible = true 
+
+func hide_buttons() -> void:
+	buttons.visible = false 
+
 func unselect() -> void: 
 	selected = false 
 	
@@ -85,10 +106,12 @@ func unselect() -> void:
 	unhover_tween.tween_property(card_unhover_sprite, "modulate:a", 1.0, 0.5)
 
 func move_card(end_pos: Vector2, anchor:= false, time := 0.5):
+	if movement_tween:
+		movement_tween.kill() 
 	if anchor: 
 		anchor_position = end_pos 
-	var tween = get_tree().create_tween() 
-	tween.tween_property(self, "position", end_pos, time)
+	movement_tween = get_tree().create_tween() 
+	movement_tween.tween_property(self, "position", end_pos, time)
 
 	await get_tree().create_timer(0.01).timeout 
 	MatchManager.input_paused = true 
@@ -100,8 +123,10 @@ func set_card_visibility(index := 0):
 	z_index = index
 
 func shift_card_y(amount: float, time := 0.1):
-	var tween = get_tree().create_tween()
-	tween.tween_property(self, "position:y", anchor_position.y + amount, time)
+	if movement_tween: 
+		movement_tween.kill() 
+	movement_tween = get_tree().create_tween()
+	movement_tween.tween_property(self, "position:y", anchor_position.y + amount, time)
 
 func flip_card(enemy := false) -> void:
 	if not enemy:
@@ -109,7 +134,7 @@ func flip_card(enemy := false) -> void:
 	else:
 		animation_player.play("flip_enemy")
 
-func attack_card() -> void:
+func render_attack() -> void:
 	animation_player.play("nuke")
 
 func _on_mouse_hover():

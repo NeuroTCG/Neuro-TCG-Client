@@ -1,0 +1,39 @@
+[gd_scene load_steps=3 format=3 uid="uid://cu02rxao1axbe"]
+
+[ext_resource type="Script" path="res://scripts/game/card_viewer.gd" id="1_5ijfm"]
+[ext_resource type="Texture2D" uid="uid://c6d2nkbr2rrol" path="res://assets/game/Angel.png" id="2_6ud8s"]
+
+[node name="CardViewer" type="Node2D"]
+z_index = 300
+script = ExtResource("1_5ijfm")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(1152, 648)
+offset_right = 1152.0
+offset_bottom = 648.0
+color = Color(0, 0, 0, 0.588235)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(319.5, 289.8)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("2_6ud8s")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+offset_left = 470.5
+offset_top = 132.8
+offset_right = 869.5
+offset_bottom = 449.8
+theme_override_font_sizes/normal_font_size = 24
+text = "Card Name: 
+HP: 
+Atk: 
+
+"
+
+[node name="Label" type="Label" parent="."]
+offset_left = 428.5
+offset_top = 486.8
+offset_right = 666.5
+offset_bottom = 515.8
+theme_override_font_sizes/font_size = 24
+text = "Press [SPACE] to close "

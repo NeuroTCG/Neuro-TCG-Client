@@ -9,6 +9,9 @@ func get_slot_no(card: Card) -> int:
 			return slot.slot_no
 	return 0  
 
+func get_slot_array(card: Card) -> Array:
+	return convert_to_array(get_slot_no(card))
+
 func get_slot_pos(slot_no: int) -> Vector2: 
 	var pos = get_node("Slot" + str(slot_no)).global_position 
 	return pos
@@ -30,6 +33,8 @@ func switch_cards(card1: Card, card2: Card) -> void:
 
 
 static func convert_to_array(index: int) -> Array:
+	assert(index != 0, "There is no 0 slot")
+	
 	if index <= 4: 
 		return [0, index-1]
 	elif index <= 7: 

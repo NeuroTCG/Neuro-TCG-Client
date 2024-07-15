@@ -1,10 +1,11 @@
-[gd_scene load_steps=12 format=3 uid="uid://boe1h3a26dhro"]
+[gd_scene load_steps=13 format=3 uid="uid://boe1h3a26dhro"]
 
 [ext_resource type="Script" path="res://scripts/game/card.gd" id="1_5rey8"]
 [ext_resource type="Texture2D" uid="uid://b20ivgjyf57nr" path="res://assets/game/Back.png" id="2_u5h17"]
 [ext_resource type="Texture2D" uid="uid://c1a02v0qnntwq" path="res://assets/game/Hover.png" id="3_nlf2q"]
 [ext_resource type="Texture2D" uid="uid://ccm0rlsborp6l" path="res://assets/game/Unhover.png" id="4_5xk0m"]
 [ext_resource type="Texture2D" uid="uid://kdovff4ku5kb" path="res://assets/game/nuke_sheet.png" id="5_0v3kj"]
+[ext_resource type="PackedScene" uid="uid://b6jkjwqcsi6xw" path="res://scenes/ui/action_choice_button.tscn" id="6_txvo4"]
 
 [sub_resource type="Animation" id="Animation_qmg2o"]
 length = 0.001
@@ -258,6 +259,39 @@ shape = SubResource("RectangleShape2D_qnkpt")
 visible = false
 texture = ExtResource("5_0v3kj")
 hframes = 13
+
+[node name="Buttons" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+offset_left = -30.0
+offset_top = -42.0
+offset_right = 30.0
+offset_bottom = -3.0
+theme_override_constants/separation = 0
+
+[node name="Summon" parent="Buttons" instance=ExtResource("6_txvo4")]
+layout_mode = 2
+
+[node name="Switch" parent="Buttons" instance=ExtResource("6_txvo4")]
+layout_mode = 2
+text = "Switch
+"
+button_action = 1
+
+[node name="Attack" parent="Buttons" instance=ExtResource("6_txvo4")]
+layout_mode = 2
+text = "Attack"
+button_action = 2
+
+[node name="Ability" parent="Buttons" instance=ExtResource("6_txvo4")]
+layout_mode = 2
+text = "Ability"
+button_action = 3
+
+[node name="View" parent="Buttons" instance=ExtResource("6_txvo4")]
+layout_mode = 2
+text = "View"
+button_action = 4
 
 [connection signal="input_event" from="Area2D" to="." method="_on_input_event"]
 [connection signal="mouse_entered" from="Area2D" to="." method="_on_mouse_hover"]

@@ -34,10 +34,8 @@ func _on_mouse_clicked():
 	
 	if mouse_over: 
 		if enemy:
-			if stored_card:
-				stored_card.attack_card() 
+			Global.enemy_slot_chosen.emit(slot_no, stored_card)
 		else:
-			print("Mouse click registered in slot!")
 			Global.slot_chosen.emit(slot_no, stored_card) 
 
 func _on_area_2d_mouse_entered():
