@@ -15,7 +15,7 @@ func _ready() -> void:
 		get_node("Pos" + str(i+1)).position.x = i * CARD_LENGTH
 	
 	await game.ready
-	for i in range(5):
+	for i in range(2):
 		add_card(i) 
 		await get_tree().create_timer(0.2).timeout 
 

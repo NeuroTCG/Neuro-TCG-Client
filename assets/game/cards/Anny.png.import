@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dg531g3kfbens"
-path="res://.godot/imported/YoYo.png-473afa194f9581e327d0f827d66cc6b8.ctex"
+uid="uid://de5i3xswimbg4"
+path="res://.godot/imported/Anny.png-5e63328f13e778a336599d4e9719941d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/game/YoYo.png"
-dest_files=["res://.godot/imported/YoYo.png-473afa194f9581e327d0f827d66cc6b8.ctex"]
+source_file="res://assets/game/cards/Anny.png"
+dest_files=["res://.godot/imported/Anny.png-5e63328f13e778a336599d4e9719941d.ctex"]
 
 [params]
 

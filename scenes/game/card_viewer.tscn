@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cu02rxao1axbe"]
 
 [ext_resource type="Script" path="res://scripts/game/card_viewer.gd" id="1_5ijfm"]
-[ext_resource type="Texture2D" uid="uid://c6d2nkbr2rrol" path="res://assets/game/Angel.png" id="2_6ud8s"]
+[ext_resource type="Texture2D" uid="uid://c6d2nkbr2rrol" path="res://assets/game/cards/Angel.png" id="2_6ud8s"]
 
 [node name="CardViewer" type="Node2D"]
 z_index = 300
@@ -37,3 +37,4 @@ offset_right = 666.5
 offset_bottom = 515.8
 theme_override_font_sizes/font_size = 24
 text = "Press [SPACE] to close "
+horizontal_alignment = 1

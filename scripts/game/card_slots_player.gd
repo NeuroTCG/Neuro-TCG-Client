@@ -86,7 +86,7 @@ func _on_action_switch() -> void:
 	show_slots_for_transfer(true) 
 
 func _on_action_attack() -> void:
-	Global.highlight_enemy_cards.emit(selected_card) 
+	Global.highlight_enemy_cards.emit(selected_card, selected_card.card_info.attack_range) 
 
 func _on_action_view() -> void:
 	if selected_card:
@@ -105,7 +105,6 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 		selected_card.move_card(get_slot_pos(slot_no), true) 
 
 func _on_enemy_slot_chosen(slot_no: int, card: Card) -> void:
-	print("SIGNAL HAS BEEN RECEIVED")
 	if card: 
 		card.render_attack() 
 		VerifyClientAction.attack.emit(selected_card.id, convert_to_array(slot_no), get_slot_array(selected_card))

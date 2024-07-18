@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ceqm8rucaml1f"
-path="res://.godot/imported/SwarmEX.png-e6d0d36616e67a5fbff22ad24997b1fa.ctex"
+uid="uid://dg531g3kfbens"
+path="res://.godot/imported/YoYo.png-626b505251ff9b932b3f66ba1cb61883.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/game/SwarmEX.png"
-dest_files=["res://.godot/imported/SwarmEX.png-e6d0d36616e67a5fbff22ad24997b1fa.ctex"]
+source_file="res://assets/game/cards/YoYo.png"
+dest_files=["res://.godot/imported/YoYo.png-626b505251ff9b932b3f66ba1cb61883.ctex"]
 
 [params]
 

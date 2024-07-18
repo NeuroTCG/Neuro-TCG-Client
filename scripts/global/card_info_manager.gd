@@ -2,12 +2,20 @@
 extends Node
 
 var card_info_dict = {
-	0: CardInfo.new(preload("res://assets/game/Angel.png")),
-	1: CardInfo.new(preload("res://assets/game/Anny.png")),
-	2: CardInfo.new(preload("res://assets/game/Fily.png")),
-	3: CardInfo.new(preload("res://assets/game/MothersLove.png")),
-	4: CardInfo.new(preload("res://assets/game/SwarmEX.png")),
-	5: CardInfo.new(preload("res://assets/game/YoYo.png"))
+	0: CardInfo.new(
+		preload("res://assets/game/cards/evil.jpg"), 
+		2,  # hp
+		2,  # atk 
+		3,  # cost
+		CardInfo.AttackRange.STANDARD  # attack range 
+	),
+	1: CardInfo.new(
+		preload("res://assets/game/cards/Fily.png"), 
+		3,  # hp
+		3,  # atk 
+		5,  # cost
+		CardInfo.AttackRange.REACH  # attack range 
+	),
 }
 
 # Called when the node enters the scene tree for the first time.

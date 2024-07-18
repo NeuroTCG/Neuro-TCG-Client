@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dtmefihxacpxx"
-path="res://.godot/imported/Fily.png-41ff094e031dc231f5afb1f687db908e.ctex"
+path="res://.godot/imported/Fily.png-4d6b787aa97618793309acf5c294f8e0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/game/Fily.png"
-dest_files=["res://.godot/imported/Fily.png-41ff094e031dc231f5afb1f687db908e.ctex"]
+source_file="res://assets/game/cards/Fily.png"
+dest_files=["res://.godot/imported/Fily.png-4d6b787aa97618793309acf5c294f8e0.ctex"]
 
 [params]
 

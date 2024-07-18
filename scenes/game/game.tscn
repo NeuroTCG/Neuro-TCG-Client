@@ -61,8 +61,7 @@ position = Vector2(317, 94)
 [node name="Slot7" parent="CardSlots" index="6"]
 position = Vector2(517, 93)
 
-[node name="CardSlotsEnemy" parent="." node_paths=PackedStringArray("player_card_slot") instance=ExtResource("8_pgxhr")]
-player_card_slot = NodePath("../CardSlots")
+[node name="CardSlotsEnemy" parent="." instance=ExtResource("8_pgxhr")]
 
 [node name="Slot8" parent="CardSlotsEnemy" index="0"]
 position = Vector2(369, 177)

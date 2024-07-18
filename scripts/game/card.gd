@@ -25,6 +25,7 @@ var hover_tween: Tween
 var unhover_tween: Tween 
 var button_y_pos: float  
 var movement_tween: Tween 
+var card_info: CardInfo 
 
 enum Placement {
 	DECK,
@@ -40,9 +41,9 @@ static func create_card(parent_scene: Node2D, id: int) -> Card:
 	parent_scene.add_child(new_card)
 	
 	new_card.id = id 
+	new_card.card_info = card_info 
 	new_card.card_sprite.texture = card_info.graphics
-	new_card.health = card_info.max_hp
-	new_card.attack = card_info.base_atk
+	
 	new_card.placement = Placement.DECK
 	
 	return new_card
@@ -85,13 +86,30 @@ func show_buttons(actions: Array) -> void:
 	buttons.visible = true 
 	buttons.position.y = button_y_pos - actions.size() * 13
 	
+	var shortcut_strings = [] 
+	
 	for button in buttons.get_children():
-		if not button.button_action in actions: 
-			button.visible = false 
+		if button.button_action in actions: 
+			button.visible = true
+			print(button.button_action)
+			match button.button_action: 
+				MatchManager.Actions.SUMMON: 
+					shortcut_strings.append("S: Summon, ")
+				MatchManager.Actions.SWITCH:
+					shortcut_strings.append("W: Switch, ")
+				MatchManager.Actions.ATTACK:
+					shortcut_strings.append("A: Attack, ")
+				MatchManager.Actions.ABILITY:
+					shortcut_strings.append("E: Ability, ") 
+				MatchManager.Actions.VIEW:
+					shortcut_strings.append("V: View, ") 
 		else:
-			button.visible = true 
+			button.visible = false 
+	
+	Global.show_shortcuts.emit(shortcut_strings)
 
 func hide_buttons() -> void:
+	Global.hide_shortcuts.emit() 
 	buttons.visible = false 
 
 func unselect() -> void: 

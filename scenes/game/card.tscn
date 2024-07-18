@@ -271,27 +271,32 @@ theme_override_constants/separation = 0
 
 [node name="Summon" parent="Buttons" instance=ExtResource("6_txvo4")]
 layout_mode = 2
+shortcut_key = "s"
 
 [node name="Switch" parent="Buttons" instance=ExtResource("6_txvo4")]
 layout_mode = 2
 text = "Switch
 "
 button_action = 1
+shortcut_key = "w"
 
 [node name="Attack" parent="Buttons" instance=ExtResource("6_txvo4")]
 layout_mode = 2
 text = "Attack"
 button_action = 2
+shortcut_key = "a"
 
 [node name="Ability" parent="Buttons" instance=ExtResource("6_txvo4")]
 layout_mode = 2
 text = "Ability"
 button_action = 3
+shortcut_key = "e"
 
 [node name="View" parent="Buttons" instance=ExtResource("6_txvo4")]
 layout_mode = 2
 text = "View"
 button_action = 4
+shortcut_key = "v"
 
 [connection signal="input_event" from="Area2D" to="." method="_on_input_event"]
 [connection signal="mouse_entered" from="Area2D" to="." method="_on_mouse_hover"]

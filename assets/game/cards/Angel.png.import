@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c6d2nkbr2rrol"
-path="res://.godot/imported/Angel.png-9e391abb8a751b3efbe63c13cbe8ae89.ctex"
+path="res://.godot/imported/Angel.png-18cd8c3ac627666b0b01d8402a71a843.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/game/Angel.png"
-dest_files=["res://.godot/imported/Angel.png-9e391abb8a751b3efbe63c13cbe8ae89.ctex"]
+source_file="res://assets/game/cards/Angel.png"
+dest_files=["res://.godot/imported/Angel.png-18cd8c3ac627666b0b01d8402a71a843.ctex"]
 
 [params]
 
