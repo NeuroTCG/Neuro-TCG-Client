@@ -29,8 +29,8 @@ func _on_unfill_slot(slot_no: int, card: Card) -> void:
 		cards.erase(card)
 
 func _on_attack(packet: AttackPacket) -> void:
-	var card_slot = CardSlots.convert_to_index([packet.target_position.row, packet.target_position.column]) 
-	var card: Card = get_node("Slot" + str(card_slot))
+	var card_slot = CardSlots.convert_to_index([packet.target_position.row, packet.target_position.column])
+	var card: Card = get_node("Slot"+ str(card_slot))
 	card.render_attack()
 
 func show_slots(flag: bool) -> void:
@@ -58,8 +58,8 @@ func _on_card_selected(card: Card) -> void:
 	if MatchManager.current_action == MatchManager.Actions.SWITCH:
 		MatchManager.current_action = MatchManager.Actions.IDLE
 		card.unselect()
-		switch_cards(card, selected_card)
 		VerifyClientAction.switch.emit(get_slot_array(card), get_slot_array(selected_card))
+		switch_cards(card, selected_card)
 		
 		# Update card slots 
 		selected_card = null
@@ -104,13 +104,15 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 		return
 	
 	if selected_card:
+		# Send packet
+		VerifyClientAction.switch.emit(get_slot_array(selected_card), convert_to_array(slot_no))
+
 		# Change slots 
 		Global.unfill_slot.emit(get_slot_no(selected_card), selected_card)
 		Global.fill_slot.emit(slot_no, selected_card)
 		
 		# Change visuals 
 		selected_card.move_card(get_slot_pos(slot_no), true)
-		VerifyClientAction.switch.emit(get_slot_array(selected_card), convert_to_array(slot_no))
 
 func _on_enemy_slot_chosen(slot_no: int, card: Card) -> void:
 	if card:
