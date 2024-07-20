@@ -17,6 +17,15 @@ const SummonRequest: String = "summon_request"
 const Attack: String = "attack"
 const AttackRequest: String = "attack_request"
 
+const SwitchPlaceRequest: String = "switch_place_request"
+const SwitchPlace: String = "switch_place"
+
+const StartTurn: String = "start_turn"
+const EndTurn: String = "end_turn"
+
+const DrawCardRequest: String = "draw_card_request"
+const DrawCard: String = "draw_card"
+
 const allTypes: Array[String] = [
 	ClientInfo,
 	ClientInfoAccept,
@@ -34,4 +43,13 @@ const allTypes: Array[String] = [
 
 	Attack,
 	AttackRequest,
+	
+	SwitchPlace,
+	SwitchPlaceRequest,
+
+	StartTurn,
+	EndTurn,
+
+	DrawCardRequest,
+	DrawCard,
 ]

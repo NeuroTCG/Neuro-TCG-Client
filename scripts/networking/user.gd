@@ -8,6 +8,10 @@ signal disconnect(packet: DisconnectPacket)
 signal rule_info(packet: RuleInfoPacket)
 signal match_found(packet: MatchFoundPacket)
 signal unknown_packet(packet: UnknownPacketPacket)
+signal switch_place(packet: SwitchPlacePacket)
+signal start_turn(packet: StartTurnPacket)
+signal end_turn(packet: EndTurnPacket)
+signal draw_card(packet: DrawCardPacket)
 #endregion
 
 # Maybe good idea to replace error with an object with more details, idk. 
@@ -102,5 +106,20 @@ func receive_command(msg: String):
 			else:
 				RenderOpponentAction.attack.emit(packet)
 
+		PacketType.SwitchPlace:
+			if packet.is_you:
+				if not packet.valid:
+					invalid_command.emit("Switch by client failed!")
+			else:
+				RenderOpponentAction.switch.emit(packet)
+		PacketType.StartTurn:
+			RenderOpponentAction.opponent_finished.emit()
+		
+		PacketType.DrawCard:
+			print(packet.is_you)
+			draw_card.emit(packet)
+			if (!packet.is_you):
+				RenderOpponentAction.draw_card.emit(packet)
+				
 		var type:
-			print("Received unhandled packet type '%s'" % type)
+			assert(false, "Received unhandled packet type '%s'" % type)

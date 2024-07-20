@@ -16,7 +16,6 @@ func _ready():
 	await User.client.wait_until_connection_opened()
 	User.get_board_state_response.connect(__tmp_on_game_state_received)
 	User.disconnect.connect(__tmp_on_disconnect)
-	User.match_found.connect(_on_game_start, CONNECT_ONE_SHOT)
 	User.start_initial_packet_sequence()
 	
 
@@ -25,13 +24,3 @@ func __tmp_on_game_state_received(_packet: GetBoardStateResponsePacket):
 
 func __tmp_on_disconnect(packet: DisconnectPacket):
 	print("Disconnected with message %s" % packet.message)
-
-func _on_game_start(_packet: MatchFoundPacket) -> void:
-	print("Requesting game state")
-	User.send_packet(GetBoardStatePacket.new(GetBoardStatePacket.Reason.connect))
-	print("Summoning at 1,2")
-	User.send_packet(SummonRequestPacket.new(0, CardPosition.new(1, 2)))
-	print("Summoning at 1,2 again")
-	User.send_packet(SummonRequestPacket.new(0, CardPosition.new(1, 2)))
-	print("Attacking 0,0 with 1,2")
-	User.send_packet(AttackRequestPacket.new(CardPosition.new(0, 0), CardPosition.new(1, 2)))

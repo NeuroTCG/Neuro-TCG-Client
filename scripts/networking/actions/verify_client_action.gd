@@ -2,13 +2,15 @@ extends Node
 
 signal summon(card_id: int, position: Array)
 signal attack(card_id: int, target_position: Array, attacker_position: Array)
+signal switch(pos1: Array, pos2: Array)
 
-signal player_finished 
+signal player_finished
 
 func _ready() -> void:
 	summon.connect(_on_summon)
 	attack.connect(_on_attack)
 	player_finished.connect(_on_player_finished)
+	switch.connect(_on_switch)
 
 func _on_summon(card_id, position) -> void:
 	print("Summon")
@@ -19,5 +21,8 @@ func _on_attack(_card_id, target_pos, attack_pos) -> void:
 	User.send_packet(AttackRequestPacket.new(CardPosition.from_array(attack_pos), CardPosition.from_array(target_pos)))
 
 func _on_player_finished() -> void:
-	# TODO: implement 
-	pass 
+	User.send_packet(EndTurnPacket.new())
+
+func _on_switch(pos1, pos2) -> void:
+	print("Switch")
+	User.send_packet(SwitchPlaceRequestPacket.new(CardPosition.from_array(pos1), CardPosition.from_array(pos2)))

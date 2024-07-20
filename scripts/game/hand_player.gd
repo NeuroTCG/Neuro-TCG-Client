@@ -10,14 +10,19 @@ func _ready() -> void:
 	MatchManager.action_summon.connect(_on_action_summon)
 	MatchManager.action_view.connect(_on_action_view)
 	
+	User.draw_card.connect(_on_draw_card)
+	
 	# Set hand positions  
 	for i in range(5):
 		get_node("Pos" + str(i+1)).position.x = i * CARD_LENGTH
 	
 	await game.ready
-	for i in range(2):
-		add_card(i) 
-		await get_tree().create_timer(0.2).timeout 
+
+func _on_draw_card(packet: DrawCardPacket):
+	if (packet.is_you):
+		assert (packet.card_id >= 0, "draw_card was invalid")
+		add_card(packet.card_id)
+			
 
 func add_card(id: int) -> void:
 	assert(cards.size() < 5, "Hand should only store 5 cards")
@@ -88,3 +93,7 @@ func _on_slot_chosen(slot_no: int, _card: Card) -> void:
 		VerifyClientAction.summon.emit(summoned_card.id, CardSlots.convert_to_array(slot_no))
 		summon(cards.find(summoned_card), slot_no)
 		
+func _process(_delta):
+	if (!MatchManager.input_paused and Input.is_action_just_pressed("draw_card")):
+		if cards.size() < 5:
+			User.send_packet(DrawCardRequestPacket.new())

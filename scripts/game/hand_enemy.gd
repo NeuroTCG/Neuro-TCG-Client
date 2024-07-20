@@ -5,15 +5,13 @@ extends Hand
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	RenderOpponentAction.summon.connect(_on_summon)
+	RenderOpponentAction.draw_card.connect(_on_draw_card)
 	
 	# Set hand positions  
 	for i in range(5):
 		get_node("Pos" + str(i+1)).position.x = 4 * CARD_LENGTH - i * CARD_LENGTH
 	
 	await game.ready
-	for i in range(2):
-		add_card(i)
-		await get_tree().create_timer(0.2).timeout 
 
 func _on_summon(packet: SummonPacket) -> void:
 	assert(cards.size() > 0, "Failed to render enemy.  Cards should exist at hand when summoning") 
@@ -30,6 +28,10 @@ func _on_summon(packet: SummonPacket) -> void:
 	Global.fill_slot.emit(slot_no, summon_card)  # Update slot 
 	summon_card.move_card(slot_pos, true) 
 	
+func _on_draw_card(packet: DrawCardPacket) -> void:
+	assert(packet.card_id >= 0, "The server sent an invalid opponent action")
+	add_card(packet.card_id)
+
 func get_hand_pos_from_id(id: int) -> int: 
 	for card in cards: 
 		if card.id == id: 

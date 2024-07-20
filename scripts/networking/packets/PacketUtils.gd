@@ -18,6 +18,15 @@ static var _type_to_class: Dictionary = {
 
 	PacketType.Attack: AttackPacket,
 	PacketType.AttackRequest: AttackRequestPacket,
+
+	PacketType.SwitchPlace: SwitchPlacePacket,
+	PacketType.SwitchPlaceRequest: SwitchPlaceRequestPacket,
+
+	PacketType.StartTurn: StartTurnPacket,
+	PacketType.EndTurn: EndTurnPacket,
+
+	PacketType.DrawCard: DrawCardPacket,
+	PacketType.DrawCardRequest: DrawCardRequestPacket,
 }
 
 static func deserialize(s: String) -> Packet:

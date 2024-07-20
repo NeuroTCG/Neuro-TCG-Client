@@ -1,8 +1,8 @@
-extends CardSlots 
+extends CardSlots
 
-var cards := [] 
+var cards := []
 var selected_card = null
-var card_transfer_underway := false 
+var card_transfer_underway := false
 
 func _ready() -> void:
 	Global.show_slots.connect(show_slots)
@@ -17,7 +17,7 @@ func _ready() -> void:
 	MatchManager.action_view.connect(_on_action_view)
 	
 	for slot in get_children():
-		slot.visible = false 
+		slot.visible = false
 
 func _on_fill_slot(slot_no: int, card: Card) -> void:
 	if slot_no < 8:
@@ -32,69 +32,70 @@ func show_slots(flag: bool) -> void:
 		for slot in get_children():
 			if not slot.stored_card:
 				slot.visible = true
-			else: 
-				slot.visible = false  
+			else:
+				slot.visible = false
 	else:
-		for slot in get_children(): 
-			slot.visible = false 
+		for slot in get_children():
+			slot.visible = false
 
 func show_slots_for_transfer(flag: bool) -> void:
-	if flag: 
+	if flag:
 		for slot in get_children():
-			slot.visible = true 
+			slot.visible = true
 			
 			# Don't show selected card  
 			if slot.stored_card:
 				if slot.stored_card == selected_card:
-					slot.visible = false 
+					slot.visible = false
 	
 func _on_card_selected(card: Card) -> void:
 	if MatchManager.current_action == MatchManager.Actions.SWITCH:
-		MatchManager.current_action = MatchManager.Actions.IDLE 
-		card.unselect() 
+		MatchManager.current_action = MatchManager.Actions.IDLE
+		card.unselect()
 		switch_cards(card, selected_card)
+		VerifyClientAction.switch.emit(get_slot_array(card), get_slot_array(selected_card))
 		
 		# Update card slots 
-		selected_card = null  
+		selected_card = null
 		show_slots(false)
 	else:
 		card.show_buttons([MatchManager.Actions.SWITCH, MatchManager.Actions.ATTACK, MatchManager.Actions.VIEW])
 		selected_card = card
-		card.select() 
+		card.select()
 
 func _on_card_unselected(card: Card) -> void:
-	card.hide_buttons() 
-	card.unselect() 
-	Global.unhighlight_enemy_cards.emit(selected_card) 
+	card.hide_buttons()
+	card.unselect()
+	Global.unhighlight_enemy_cards.emit(selected_card)
 	
 	# If another card has been selected, 
 	# Update these values from the _on_card_selected
 	# that will run from that card being clicked on 
-	if not another_card_selected(card): 
+	if not another_card_selected(card):
 		selected_card = null
 		show_slots(false)
-		MatchManager.current_action = MatchManager.Actions.IDLE 
+		MatchManager.current_action = MatchManager.Actions.IDLE
 
 func another_card_selected(card: Card) -> bool:
 	for c in cards:
 		if c != card and c.mouse_over:
-			return true 
+			return true
 	
 	return false
 
 func _on_action_switch() -> void:
-	show_slots_for_transfer(true) 
+	show_slots_for_transfer(true)
 
 func _on_action_attack() -> void:
-	Global.highlight_enemy_cards.emit(selected_card, selected_card.card_info.attack_range) 
+	Global.highlight_enemy_cards.emit(selected_card, selected_card.card_info.attack_range)
 
 func _on_action_view() -> void:
 	if selected_card:
 		Global.view_card.emit(selected_card)
 
-func _on_slot_chosen(slot_no: int, card: Card) -> void:	
+func _on_slot_chosen(slot_no: int, card: Card) -> void:
 	if card:
-		return 
+		return
 	
 	if selected_card:
 		# Change slots 
@@ -102,9 +103,10 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 		Global.fill_slot.emit(slot_no, selected_card)
 		
 		# Change visuals 
-		selected_card.move_card(get_slot_pos(slot_no), true) 
+		selected_card.move_card(get_slot_pos(slot_no), true)
+		VerifyClientAction.switch.emit(get_slot_array(selected_card), convert_to_array(slot_no))
 
 func _on_enemy_slot_chosen(slot_no: int, card: Card) -> void:
-	if card: 
-		card.render_attack() 
+	if card:
+		card.render_attack()
 		VerifyClientAction.attack.emit(selected_card.id, convert_to_array(slot_no), get_slot_array(selected_card))
