@@ -15,6 +15,7 @@ func _ready() -> void:
 	MatchManager.action_switch.connect(_on_action_switch)
 	MatchManager.action_attack.connect(_on_action_attack)
 	MatchManager.action_view.connect(_on_action_view)
+	RenderOpponentAction.attack.connect(_on_attack)
 	
 	for slot in get_children():
 		slot.visible = false
@@ -26,6 +27,11 @@ func _on_fill_slot(slot_no: int, card: Card) -> void:
 func _on_unfill_slot(slot_no: int, card: Card) -> void:
 	if slot_no < 8:
 		cards.erase(card)
+
+func _on_attack(packet: AttackPacket) -> void:
+	var card_slot = CardSlots.convert_to_index([packet.target_position.row, packet.target_position.column]) 
+	var card: Card = get_node("Slot" + str(card_slot))
+	card.render_attack()
 
 func show_slots(flag: bool) -> void:
 	if flag:

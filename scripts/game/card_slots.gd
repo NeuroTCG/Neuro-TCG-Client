@@ -31,7 +31,6 @@ func switch_cards(card1: Card, card2: Card) -> void:
 	card1.move_card(card2_pos)
 	card2.move_card(card1_pos) 
 
-
 static func convert_to_array(index: int) -> Array:
 	assert(index != 0, "There is no 0 slot")
 	
