@@ -94,6 +94,6 @@ func _on_slot_chosen(slot_no: int, _card: Card) -> void:
 		summon(cards.find(summoned_card), slot_no)
 		
 func _process(_delta):
-	if (!MatchManager.input_paused and Input.is_action_just_pressed("draw_card")):
+	if ((not MatchManager.input_paused) and Input.is_action_just_pressed("draw_card")):
 		if cards.size() < 5:
 			User.send_packet(DrawCardRequestPacket.new())

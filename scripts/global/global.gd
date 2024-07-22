@@ -33,9 +33,9 @@ signal hide_shortcuts
 ## This is done so that mouse input can be 
 ## proccessed in a controlled manner
 ## Current order is SLOTS -> CARDS 
-var mouse_input_functions = [] 
+var mouse_input_functions: Array[Callable] = []
 
 func _process(delta: float) -> void:
-	if Input.is_action_just_pressed("click"): 
-		for callable in mouse_input_functions: 
-			callable.call() 
+	if Input.is_action_just_pressed("click"):
+		for callable in mouse_input_functions:
+			callable.call()
