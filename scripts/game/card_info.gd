@@ -19,7 +19,6 @@ func _init(_graphics: Texture2D, _hp, _atk, _cost, _atk_range) -> void:
 	cost = _cost
 	graphics = _graphics
 	attack_range = _atk_range
-	
 
 func set_info(p_max_hp: int, p_base_atk: int) -> void:
 	max_hp = p_max_hp

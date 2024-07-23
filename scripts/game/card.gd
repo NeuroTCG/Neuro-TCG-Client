@@ -8,6 +8,8 @@ class_name Card
 @onready var card_sprite = $CardBack/CardFront
 @onready var attack_sprite = $AttackSprite
 @onready var buttons = %Buttons
+@onready var atk_label = %AtkLabel
+@onready var hp_label = %HpLabel
 
 #region CARD ATTRIBUTES
 var card_name: String 
@@ -26,6 +28,8 @@ var unhover_tween: Tween
 var button_y_pos: float  
 var movement_tween: Tween 
 var card_info: CardInfo 
+var hp: int  
+var atk: int 
 
 enum Placement {
 	DECK,
@@ -43,6 +47,8 @@ static func create_card(parent_scene: Node2D, id: int) -> Card:
 	new_card.id = id 
 	new_card.card_info = card_info 
 	new_card.card_sprite.texture = card_info.graphics
+	new_card.hp = card_info.max_hp 
+	new_card.atk = card_info.base_atk
 	
 	new_card.placement = Placement.DECK
 	
@@ -81,6 +87,9 @@ func select() -> void:
 	if unhover_tween: unhover_tween.kill() 
 	unhover_tween = get_tree().create_tween() 
 	unhover_tween.tween_property(card_unhover_sprite, "modulate:a", 0.0, 0.5)
+
+	atk_label.text = str(atk)
+	hp_label.text = str(hp)
 
 func show_buttons(actions: Array) -> void:
 	buttons.visible = true 
@@ -152,7 +161,12 @@ func flip_card(enemy := false) -> void:
 	else:
 		animation_player.play("flip_enemy")
 
-func render_attack() -> void:
+func render_attack(card: Card) -> void:
+	hp - card.atk
+	animation_player.play("nuke")
+
+func render_opponent_attack(_hp: int) -> void:
+	hp = _hp  
 	animation_player.play("nuke")
 
 func _on_mouse_hover():

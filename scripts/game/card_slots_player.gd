@@ -31,7 +31,7 @@ func _on_unfill_slot(slot_no: int, card: Card) -> void:
 func _on_attack(packet: AttackPacket) -> void:
 	var card_slot = CardSlots.convert_to_index([packet.target_position.row, packet.target_position.column]) 
 	var card: Card = get_node("Slot" + str(card_slot))
-	card.render_attack()
+	card.render_opponent_attack(packet.target_card.health)
 
 func show_slots(flag: bool) -> void:
 	if flag:
@@ -110,9 +110,10 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 		
 		# Change visuals 
 		selected_card.move_card(get_slot_pos(slot_no), true)
+		
 		VerifyClientAction.switch.emit(get_slot_array(selected_card), convert_to_array(slot_no))
 
 func _on_enemy_slot_chosen(slot_no: int, card: Card) -> void:
 	if card:
-		card.render_attack()
+		card.render_attack(selected_card)
 		VerifyClientAction.attack.emit(selected_card.id, convert_to_array(slot_no), get_slot_array(selected_card))

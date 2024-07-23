@@ -241,6 +241,31 @@ position = Vector2(2.95639e-05, -1.14441e-05)
 modulate = Color(1, 1, 1, 0)
 texture = ExtResource("3_nlf2q")
 
+[node name="Labels" type="Node2D" parent="CardBack/CardHover"]
+scale = Vector2(12.5, 12.5)
+
+[node name="AtkLabel" type="Label" parent="CardBack/CardHover/Labels"]
+unique_name_in_owner = true
+offset_left = -31.0
+offset_top = -44.0
+offset_right = -16.0
+offset_bottom = -26.0
+theme_override_font_sizes/font_size = 14
+text = "10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HpLabel" type="Label" parent="CardBack/CardHover/Labels"]
+unique_name_in_owner = true
+offset_left = 16.0
+offset_top = -44.0
+offset_right = 31.0
+offset_bottom = -26.0
+theme_override_font_sizes/font_size = 14
+text = "10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="CardUnhover" type="Sprite2D" parent="CardBack"]
 visible = false
 texture = ExtResource("4_5xk0m")
