@@ -12,6 +12,8 @@ signal switch_place(packet: SwitchPlacePacket)
 signal start_turn(packet: StartTurnPacket)
 signal end_turn(packet: EndTurnPacket)
 signal draw_card(packet: DrawCardPacket)
+
+signal attack(packet: AttackPacket)
 #endregion
 
 # Maybe good idea to replace error with an object with more details, idk. 
@@ -100,6 +102,7 @@ func receive_command(msg: String):
 			else:
 				RenderOpponentAction.summon.emit(packet)
 		PacketType.Attack:
+			attack.emit(packet)
 			if packet.is_you:
 				if not packet.valid:
 					invalid_command.emit("Attack by client failed!")

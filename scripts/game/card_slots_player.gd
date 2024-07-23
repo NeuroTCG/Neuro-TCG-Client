@@ -16,6 +16,7 @@ func _ready() -> void:
 	MatchManager.action_attack.connect(_on_action_attack)
 	MatchManager.action_view.connect(_on_action_view)
 	RenderOpponentAction.attack.connect(_on_attack)
+	User.attack.connect(_on_any_attack)
 	
 	for slot in get_children():
 		slot.visible = false
@@ -29,9 +30,23 @@ func _on_unfill_slot(slot_no: int, card: Card) -> void:
 		cards.erase(card)
 
 func _on_attack(packet: AttackPacket) -> void:
-	var card_slot = CardSlots.convert_to_index([packet.target_position.row, packet.target_position.column]) 
-	var card: Card = get_node("Slot" + str(card_slot))
-	card.render_opponent_attack(packet.target_card.health)
+	var card_slot = CardSlots.convert_to_index(packet.target_position.to_array())
+	var card: Card = get_node("Slot"+ str(card_slot)).stored_card
+	card.render_attack()
+
+func _on_any_attack(packet: AttackPacket) -> void:
+	if (packet.attacker_card == null and packet.is_you):
+		var atk_card_pos = CardSlots.convert_to_index(packet.attacker_position.to_array(), false)
+		var atk_card: Card = get_node("Slot"+ str(atk_card_pos)).stored_card
+		atk_card.render_attack()
+		#Global.unfill_slot.emit(atk_card_pos, atk_card)
+		#atk_card.destroy()
+	if (packet.target_card == null and !packet.is_you):
+		var card_pos = CardSlots.convert_to_index(packet.target_position.to_array(), false)
+		var card: Card = get_node("Slot"+ str(card_pos)).stored_card
+		card.render_attack()
+		#Global.unfill_slot.emit(card_pos, card)
+		#card.destroy()
 
 func show_slots(flag: bool) -> void:
 	if flag:
@@ -58,8 +73,8 @@ func _on_card_selected(card: Card) -> void:
 	if MatchManager.current_action == MatchManager.Actions.SWITCH:
 		MatchManager.current_action = MatchManager.Actions.IDLE
 		card.unselect()
-		switch_cards(card, selected_card)
 		VerifyClientAction.switch.emit(get_slot_array(card), get_slot_array(selected_card))
+		switch_cards(card, selected_card)
 		
 		# Update card slots 
 		selected_card = null
@@ -104,14 +119,15 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 		return
 	
 	if selected_card:
+		# Send packet
+		VerifyClientAction.switch.emit(get_slot_array(selected_card), convert_to_array(slot_no))
+
 		# Change slots 
 		Global.unfill_slot.emit(get_slot_no(selected_card), selected_card)
 		Global.fill_slot.emit(slot_no, selected_card)
 		
 		# Change visuals 
 		selected_card.move_card(get_slot_pos(slot_no), true)
-		
-		VerifyClientAction.switch.emit(get_slot_array(selected_card), convert_to_array(slot_no))
 
 func _on_enemy_slot_chosen(slot_no: int, card: Card) -> void:
 	if card:
