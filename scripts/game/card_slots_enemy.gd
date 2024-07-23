@@ -54,13 +54,13 @@ func _on_any_attack(packet: AttackPacket) -> void:
 	if (packet.attacker_card == null and !packet.is_you):
 		var atk_card_pos = CardSlots.convert_to_index(packet.attacker_position.to_array(), true)
 		var atk_card: Card = get_node("Slot"+ str(atk_card_pos)).stored_card
-		atk_card.render_attack()
+		atk_card.render_opponent_attack(packet.target_card.health)
 		#Global.unfill_slot.emit(atk_card_pos, atk_card)
 		#atk_card.destroy()
 	if (packet.target_card == null and packet.is_you):
 		var card_pos = CardSlots.convert_to_index(packet.target_position.to_array(), true)
 		var card: Card = get_node("Slot"+ str(card_pos)).stored_card
-		card.render_attack()
+		card.render_opponent_attack(packet.target_card.health)
 		#Global.unfill_slot.emit(card_pos, card)
 		#card.destroy()
 	pass
