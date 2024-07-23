@@ -32,19 +32,19 @@ func _on_unfill_slot(slot_no: int, card: Card) -> void:
 func _on_attack(packet: AttackPacket) -> void:
 	var card_slot = CardSlots.convert_to_index(packet.target_position.to_array())
 	var card: Card = get_node("Slot"+ str(card_slot)).stored_card
-	card.render_opponent_attack(packet.target_card.health)
+	card.render_attack(packet.target_card.health)
 
 func _on_any_attack(packet: AttackPacket) -> void:
 	if (packet.attacker_card == null and packet.is_you):
 		var atk_card_pos = CardSlots.convert_to_index(packet.attacker_position.to_array(), false)
 		var atk_card: Card = get_node("Slot"+ str(atk_card_pos)).stored_card
-		atk_card.render_opponent_attack(packet.target_card.health)
+		atk_card.render_attack(packet.target_card.health)
 		#Global.unfill_slot.emit(atk_card_pos, atk_card)
 		#atk_card.destroy()
 	if (packet.target_card == null and !packet.is_you):
 		var card_pos = CardSlots.convert_to_index(packet.target_position.to_array(), false)
 		var card: Card = get_node("Slot"+ str(card_pos)).stored_card
-		card.render_opponent_attack(packet.target_card.health)
+		card.render_attack(packet.target_card.health)
 		#Global.unfill_slot.emit(card_pos, card)
 		#card.destroy()
 
@@ -131,5 +131,5 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 
 func _on_enemy_slot_chosen(slot_no: int, card: Card) -> void:
 	if card:
-		card.render_attack(selected_card)
+		card.render_attack_client(selected_card)
 		VerifyClientAction.attack.emit(selected_card.id, convert_to_array(slot_no), get_slot_array(selected_card))

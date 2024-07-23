@@ -161,11 +161,11 @@ func flip_card(enemy:=false) -> void:
 	else:
 		animation_player.play("flip_enemy")
 
-func render_attack(card: Card) -> void:
+func render_attack_client(card: Card) -> void:
 	hp - card.atk
 	animation_player.play("nuke")
 
-func render_opponent_attack(_hp: int) -> void:
+func render_attack(_hp: int) -> void:
 	hp = _hp  
 	animation_player.play("nuke")
 
