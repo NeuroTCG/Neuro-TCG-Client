@@ -15,8 +15,8 @@ func _ready() -> void:
 	MatchManager.action_switch.connect(_on_action_switch)
 	MatchManager.action_attack.connect(_on_action_attack)
 	MatchManager.action_view.connect(_on_action_view)
-	RenderOpponentAction.attack.connect(_on_attack)
-	User.attack.connect(_on_any_attack)
+	RenderOpponentAction.attack.connect(_on_opponent_attack)
+	#User.attack.connect(_on_any_attack)
 	
 	for slot in get_children():
 		slot.visible = false
@@ -29,24 +29,19 @@ func _on_unfill_slot(slot_no: int, card: Card) -> void:
 	if slot_no < 8:
 		cards.erase(card)
 
-func _on_attack(packet: AttackPacket) -> void:
-	var card_slot = CardSlots.convert_to_index(packet.target_position.to_array())
-	var card: Card = get_node("Slot"+ str(card_slot)).stored_card
-	card.render_attack(packet.target_card.health)
-
-func _on_any_attack(packet: AttackPacket) -> void:
-	if (packet.attacker_card == null and packet.is_you):
-		var atk_card_pos = CardSlots.convert_to_index(packet.attacker_position.to_array(), false)
-		var atk_card: Card = get_node("Slot"+ str(atk_card_pos)).stored_card
-		atk_card.render_attack(packet.target_card.health)
-		#Global.unfill_slot.emit(atk_card_pos, atk_card)
-		#atk_card.destroy()
-	if (packet.target_card == null and !packet.is_you):
-		var card_pos = CardSlots.convert_to_index(packet.target_position.to_array(), false)
-		var card: Card = get_node("Slot"+ str(card_pos)).stored_card
-		card.render_attack(packet.target_card.health)
-		#Global.unfill_slot.emit(card_pos, card)
-		#card.destroy()
+#func _on_any_attack(packet: AttackPacket) -> void:
+	#if (packet.attacker_card == null and packet.is_you):
+		#var atk_card_pos = CardSlots.convert_to_index(packet.attacker_position.to_array(), false)
+		#var atk_card: Card = get_node("Slot"+ str(atk_card_pos)).stored_card
+		#atk_card.render_attack(packet.attacker_card.health)
+		##Global.unfill_slot.emit(atk_card_pos, atk_card)
+		##atk_card.destroy()
+	#if (packet.target_card == null and !packet.is_you):
+		#var card_pos = CardSlots.convert_to_index(packet.target_position.to_array(), false)
+		#var card: Card = get_node("Slot"+ str(card_pos)).stored_card
+		#card.render_attack(packet.target_card.health)
+		##Global.unfill_slot.emit(card_pos, card)
+		##card.destroy()
 
 func show_slots(flag: bool) -> void:
 	if flag:
@@ -129,7 +124,17 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 		# Change visuals 
 		selected_card.move_card(get_slot_pos(slot_no), true)
 
+## When the client attacks the opponent 
 func _on_enemy_slot_chosen(slot_no: int, card: Card) -> void:
 	if card:
 		card.render_attack_client(selected_card)
 		VerifyClientAction.attack.emit(selected_card.id, convert_to_array(slot_no), get_slot_array(selected_card))
+	
+	selected_card.render_attack(max(selected_card.hp - (card.atk - 1), 0))
+
+## When the opponent attacks the client 
+func _on_opponent_attack(packet: AttackPacket) -> void:
+	var card_slot = CardSlots.convert_to_index(packet.target_position.to_array())
+	var card: Card = get_node("Slot"+ str(card_slot)).stored_card
+	card.render_attack(packet.target_card.health)
+	print("New target card health ", packet.attacker_card.health)

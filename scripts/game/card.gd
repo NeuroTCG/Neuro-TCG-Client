@@ -14,10 +14,10 @@ class_name Card
 #region CARD ATTRIBUTES
 var card_name: String
 var id: int
-var health: float
-var attack: float
-var attack_m1: float
 var placement: Placement
+var card_info: CardInfo 
+var hp: int  
+var atk: int 
 #endregion
 
 var mouse_over := false
@@ -27,9 +27,6 @@ var hover_tween: Tween
 var unhover_tween: Tween 
 var button_y_pos: float  
 var movement_tween: Tween 
-var card_info: CardInfo 
-var hp: int  
-var atk: int 
 
 enum Placement {
 	DECK,
@@ -87,7 +84,7 @@ func select() -> void:
 	if unhover_tween: unhover_tween.kill()
 	unhover_tween = get_tree().create_tween()
 	unhover_tween.tween_property(card_unhover_sprite, "modulate:a", 0.0, 0.5)
-
+	
 	atk_label.text = str(atk)
 	hp_label.text = str(hp)
 
@@ -162,7 +159,7 @@ func flip_card(enemy:=false) -> void:
 		animation_player.play("flip_enemy")
 
 func render_attack_client(card: Card) -> void:
-	hp - card.atk
+	hp -= card.atk
 	animation_player.play("nuke")
 
 func render_attack(_hp: int) -> void:
@@ -178,7 +175,13 @@ func destroy() -> void:
 func _on_mouse_hover():
 	mouse_over = true
 
+	if placement == Placement.ENEMY:
+		select() 
+
 func _on_mouse_exit():
 	mouse_over = false
+	
+	if placement == Placement.ENEMY:
+		unselect() 
 
 	
