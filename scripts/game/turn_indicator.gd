@@ -7,7 +7,7 @@ func _ready():
 	VerifyClientAction.player_finished.connect(_on_player_finished)
 
 	await get_tree().create_timer(0.5).timeout
-	if (MatchManager.is_opponent_turn()):
+	if (MatchManager._opponent_turn):
 		text = "Opponent's Turn"
 	else:
 		text = "Your Turn"

@@ -18,10 +18,7 @@ enum Actions {
 var input_paused := false
 ## Don't set this variable outside of match manager.
 ## For pausing input unrelated to the player turn use input_paused instead
-var _opponent_turn := false: 
-	set(new):
-		_opponent_turn = new 
-		print("TURN CHANGED")
+var _opponent_turn := false
 
 var current_action := Actions.IDLE:
 	set(new_action):

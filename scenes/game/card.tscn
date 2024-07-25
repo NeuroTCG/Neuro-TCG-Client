@@ -296,6 +296,7 @@ theme_override_constants/separation = 0
 
 [node name="Summon" parent="Buttons" instance=ExtResource("6_txvo4")]
 layout_mode = 2
+button_action = null
 shortcut_key = "s"
 
 [node name="Switch" parent="Buttons" instance=ExtResource("6_txvo4")]
