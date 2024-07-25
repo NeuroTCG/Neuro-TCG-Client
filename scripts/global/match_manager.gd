@@ -15,7 +15,14 @@ enum Actions {
 	IDLE  
 }
 
-var input_paused := false 
+var input_paused := false
+## Don't set this variable outside of match manager.
+## For pausing input unrelated to the player turn use input_paused instead
+var _opponent_turn := false: 
+	set(new):
+		_opponent_turn = new 
+		print("TURN CHANGED")
+
 var current_action := Actions.IDLE:
 	set(new_action):
 		current_action = new_action 
@@ -36,18 +43,19 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("end_turn"):
+		print("ENDING TURN")
 		VerifyClientAction.player_finished.emit() 
 
 func _on_match_found(packet: MatchFoundPacket) -> void:
 	if packet.is_first_player: 
-		input_paused = false 
+		_opponent_turn = false 
 	else: 
-		input_paused = true 
+		_opponent_turn = true 
 	
 	current_action = Actions.IDLE 
-	
+
 func _on_opponent_finished() -> void:
-	input_paused = false 
+	_opponent_turn = false 
 
 func _on_player_finished() -> void:
-	input_paused = true
+	_opponent_turn = true

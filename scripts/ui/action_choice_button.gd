@@ -17,7 +17,7 @@ func _process(delta) -> void:
 
 func _on_pressed() -> void:
 	release_focus()
-	if MatchManager.input_paused:
+	if MatchManager.input_paused or MatchManager._opponent_turn:
 		return 
 	
 	MatchManager.current_action = button_action 

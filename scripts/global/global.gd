@@ -36,6 +36,9 @@ signal hide_shortcuts
 var mouse_input_functions: Array[Callable] = []
 
 func _process(delta: float) -> void:
+	if MatchManager.input_paused or MatchManager._opponent_turn:
+		return 
+	
 	if Input.is_action_just_pressed("click"):
 		for callable in mouse_input_functions:
 			callable.call()

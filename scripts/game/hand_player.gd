@@ -18,6 +18,14 @@ func _ready() -> void:
 	
 	await game.ready
 
+func _process(_delta):
+	if MatchManager.input_paused or MatchManager._opponent_turn:
+		return 
+	
+	if Input.is_action_just_pressed("draw_card") and cards.size() < 5:
+		print("Is opponent turn is ", MatchManager._opponent_turn)
+		User.send_packet(DrawCardRequestPacket.new())
+
 func _on_draw_card(packet: DrawCardPacket):
 	if (packet.is_you):
 		assert (packet.card_id >= 0, "draw_card was invalid")
@@ -93,7 +101,3 @@ func _on_slot_chosen(slot_no: int, _card: Card) -> void:
 		VerifyClientAction.summon.emit(summoned_card.id, CardSlots.convert_to_array(slot_no))
 		summon(cards.find(summoned_card), slot_no)
 		
-func _process(_delta):
-	if ((not MatchManager.input_paused) and Input.is_action_just_pressed("draw_card")):
-		if cards.size() < 5:
-			User.send_packet(DrawCardRequestPacket.new())
