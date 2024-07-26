@@ -17,12 +17,17 @@ func _process(delta) -> void:
 
 func _on_pressed() -> void:
 	release_focus()
+	
+	if button_action == MatchManager.Actions.VIEW: 
+		MatchManager.action_view.emit(get_parent().get_parent())
+		return 
+	
 	if MatchManager.input_paused or MatchManager._opponent_turn:
 		return 
 	
 	MatchManager.current_action = button_action 
 	
-	if button_action != MatchManager.Actions.VIEW:
+	if button_action:
 		buttons.hide()
 
 func _on_mouse_entered():

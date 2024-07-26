@@ -1,4 +1,11 @@
 extends CardSlots
+## Enemy cards only need to worry about Slots and 
+## Placement when moving them around. 
+
+@export var player_card_slots: CardSlots
+
+## List to store all destroyed enemy cards 
+var destroyed_cards := [] 
 
 func _ready() -> void:
 	Global.highlight_enemy_cards.connect(_on_highlight_enemy_cards)
@@ -44,15 +51,26 @@ func _on_switch(packet: SwitchPlacePacket) -> void:
 		card1.move_card(slot2.global_position)
 	else:
 		switch_cards(card1, card2)
-	
+
+## When the opponent attacks the client
 func _on_attack(packet: AttackPacket) -> void:
-	#TODO: Implement card destruction cauz rn, nothing will happen
-	# cards will be null when they should be destroyed 
+	# Update attacking card's status 
+	var atk_card_slot = CardSlots.convert_to_index(packet.attacker_position.to_array(), true)
+	var atk_card: Card = get_node("Slot"+ str(atk_card_slot)).stored_card
+
+	if packet.attacker_card == null:
+		destroy_card(atk_card_slot, atk_card)
+	else:
+		atk_card.render_attack(packet.attacker_card.health)
 	
-	var atk_card_pos = CardSlots.convert_to_index(packet.attacker_position.to_array(), true)
-	var atk_card: Card = get_node("Slot"+ str(atk_card_pos)).stored_card
-	atk_card.render_attack(packet.attacker_card.health)
-	print("New attacker card health ", packet.attacker_card.health)
+	# Update target card's status 
+	var card_slot = CardSlots.convert_to_index(packet.target_position.to_array())
+	var card: Card = player_card_slots.get_node("Slot"+ str(card_slot)).stored_card
+	
+	if packet.target_card == null: 
+		destroy_card(card_slot, card)
+	else:
+		card.render_attack(packet.target_card.health)
 
 #func _on_any_attack(packet: AttackPacket) -> void:
 	#if (packet.attacker_card == null and !packet.is_you):
@@ -74,3 +92,10 @@ func _on_highlight_enemy_cards(card: Card, atk_range: CardInfo.AttackRange) -> v
 
 func _on_unhighlight_enemy_cards(card: Card) -> void:
 	show_slots_for_attack(false)
+
+func destroy_card(slot:int, card: Card) -> void:
+	print("(From Opponent) Card Destroyed!")
+	Global.unfill_slot.emit(slot, card) 
+	destroyed_cards.append(card)
+	card.visible = false 
+	card.global_position = Vector2.ZERO 

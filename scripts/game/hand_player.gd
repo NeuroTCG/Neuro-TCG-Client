@@ -8,7 +8,7 @@ func _ready() -> void:
 	Global.hand_card_unselected.connect(_on_card_unselected)
 	Global.slot_chosen.connect(_on_slot_chosen)
 	MatchManager.action_summon.connect(_on_action_summon)
-	MatchManager.action_view.connect(_on_action_view)
+	#MatchManager.action_view.connect(_on_action_view)
 	
 	User.draw_card.connect(_on_draw_card)
 	
@@ -89,9 +89,9 @@ func another_card_selected(card: Card) -> bool:
 func _on_action_summon() -> void:
 	Global.show_slots.emit(true)
 
-func _on_action_view() -> void:
-	if selected_card:
-		Global.view_card.emit(selected_card)
+#func _on_action_view() -> void:
+	#if selected_card:
+		#Global.view_card.emit(selected_card)
 
 func _on_slot_chosen(slot_no: int, _card: Card) -> void:
 	if selected_card:

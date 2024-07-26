@@ -14,7 +14,8 @@ class_name Card
 #region CARD ATTRIBUTES
 var card_name: String
 var id: int
-var placement: Placement
+var placement := Placement.DECK 
+var owned_by_player := true 
 var card_info: CardInfo 
 var hp: int  
 var atk: int 
@@ -28,11 +29,12 @@ var unhover_tween: Tween
 var button_y_pos: float  
 var movement_tween: Tween 
 
+## Placement for player cards. Currently unused for opponent cards. 
 enum Placement {
 	DECK,
 	HAND,
 	PLAYMAT,
-	ENEMY
+	DESTROYED
 }
 
 static func create_card(parent_scene: Node2D, id: int) -> Card:
@@ -47,8 +49,6 @@ static func create_card(parent_scene: Node2D, id: int) -> Card:
 	new_card.hp = card_info.max_hp 
 	new_card.atk = card_info.base_atk
 	
-	new_card.placement = Placement.DECK
-	
 	return new_card
 
 func _ready() -> void:
@@ -56,27 +56,32 @@ func _ready() -> void:
 	button_y_pos = buttons.position.y
 
 func _on_mouse_clicked() -> void:
-	if MatchManager.input_paused:
-		return
-	
 	for button in buttons.get_children():
 		if button.mouse_over:
 			return
-	
-	if mouse_over and not selected:
-		if placement == Placement.HAND:
-			Global.hand_card_selected.emit(self)
-		elif placement == Placement.PLAYMAT:
-			Global.playmat_card_selected.emit(self)
-	elif selected:
-		if placement == Placement.HAND:
-			Global.hand_card_unselected.emit(self)
-		elif placement == Placement.PLAYMAT:
-			Global.playmat_card_unselected.emit(self)
+
+	if owned_by_player:
+		if mouse_over and not selected:
+			if placement == Placement.HAND:
+				Global.hand_card_selected.emit(self)
+			elif placement == Placement.PLAYMAT:
+				Global.playmat_card_selected.emit(self)
+		elif selected:
+			if placement == Placement.HAND:
+				Global.hand_card_unselected.emit(self)
+			elif placement == Placement.PLAYMAT:
+				Global.playmat_card_unselected.emit(self)
+	else:
+		if mouse_over and not selected:
+			selected = true 
+			show_buttons([MatchManager.Actions.VIEW]) 
+		elif selected:
+			selected = false 
+			hide_buttons()
 
 func select() -> void:
 	selected = true
-	
+
 	if hover_tween: hover_tween.kill()
 	hover_tween = get_tree().create_tween()
 	hover_tween.tween_property(card_hover_sprite, "modulate:a", 1.0, 0.5)
@@ -88,6 +93,17 @@ func select() -> void:
 	atk_label.text = str(atk)
 	hp_label.text = str(hp)
 
+func unselect() -> void:
+	selected = false
+	
+	if hover_tween: hover_tween.kill()
+	hover_tween = get_tree().create_tween()
+	hover_tween.tween_property(card_hover_sprite, "modulate:a", 0.0, 0.5)
+
+	if unhover_tween: unhover_tween.kill()
+	unhover_tween = get_tree().create_tween()
+	unhover_tween.tween_property(card_unhover_sprite, "modulate:a", 1.0, 0.5)
+
 func show_buttons(actions: Array) -> void:
 	buttons.visible = true
 	buttons.position.y = button_y_pos - actions.size() * 13
@@ -97,7 +113,6 @@ func show_buttons(actions: Array) -> void:
 	for button in buttons.get_children():
 		if button.button_action in actions:
 			button.visible = true
-			print(button.button_action)
 			match button.button_action:
 				MatchManager.Actions.SUMMON:
 					shortcut_strings.append("S: Summon, ")
@@ -117,17 +132,6 @@ func show_buttons(actions: Array) -> void:
 func hide_buttons() -> void:
 	Global.hide_shortcuts.emit()
 	buttons.visible = false
-
-func unselect() -> void:
-	selected = false
-	
-	if hover_tween: hover_tween.kill()
-	hover_tween = get_tree().create_tween()
-	hover_tween.tween_property(card_hover_sprite, "modulate:a", 0.0, 0.5)
-
-	if unhover_tween: unhover_tween.kill()
-	unhover_tween = get_tree().create_tween()
-	unhover_tween.tween_property(card_unhover_sprite, "modulate:a", 1.0, 0.5)
 
 func move_card(end_pos: Vector2, anchor:=false, time:=0.5):
 	if movement_tween:
@@ -166,22 +170,9 @@ func render_attack(_hp: int) -> void:
 	hp = _hp  
 	animation_player.play("nuke")
 
-func destroy() -> void:
-	# TODO: figure out how to not leave nulls everwhere
-	await animation_player.animation_finished
-	Global.mouse_input_functions.erase(_on_mouse_clicked)
-	queue_free()
-
 func _on_mouse_hover():
 	mouse_over = true
 
-	if placement == Placement.ENEMY:
-		select() 
-
 func _on_mouse_exit():
 	mouse_over = false
-	
-	if placement == Placement.ENEMY:
-		unselect() 
 
-	

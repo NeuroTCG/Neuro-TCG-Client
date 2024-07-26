@@ -244,7 +244,7 @@ texture = ExtResource("3_nlf2q")
 [node name="Labels" type="Node2D" parent="CardBack/CardHover"]
 scale = Vector2(12.5, 12.5)
 
-[node name="AtkLabel" type="Label" parent="CardBack/CardHover/Labels"]
+[node name="HpLabel" type="Label" parent="CardBack/CardHover/Labels"]
 unique_name_in_owner = true
 offset_left = -31.0
 offset_top = -44.0
@@ -255,7 +255,7 @@ text = "10"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HpLabel" type="Label" parent="CardBack/CardHover/Labels"]
+[node name="AtkLabel" type="Label" parent="CardBack/CardHover/Labels"]
 unique_name_in_owner = true
 offset_left = 16.0
 offset_top = -44.0
@@ -296,7 +296,6 @@ theme_override_constants/separation = 0
 
 [node name="Summon" parent="Buttons" instance=ExtResource("6_txvo4")]
 layout_mode = 2
-button_action = null
 shortcut_key = "s"
 
 [node name="Switch" parent="Buttons" instance=ExtResource("6_txvo4")]

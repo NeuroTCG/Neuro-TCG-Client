@@ -4,7 +4,8 @@ extends Node
 signal action_summon
 signal action_switch 
 signal action_attack 
-signal action_view
+## View is handeled separately compared to any other other action
+signal action_view(card: Card)
 
 enum Actions {
 	SUMMON,
@@ -30,8 +31,6 @@ var current_action := Actions.IDLE:
 				action_switch.emit() 
 			Actions.ATTACK:
 				action_attack.emit() 
-			Actions.VIEW:
-				action_view.emit()
 
 func _ready() -> void: 
 	User.match_found.connect(_on_match_found)

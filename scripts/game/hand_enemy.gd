@@ -50,7 +50,7 @@ func add_card(id: int) -> void:
 	cards.append(new_card)
 	await new_card.move_card(card_positions[cards.size()-1].global_position, true)
 	
-	new_card.placement = Card.Placement.ENEMY 
+	new_card.owned_by_player = false 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

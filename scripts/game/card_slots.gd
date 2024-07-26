@@ -31,6 +31,7 @@ func switch_cards(card1: Card, card2: Card) -> void:
 	card1.move_card(card2_pos)
 	card2.move_card(card1_pos) 
 
+#region STATIC FUNCTIONS 
 static func convert_to_array(index: int) -> Array:
 	assert(index != 0, "There is no 0 slot")
 	
@@ -44,7 +45,6 @@ static func convert_to_array(index: int) -> Array:
 		return [0, 3-(index-11)]
 	
 	return []
-
 
 static func convert_to_index(array: Array, enemy := false) -> int:
 	if not enemy: 
@@ -81,4 +81,5 @@ static func convert_to_index(array: Array, enemy := false) -> int:
 				return 14 
 
 	return 0 
+#endregion 
 

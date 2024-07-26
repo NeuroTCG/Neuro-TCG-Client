@@ -1,11 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://dh5lnd7qcyrg1"]
+[gd_scene load_steps=11 format=3 uid="uid://dh5lnd7qcyrg1"]
 
 [ext_resource type="Script" path="res://scripts/game/game.gd" id="1_kfv8y"]
 [ext_resource type="PackedScene" uid="uid://b6dy802mg5uvg" path="res://scenes/ui/hud.tscn" id="2_846mn"]
 [ext_resource type="Texture2D" uid="uid://cmfje43hqra1p" path="res://assets/game/FullBoardLayoutV2-5-GrayOut.png" id="2_rdgcq"]
 [ext_resource type="PackedScene" uid="uid://bopel3gld2b6o" path="res://scenes/game/hand.tscn" id="3_tjohb"]
 [ext_resource type="PackedScene" uid="uid://buorw4d055t0m" path="res://scenes/game/deck.tscn" id="4_kbisd"]
-[ext_resource type="PackedScene" uid="uid://dh37g4ide4hun" path="res://scenes/game/card_displayer.tscn" id="5_l5tpl"]
 [ext_resource type="PackedScene" uid="uid://cuh080ycrhojk" path="res://scenes/game/hand_enemy.tscn" id="5_l60w6"]
 [ext_resource type="PackedScene" uid="uid://7p238k7khnvn" path="res://scenes/game/card_slots.tscn" id="7_vh228"]
 [ext_resource type="PackedScene" uid="uid://dt020trjt7st3" path="res://scenes/game/card_slots_enemy.tscn" id="8_pgxhr"]
@@ -38,9 +37,6 @@ rotation = 3.14159
 [node name="Deck" parent="." instance=ExtResource("4_kbisd")]
 position = Vector2(1069, 571)
 
-[node name="CardDisplayer" parent="." instance=ExtResource("5_l5tpl")]
-position = Vector2(1041, 292)
-
 [node name="CardSlots" parent="." instance=ExtResource("7_vh228")]
 position = Vector2(266, 378)
 
@@ -62,7 +58,8 @@ position = Vector2(317, 94)
 [node name="Slot7" parent="CardSlots" index="6"]
 position = Vector2(517, 93)
 
-[node name="CardSlotsEnemy" parent="." instance=ExtResource("8_pgxhr")]
+[node name="CardSlotsEnemy" parent="." node_paths=PackedStringArray("player_card_slots") instance=ExtResource("8_pgxhr")]
+player_card_slots = NodePath("../CardSlots")
 
 [node name="Slot8" parent="CardSlotsEnemy" index="0"]
 position = Vector2(369, 177)

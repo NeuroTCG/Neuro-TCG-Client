@@ -1,8 +1,10 @@
 extends CardSlots
+## When moving a card, keep track of card.placement, Slots,
+## cards, and selected_card
 
 var cards := []
+var destroyed_cards := [] 
 var selected_card = null
-var card_transfer_underway := false
 
 func _ready() -> void:
 	Global.show_slots.connect(show_slots)
@@ -14,19 +16,18 @@ func _ready() -> void:
 	Global.unfill_slot.connect(_on_unfill_slot)
 	MatchManager.action_switch.connect(_on_action_switch)
 	MatchManager.action_attack.connect(_on_action_attack)
-	MatchManager.action_view.connect(_on_action_view)
-	RenderOpponentAction.attack.connect(_on_opponent_attack)
+	#MatchManager.action_view.connect(_on_action_view)
 	#User.attack.connect(_on_any_attack)
-	
+
 	for slot in get_children():
 		slot.visible = false
 
 func _on_fill_slot(slot_no: int, card: Card) -> void:
-	if slot_no < 8:
+	if card.owned_by_player:
 		cards.append(card)
 
 func _on_unfill_slot(slot_no: int, card: Card) -> void:
-	if slot_no < 8:
+	if card.owned_by_player:
 		cards.erase(card)
 
 #func _on_any_attack(packet: AttackPacket) -> void:
@@ -105,9 +106,9 @@ func _on_action_switch() -> void:
 func _on_action_attack() -> void:
 	Global.highlight_enemy_cards.emit(selected_card, selected_card.card_info.attack_range)
 
-func _on_action_view() -> void:
-	if selected_card:
-		Global.view_card.emit(selected_card)
+#func _on_action_view() -> void:
+	#if selected_card:
+		#Global.view_card.emit(selected_card)
 
 func _on_slot_chosen(slot_no: int, card: Card) -> void:
 	if card:
@@ -126,15 +127,26 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 
 ## When the client attacks the opponent 
 func _on_enemy_slot_chosen(slot_no: int, card: Card) -> void:
-	if card:
-		card.render_attack_client(selected_card)
-		VerifyClientAction.attack.emit(selected_card.id, convert_to_array(slot_no), get_slot_array(selected_card))
+	assert(card, "Enemy slot chosen but no card in enemy slot!")
+	assert(selected_card, "Enemy slot chosen but no player card selected!")
+	
+	card.render_attack_client(selected_card)
+	VerifyClientAction.attack.emit(selected_card.id, convert_to_array(slot_no), get_slot_array(selected_card))
+	if card.hp == 0: 
+		destroy_card(slot_no, card)
 	
 	selected_card.render_attack(max(selected_card.hp - (card.atk - 1), 0))
+	if selected_card.hp == 0:
+		destroy_card(get_slot_no(card), card)
 
-## When the opponent attacks the client 
-func _on_opponent_attack(packet: AttackPacket) -> void:
-	var card_slot = CardSlots.convert_to_index(packet.target_position.to_array())
-	var card: Card = get_node("Slot"+ str(card_slot)).stored_card
-	card.render_attack(packet.target_card.health)
-	print("New target card health ", packet.attacker_card.health)
+func destroy_card(slot:int, card: Card) -> void:
+	print("Card Destroyed!")
+	Global.unfill_slot.emit(slot, card)
+	cards.erase(card)
+	if selected_card == card:
+		selected_card = null 
+	card.placement = Card.Placement.DESTROYED
+	
+	destroyed_cards.append(card)
+	card.visible = false
+	card.global_position = Vector2.ZERO 

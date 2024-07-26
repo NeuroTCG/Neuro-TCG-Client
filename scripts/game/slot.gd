@@ -29,7 +29,7 @@ func _on_unfill_slot(slot_no: int, card: Card) -> void:
 	stored_card = null 
 
 func _on_mouse_clicked():
-	if MatchManager.input_paused:
+	if MatchManager.input_paused or MatchManager._opponent_turn:
 		return 
 	
 	if mouse_over: 

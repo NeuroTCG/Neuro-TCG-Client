@@ -107,6 +107,7 @@ func receive_command(msg: String):
 				if not packet.valid:
 					invalid_command.emit("Attack by client failed!")
 			else:
+				print("Attack Packet is received and IS FROM OPPONENT")
 				RenderOpponentAction.attack.emit(packet)
 
 		PacketType.SwitchPlace:

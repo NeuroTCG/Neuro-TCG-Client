@@ -21,7 +21,6 @@ signal unhighlight_enemy_cards(card: Card)
 
 # TO PLAYER CARD SLOTS 
 signal show_slots(flag: bool)
-signal view_card(card: Card)
 
 # TO HUD
 signal show_shortcuts(shortcuts: PackedStringArray)
@@ -35,10 +34,7 @@ signal hide_shortcuts
 ## Current order is SLOTS -> CARDS 
 var mouse_input_functions: Array[Callable] = []
 
-func _process(delta: float) -> void:
-	if MatchManager.input_paused or MatchManager._opponent_turn:
-		return 
-	
+func _process(delta: float) -> void:	
 	if Input.is_action_just_pressed("click"):
 		for callable in mouse_input_functions:
 			callable.call()
