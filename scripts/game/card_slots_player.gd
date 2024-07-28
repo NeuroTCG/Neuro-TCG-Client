@@ -131,12 +131,13 @@ func _on_enemy_slot_chosen(slot_no: int, card: Card) -> void:
 	assert(selected_card, "Enemy slot chosen but no player card selected!")
 	
 	card.render_attack_client(selected_card)
+	assert(slot_no != get_slot_no(selected_card), "The attacker and target are both in slot %d" % slot_no)
 	VerifyClientAction.attack.emit(selected_card.id, convert_to_array(slot_no), get_slot_array(selected_card))
-	if card.hp == 0: 
+	if card.hp <= 0: 
 		destroy_card(slot_no, card)
 	
 	selected_card.render_attack(max(selected_card.hp - (card.atk - 1), 0))
-	if selected_card.hp == 0:
+	if selected_card.hp <= 0:
 		destroy_card(get_slot_no(card), card)
 
 func destroy_card(slot:int, card: Card) -> void:
