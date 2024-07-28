@@ -28,7 +28,9 @@ signal hide_shortcuts
 
 # TO RAM 
 signal update_ram(value: int)
+signal update_max_ram(value: int)
 signal update_enemy_ram(value: int)
+signal update_enemy_max_ram(value: int)
 
 # TO RAM MANAGER
 signal use_ram(value: int)
