@@ -1,7 +1,7 @@
 extends Hand
 
 @export var game: Node2D
-
+@export var ram_manager: Node2D
 
 func _ready() -> void:
 	Global.hand_card_selected.connect(_on_card_selected)
@@ -58,6 +58,9 @@ func summon(hand_pos: int, slot_no: int) -> void:
 	# Shift all cards right of summoned card
 	for i in range(hand_pos, cards.size()):
 		cards[i].move_card(card_positions[i].global_position, true)
+	
+	# Update ram 
+	Global.use_ram.emit(summon_card.cost)
 	
 	# Move card and reset card visibility 
 	await summon_card.move_card(slot_pos, true) 

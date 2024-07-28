@@ -6,7 +6,7 @@ var card_info_dict = {
 		preload("res://assets/game/cards/evil.jpg"), 
 		2,  # hp
 		2,  # atk 
-		3,  # cost
+		1,  # cost
 		CardInfo.AttackRange.STANDARD  # attack range 
 	),
 	1: CardInfo.new(

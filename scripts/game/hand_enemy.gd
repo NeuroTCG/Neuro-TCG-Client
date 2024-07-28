@@ -28,6 +28,9 @@ func _on_summon(packet: SummonPacket) -> void:
 	Global.fill_slot.emit(slot_no, summon_card)  # Update slot 
 	summon_card.move_card(slot_pos, true) 
 	
+	#TODO: Uncomment when ram has been implemented server-side
+	# Global.update_enemy_ram.emit(packet.ram)
+	
 func _on_draw_card(packet: DrawCardPacket) -> void:
 	assert(packet.card_id >= 0, "The server sent an invalid opponent action")
 	add_card(packet.card_id)

@@ -19,6 +19,7 @@ var owned_by_player := true
 var card_info: CardInfo 
 var hp: int  
 var atk: int 
+var cost: int 
 #endregion
 
 var mouse_over := false
@@ -48,6 +49,7 @@ static func create_card(parent_scene: Node2D, id: int) -> Card:
 	new_card.card_sprite.texture = card_info.graphics
 	new_card.hp = card_info.max_hp 
 	new_card.atk = card_info.base_atk
+	new_card.cost = card_info.cost
 	
 	return new_card
 

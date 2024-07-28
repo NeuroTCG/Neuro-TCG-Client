@@ -24,6 +24,13 @@ func _on_pressed() -> void:
 	
 	if MatchManager.input_paused or MatchManager._opponent_turn:
 		return 
+		
+	if button_action == MatchManager.Actions.SUMMON:
+		var player_ram = get_tree().get_first_node_in_group("ram_manager").player_ram
+		if player_ram < buttons.get_parent().cost:
+			#TODO: Use a popup or something like that to warn the player
+			print("Insufficient Ram to Summon this card!") 
+			return 
 	
 	MatchManager.current_action = button_action 
 	

@@ -20,7 +20,6 @@ var input_paused := false
 ## Don't set this variable outside of match manager.
 ## For pausing input unrelated to the player turn use input_paused instead
 var _opponent_turn := false
-
 var current_action := Actions.IDLE:
 	set(new_action):
 		current_action = new_action 
@@ -31,6 +30,7 @@ var current_action := Actions.IDLE:
 				action_switch.emit() 
 			Actions.ATTACK:
 				action_attack.emit() 
+var first_player := false 
 
 func _ready() -> void: 
 	User.match_found.connect(_on_match_found)
@@ -44,10 +44,13 @@ func _process(delta: float) -> void:
 
 func _on_match_found(packet: MatchFoundPacket) -> void:
 	if packet.is_first_player: 
+		first_player = true 
 		_opponent_turn = false 
 	else: 
+		first_player = false 
 		_opponent_turn = true 
 	
+	input_paused = false 
 	current_action = Actions.IDLE 
 
 func _on_opponent_finished() -> void:

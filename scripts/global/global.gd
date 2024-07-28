@@ -1,5 +1,5 @@
 # Global stuffs for game functionality 
-extends Node
+extends Node 
 
 # FROM CARD
 signal hand_card_selected(card: Card)
@@ -25,6 +25,13 @@ signal show_slots(flag: bool)
 # TO HUD
 signal show_shortcuts(shortcuts: PackedStringArray)
 signal hide_shortcuts
+
+# TO RAM 
+signal update_ram(value: int)
+signal update_enemy_ram(value: int)
+
+# TO RAM MANAGER
+signal use_ram(value: int)
 
 ## Simple mouse input implementation 
 ## All functions that process mouse input 
