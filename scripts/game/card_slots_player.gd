@@ -126,19 +126,26 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 		selected_card.move_card(get_slot_pos(slot_no), true)
 
 ## When the client attacks the opponent 
-func _on_enemy_slot_chosen(slot_no: int, card: Card) -> void:
-	assert(card, "Enemy slot chosen but no card in enemy slot!")
+func _on_enemy_slot_chosen(slot_no: int, target_card: Card) -> void:
+	assert(target_card, "Enemy slot chosen but no card in enemy slot!")
 	assert(selected_card, "Enemy slot chosen but no player card selected!")
 	
-	card.render_attack_client(selected_card)
-	assert(slot_no != get_slot_no(selected_card), "The attacker and target are both in slot %d" % slot_no)
-	VerifyClientAction.attack.emit(selected_card.id, convert_to_array(slot_no), get_slot_array(selected_card))
-	if card.hp <= 0: 
-		destroy_card(slot_no, card)
+	var atk_card = selected_card
 	
-	selected_card.render_attack(max(selected_card.hp - (card.atk - 1), 0))
+	target_card.render_attack_client(atk_card)
+	assert(slot_no != get_slot_no(atk_card), "The attacker and target are both in slot %d" % slot_no)
+	VerifyClientAction.attack.emit(atk_card.id, convert_to_array(slot_no), get_slot_array(atk_card))
+	if target_card.hp <= 0: 
+		destroy_card(slot_no, target_card)
+	
+	var atk_card_slot = get_slot_no(atk_card)
+	## No counterattack if the target card cannot reach the player card
+	if not player_is_reachable(get_node("Slot%d" % atk_card_slot), target_card.card_info.attack_range):
+		return 
+	
+	selected_card.render_attack(max(selected_card.hp - (target_card.atk - 1), 0))
 	if selected_card.hp <= 0:
-		destroy_card(get_slot_no(card), card)
+		destroy_card(atk_card_slot, atk_card) 
 
 func destroy_card(slot:int, card: Card) -> void:
 	print("Card Destroyed!")

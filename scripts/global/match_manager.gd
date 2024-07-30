@@ -39,7 +39,9 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("end_turn"):
-		print("ENDING TURN")
+		print("Ending player turn")
+		for callable in Global.mouse_input_functions:
+			callable.call()
 		VerifyClientAction.player_finished.emit() 
 
 func _on_match_found(packet: MatchFoundPacket) -> void:

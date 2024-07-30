@@ -25,6 +25,7 @@ signal show_slots(flag: bool)
 # TO HUD
 signal show_shortcuts(shortcuts: PackedStringArray)
 signal hide_shortcuts
+signal notice(msg: String)
 
 # TO RAM 
 signal update_ram(value: int)
@@ -34,6 +35,9 @@ signal update_enemy_max_ram(value: int)
 
 # TO RAM MANAGER
 signal use_ram(value: int)
+
+# TO CARD VIEWER 
+signal close_view 
 
 ## Simple mouse input implementation 
 ## All functions that process mouse input 

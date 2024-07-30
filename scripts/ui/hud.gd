@@ -3,11 +3,16 @@ extends CanvasLayer
 @onready var pause_screen = $PauseScreen
 @onready var shortcuts_label = $ShortcutsLabel
 
+@onready var notice = $Notice
+@onready var notice_text = %NoticeText
+@onready var close_notice_button = %CloseNoticeButton
+
 var main_menu = preload ("res://scenes/ui/main_menu.tscn")
 
 func _ready() -> void:
 	Global.show_shortcuts.connect(_on_show_shortcuts)
 	Global.hide_shortcuts.connect(_on_hide_shortcuts)
+	Global.notice.connect(_on_notice)
 	shortcuts_label.text = "   "
 
 func _on_show_shortcuts(shortcuts: PackedStringArray) -> void:
@@ -31,3 +36,12 @@ func return_to_menu() -> void:
 	
 func _on_quit_button_pressed():
 	return_to_menu()
+
+func _on_notice(msg: String) -> void:
+	notice.visible = true 
+	notice_text.text = msg
+	await get_tree().create_timer(2.0).timeout 
+	notice.visible = false 
+
+func _on_close_notice_button_pressed():
+	notice.visible = false 

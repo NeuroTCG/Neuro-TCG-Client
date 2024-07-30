@@ -21,10 +21,10 @@ func show_slots_for_attack(flag: bool, atk_range:=CardInfo.AttackRange.STANDARD)
 	if flag:
 		for slot in get_children():
 			if slot.stored_card:
-				if slot.slot_no in [8, 9, 10] and atk_range == CardInfo.AttackRange.STANDARD:
-					slot.visible = false
-				else:
+				if opponent_is_reachable(slot, atk_range):
 					slot.visible = true
+				else:
+					slot.visible = false
 			else:
 				slot.visible = false
 	else:
@@ -61,7 +61,10 @@ func _on_attack(packet: AttackPacket) -> void:
 	if packet.attacker_card == null:
 		destroy_card(atk_card_slot, atk_card)
 	else:
-		atk_card.render_attack(packet.attacker_card.health)
+		## If hp is the same, target card was not able to reach
+		## the attacking card. 
+		if not atk_card.hp == packet.attacker_card.health:
+			atk_card.render_attack(packet.attacker_card.health)
 	
 	# Update target card's status 
 	var card_slot = CardSlots.convert_to_index(packet.target_position.to_array())
@@ -72,20 +75,6 @@ func _on_attack(packet: AttackPacket) -> void:
 	else:
 		card.render_attack(packet.target_card.health)
 
-#func _on_any_attack(packet: AttackPacket) -> void:
-	#if (packet.attacker_card == null and !packet.is_you):
-		#var atk_card_pos = CardSlots.convert_to_index(packet.attacker_position.to_array(), true)
-		#var atk_card: Card = get_node("Slot"+ str(atk_card_pos)).stored_card
-		#atk_card.render_attack(packet.attacker_card.health)
-		##Global.unfill_slot.emit(atk_card_pos, atk_card)
-		##atk_card.destroy()
-	#if (packet.target_card == null and packet.is_you):
-		#var card_pos = CardSlots.convert_to_index(packet.target_position.to_array(), true)
-		#var card: Card = get_node("Slot"+ str(card_pos)).stored_card
-		#card.render_attack(packet.target_card.health)
-		##Global.unfill_slot.emit(card_pos, card)
-		##card.destroy()
-	#pass
 
 func _on_highlight_enemy_cards(card: Card, atk_range: CardInfo.AttackRange) -> void:
 	show_slots_for_attack(true, atk_range)

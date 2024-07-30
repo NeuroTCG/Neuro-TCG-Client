@@ -31,6 +31,41 @@ func switch_cards(card1: Card, card2: Card) -> void:
 	card1.move_card(card2_pos)
 	card2.move_card(card1_pos) 
 
+## Return true if an opponent slot is reachable by the player card 
+## Takes opponent slot and atk_range of player card
+func opponent_is_reachable(slot, atk_range: CardInfo.AttackRange) -> bool:
+	if slot.slot_no in [8, 9, 10]:  # For cards in the back 
+		if atk_range == CardInfo.AttackRange.REACH:  
+			return true
+		else:  # Without reach, the front row cards must be empty 
+			if slots_empty([11, 12, 13, 14]):
+				return true 
+			return false  
+	else:  # Cards in the front are always reachable 
+		return true   
+
+## Return true if a player slot is reachable by the opponent card 
+## Takes player slot and atk_range of opponent card 
+func player_is_reachable(slot, atk_range: CardInfo.AttackRange) -> bool:
+	if slot.slot_no in [5, 6, 7]:  # For cards in the back 
+		if atk_range == CardInfo.AttackRange.REACH:  
+			return true
+		else:  # Without reach, the front row cards must be empty 
+			if slots_empty([1, 2, 3, 4]):
+				return true 
+			return false  
+	else:  # Cards in the front are always reachable 
+		return true   
+
+## Returns true if a list of slots are empty 
+## Takes a list of slot numbers 
+func slots_empty(slot_nos: Array[int]) -> bool:
+	for no in slot_nos: 
+		var slot = get_node("Slot%d" % no)
+		if slot.stored_card:
+			return false
+	return true 
+
 #region STATIC FUNCTIONS 
 static func convert_to_array(index: int) -> Array:
 	assert(index != 0, "There is no 0 slot")

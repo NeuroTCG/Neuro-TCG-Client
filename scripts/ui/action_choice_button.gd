@@ -23,19 +23,21 @@ func _on_pressed() -> void:
 		return 
 	
 	if MatchManager.input_paused or MatchManager._opponent_turn:
+		if MatchManager._opponent_turn:
+			Global.notice.emit("It is not your turn!")
+		if MatchManager.input_paused:
+			Global.notice.emit("Wait until cards have finished moving!")
 		return 
 		
 	if button_action == MatchManager.Actions.SUMMON:
 		var player_ram = get_tree().get_first_node_in_group("ram_manager").player_ram
 		if player_ram < buttons.get_parent().cost:
-			#TODO: Use a popup or something like that to warn the player
-			print("Insufficient Ram to Summon this card!") 
+			Global.notice.emit("Insufficent Ram to summon this card!")
 			return 
 	
 	MatchManager.current_action = button_action 
-	
-	if button_action:
-		buttons.hide()
+	Global.close_view.emit() 
+	buttons.hide()
 
 func _on_mouse_entered():
 	mouse_over = true 
