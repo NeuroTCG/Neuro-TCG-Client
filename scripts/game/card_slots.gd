@@ -33,9 +33,9 @@ func switch_cards(card1: Card, card2: Card) -> void:
 
 ## Return true if an opponent slot is reachable by the player card 
 ## Takes opponent slot and atk_range of player card
-func opponent_is_reachable(slot, atk_range: CardInfo.AttackRange) -> bool:
+func opponent_is_reachable(slot, atk_range: CardStats.AttackRange) -> bool:
 	if slot.slot_no in [8, 9, 10]:  # For cards in the back 
-		if atk_range == CardInfo.AttackRange.REACH:  
+		if atk_range == CardStats.AttackRange.REACH:  
 			return true
 		else:  # Without reach, the front row cards must be empty 
 			if slots_empty([11, 12, 13, 14]):
@@ -46,9 +46,9 @@ func opponent_is_reachable(slot, atk_range: CardInfo.AttackRange) -> bool:
 
 ## Return true if a player slot is reachable by the opponent card 
 ## Takes player slot and atk_range of opponent card 
-func player_is_reachable(slot, atk_range: CardInfo.AttackRange) -> bool:
+func player_is_reachable(slot, atk_range: CardStats.AttackRange) -> bool:
 	if slot.slot_no in [5, 6, 7]:  # For cards in the back 
-		if atk_range == CardInfo.AttackRange.REACH:  
+		if atk_range == CardStats.AttackRange.REACH:  
 			return true
 		else:  # Without reach, the front row cards must be empty 
 			if slots_empty([1, 2, 3, 4]):

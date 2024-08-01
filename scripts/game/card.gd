@@ -11,16 +11,18 @@ class_name Card
 @onready var atk_label = %AtkLabel
 @onready var hp_label = %HpLabel
 
-#region CARD ATTRIBUTES
-var card_name: String
+#region IMUTABLE CARD STATS 
 var id: int
 var placement := Placement.DECK 
 var owned_by_player := true 
-var card_info: CardInfo 
+var card_info: CardStats 
+#endregion
+
+#region MUTABLE CARD STATS
 var hp: int  
 var atk: int 
 var cost: int 
-#endregion
+#endregion 
 
 var mouse_over := false
 var selected := false
@@ -40,13 +42,13 @@ enum Placement {
 
 static func create_card(parent_scene: Node2D, id: int) -> Card:
 	var new_card: Card = load("res://scenes/game/card.tscn").instantiate()
-	var card_info: CardInfo = CardInfoManager.card_info_dict[id]
+	var card_info: CardStats = CardStatsManager.card_info_dict[id]
 	
 	parent_scene.add_child(new_card)
 	
 	new_card.id = id
 	new_card.card_info = card_info
-	new_card.card_sprite.texture = card_info.graphics
+	new_card.card_sprite.texture = load(card_info.graphics)
 	new_card.hp = card_info.max_hp 
 	new_card.atk = card_info.base_atk
 	new_card.cost = card_info.cost

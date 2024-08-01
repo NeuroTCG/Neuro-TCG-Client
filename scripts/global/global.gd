@@ -16,7 +16,7 @@ signal fill_slot(slot_no: int, card: Card)
 signal unfill_slot(slot_no: int, card: Card)
 
 # TO ENEMY CARD SLOTS 
-signal highlight_enemy_cards(card: Card, atk_range: CardInfo.AttackRange)
+signal highlight_enemy_cards(card: Card, atk_range: CardStats.AttackRange)
 signal unhighlight_enemy_cards(card: Card)
 
 # TO PLAYER CARD SLOTS 

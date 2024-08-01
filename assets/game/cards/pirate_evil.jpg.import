@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://nmmaqv3s6cgd"
-path="res://.godot/imported/evil.jpg-51b364e9efbd796e5dbc1366e9b9f3a9.ctex"
+path="res://.godot/imported/pirate_evil.jpg-5c29322916ed71f5ef6042d0dbd1296a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/game/cards/evil.jpg"
-dest_files=["res://.godot/imported/evil.jpg-51b364e9efbd796e5dbc1366e9b9f3a9.ctex"]
+source_file="res://assets/game/cards/pirate_evil.jpg"
+dest_files=["res://.godot/imported/pirate_evil.jpg-5c29322916ed71f5ef6042d0dbd1296a.ctex"]
 
 [params]
 

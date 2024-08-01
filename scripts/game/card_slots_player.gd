@@ -16,8 +16,7 @@ func _ready() -> void:
 	Global.unfill_slot.connect(_on_unfill_slot)
 	MatchManager.action_switch.connect(_on_action_switch)
 	MatchManager.action_attack.connect(_on_action_attack)
-	#MatchManager.action_view.connect(_on_action_view)
-	#User.attack.connect(_on_any_attack)
+	MatchManager.action_ability.connect(_on_action_ability)
 
 	for slot in get_children():
 		slot.visible = false
@@ -29,20 +28,6 @@ func _on_fill_slot(slot_no: int, card: Card) -> void:
 func _on_unfill_slot(slot_no: int, card: Card) -> void:
 	if card.owned_by_player:
 		cards.erase(card)
-
-#func _on_any_attack(packet: AttackPacket) -> void:
-	#if (packet.attacker_card == null and packet.is_you):
-		#var atk_card_pos = CardSlots.convert_to_index(packet.attacker_position.to_array(), false)
-		#var atk_card: Card = get_node("Slot"+ str(atk_card_pos)).stored_card
-		#atk_card.render_attack(packet.attacker_card.health)
-		##Global.unfill_slot.emit(atk_card_pos, atk_card)
-		##atk_card.destroy()
-	#if (packet.target_card == null and !packet.is_you):
-		#var card_pos = CardSlots.convert_to_index(packet.target_position.to_array(), false)
-		#var card: Card = get_node("Slot"+ str(card_pos)).stored_card
-		#card.render_attack(packet.target_card.health)
-		##Global.unfill_slot.emit(card_pos, card)
-		##card.destroy()
 
 func show_slots(flag: bool) -> void:
 	if flag:
@@ -64,7 +49,14 @@ func show_slots_for_transfer(flag: bool) -> void:
 			if slot.stored_card:
 				if slot.stored_card == selected_card:
 					slot.visible = false
-	
+
+func show_all_ally_cards() -> void:
+	for slot in get_children():
+		if slot.stored_card:
+			slot.visible = true 
+		else:
+			slot.visible = false 
+
 func _on_card_selected(card: Card) -> void:
 	if MatchManager.current_action == MatchManager.Actions.SWITCH:
 		MatchManager.current_action = MatchManager.Actions.IDLE
@@ -76,7 +68,10 @@ func _on_card_selected(card: Card) -> void:
 		selected_card = null
 		show_slots(false)
 	else:
-		card.show_buttons([MatchManager.Actions.SWITCH, MatchManager.Actions.ATTACK, MatchManager.Actions.VIEW])
+		var default_buttons = [MatchManager.Actions.SWITCH, MatchManager.Actions.ATTACK, MatchManager.Actions.VIEW]
+		if card.card_info.ability.effect != Ability.AbilityEffect.NONE:
+			default_buttons.append(MatchManager.Actions.ABILITY)
+		card.show_buttons(default_buttons)
 		selected_card = card
 		card.select()
 
@@ -106,9 +101,8 @@ func _on_action_switch() -> void:
 func _on_action_attack() -> void:
 	Global.highlight_enemy_cards.emit(selected_card, selected_card.card_info.attack_range)
 
-#func _on_action_view() -> void:
-	#if selected_card:
-		#Global.view_card.emit(selected_card)
+func _on_action_ability() -> void:
+	print("ACTION BUTTON PRESSED AND SIGNAL RECEIVED!")
 
 func _on_slot_chosen(slot_no: int, card: Card) -> void:
 	if card:

@@ -23,8 +23,8 @@ AudioSystem="*res://scripts/global/audio_system.gd"
 SavedSettings="*res://scripts/global/saved_settings.gd"
 RenderOpponentAction="*res://scripts/networking/actions/render_opponent_action.gd"
 VerifyClientAction="*res://scripts/networking/actions/verify_client_action.gd"
-CardInfoManager="*res://scripts/global/card_info_manager.gd"
 MatchManager="*res://scripts/global/match_manager.gd"
+CardStatsManager="*res://scripts/global/card_stats_manager.gd"
 
 [display]
 

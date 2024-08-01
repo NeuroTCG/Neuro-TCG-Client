@@ -12,12 +12,11 @@ func _ready() -> void:
 	Global.unhighlight_enemy_cards.connect(_on_unhighlight_enemy_cards)
 	RenderOpponentAction.attack.connect(_on_attack)
 	RenderOpponentAction.switch.connect(_on_switch)
-	#User.attack.connect(_on_any_attack)
 	
 	for slot in get_children():
 		slot.visible = false
 
-func show_slots_for_attack(flag: bool, atk_range:=CardInfo.AttackRange.STANDARD) -> void:
+func show_slots_for_attack(flag: bool, atk_range:=CardStats.AttackRange.STANDARD) -> void:
 	if flag:
 		for slot in get_children():
 			if slot.stored_card:
@@ -76,7 +75,7 @@ func _on_attack(packet: AttackPacket) -> void:
 		card.render_attack(packet.target_card.health)
 
 
-func _on_highlight_enemy_cards(card: Card, atk_range: CardInfo.AttackRange) -> void:
+func _on_highlight_enemy_cards(card: Card, atk_range: CardStats.AttackRange) -> void:
 	show_slots_for_attack(true, atk_range)
 
 func _on_unhighlight_enemy_cards(card: Card) -> void:

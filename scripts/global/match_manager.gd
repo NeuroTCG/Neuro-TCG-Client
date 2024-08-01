@@ -4,6 +4,7 @@ extends Node
 signal action_summon
 signal action_switch 
 signal action_attack 
+signal action_ability
 ## View is handeled separately compared to any other other action
 signal action_view(card: Card)
 
@@ -30,6 +31,8 @@ var current_action := Actions.IDLE:
 				action_switch.emit() 
 			Actions.ATTACK:
 				action_attack.emit() 
+			Actions.ABILITY:
+				action_ability.emit() 
 var first_player := false 
 
 func _ready() -> void: 
