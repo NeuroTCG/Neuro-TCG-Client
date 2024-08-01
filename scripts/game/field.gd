@@ -1,5 +1,5 @@
 extends Node2D
-class_name CardSlots
+class_name Field
 
 ## Returns slot number of card 
 ## Returns 0 if card isn't in any slot 

@@ -16,8 +16,8 @@ func _ready():
 func _on_summon(packet: SummonPacket) -> void:
 	assert(cards.size() > 0, "Failed to render enemy.  Cards should exist at hand when summoning") 
 	
-	var slot_no = CardSlots.convert_to_index(packet.position.to_array(), true)
-	var slot_pos = game.get_node("CardSlotsEnemy").get_slot_pos(slot_no)
+	var slot_no = Field.convert_to_index(packet.position.to_array(), true)
+	var slot_pos = game.get_node("EnemyField").get_slot_pos(slot_no)
 	var hand_pos := get_hand_pos_from_id(packet.new_card.id)
 	var summon_card = cards.pop_at(hand_pos)
 		
@@ -47,7 +47,7 @@ func add_card(id: int) -> void:
 	
 	# Create new card 
 	var new_card = Card.create_card(game, id)
-	new_card.global_position = game.get_node("DeckEnemy").global_position
+	new_card.global_position = game.get_node("EnemyDeck").global_position
 	new_card.flip_card(true)
 	cards.append(new_card)
 	await new_card.move_card(card_positions[cards.size()-1].global_position, true)

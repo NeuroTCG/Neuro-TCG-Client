@@ -24,75 +24,75 @@ metadata/_edit_lock_ = true
 
 [node name="HUD" parent="." instance=ExtResource("2_846mn")]
 
-[node name="Hand" parent="." node_paths=PackedStringArray("game", "ram_manager") instance=ExtResource("3_tjohb")]
+[node name="PlayerHand" parent="." node_paths=PackedStringArray("game", "ram_manager") instance=ExtResource("3_tjohb")]
 position = Vector2(431, 566)
 game = NodePath("..")
 ram_manager = NodePath("../RamManager")
 
-[node name="HandEnemy" parent="." node_paths=PackedStringArray("game") instance=ExtResource("5_l60w6")]
+[node name="EnemyHand" parent="." node_paths=PackedStringArray("game") instance=ExtResource("5_l60w6")]
 position = Vector2(433, 81)
 game = NodePath("..")
 
-[node name="DeckEnemy" parent="." instance=ExtResource("4_kbisd")]
+[node name="EnemyDeck" parent="." instance=ExtResource("4_kbisd")]
 position = Vector2(83, 78)
 rotation = 3.14159
 
-[node name="Deck" parent="." instance=ExtResource("4_kbisd")]
+[node name="PlayerDeck" parent="." instance=ExtResource("4_kbisd")]
 position = Vector2(1069, 571)
 
-[node name="CardSlots" parent="." instance=ExtResource("7_vh228")]
+[node name="PlayerField" parent="." instance=ExtResource("7_vh228")]
 position = Vector2(266, 378)
 
-[node name="Slot2" parent="CardSlots" index="1"]
+[node name="Slot2" parent="PlayerField" index="1"]
 position = Vector2(206, -1)
 
-[node name="Slot3" parent="CardSlots" index="2"]
+[node name="Slot3" parent="PlayerField" index="2"]
 position = Vector2(414, -1)
 
-[node name="Slot4" parent="CardSlots" index="3"]
+[node name="Slot4" parent="PlayerField" index="3"]
 position = Vector2(617, -2)
 
-[node name="Slot5" parent="CardSlots" index="4"]
+[node name="Slot5" parent="PlayerField" index="4"]
 position = Vector2(104, 94)
 
-[node name="Slot6" parent="CardSlots" index="5"]
+[node name="Slot6" parent="PlayerField" index="5"]
 position = Vector2(317, 94)
 
-[node name="Slot7" parent="CardSlots" index="6"]
+[node name="Slot7" parent="PlayerField" index="6"]
 position = Vector2(517, 93)
 
-[node name="CardSlotsEnemy" parent="." node_paths=PackedStringArray("player_card_slots") instance=ExtResource("8_pgxhr")]
-player_card_slots = NodePath("../CardSlots")
+[node name="EnemyField" parent="." node_paths=PackedStringArray("player_field") instance=ExtResource("8_pgxhr")]
+player_field = NodePath("../PlayerField")
 
-[node name="Slot8" parent="CardSlotsEnemy" index="0"]
+[node name="Slot8" parent="EnemyField" index="0"]
 position = Vector2(369, 177)
 
-[node name="Slot9" parent="CardSlotsEnemy" index="1"]
+[node name="Slot9" parent="EnemyField" index="1"]
 position = Vector2(569, 177)
 
-[node name="Slot10" parent="CardSlotsEnemy" index="2"]
+[node name="Slot10" parent="EnemyField" index="2"]
 position = Vector2(782, 176)
 
-[node name="Slot11" parent="CardSlotsEnemy" index="3"]
+[node name="Slot11" parent="EnemyField" index="3"]
 position = Vector2(269, 271)
 
-[node name="Slot12" parent="CardSlotsEnemy" index="4"]
+[node name="Slot12" parent="EnemyField" index="4"]
 position = Vector2(472, 271)
 
-[node name="Slot13" parent="CardSlotsEnemy" index="5"]
+[node name="Slot13" parent="EnemyField" index="5"]
 position = Vector2(679, 271)
 
-[node name="Slot14" parent="CardSlotsEnemy" index="6"]
+[node name="Slot14" parent="EnemyField" index="6"]
 position = Vector2(885, 271)
 
 [node name="CardViewer" parent="." instance=ExtResource("10_4vhfg")]
 visible = false
 
 [node name="TurnIndicator" parent="." instance=ExtResource("11_dhnsn")]
-offset_left = 3.0
-offset_top = 255.0
-offset_right = 78.0
-offset_bottom = 275.0
+offset_left = 25.0
+offset_top = 234.0
+offset_right = 178.0
+offset_bottom = 259.0
 
 [node name="Ram" parent="." instance=ExtResource("11_jogws")]
 position = Vector2(907, 406)
@@ -105,5 +105,5 @@ enemy = true
 [node name="RamManager" type="Node2D" parent="."]
 script = ExtResource("12_ft7rt")
 
-[editable path="CardSlots"]
-[editable path="CardSlotsEnemy"]
+[editable path="PlayerField"]
+[editable path="EnemyField"]

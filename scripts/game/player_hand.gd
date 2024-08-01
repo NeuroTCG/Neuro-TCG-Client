@@ -8,8 +8,6 @@ func _ready() -> void:
 	Global.hand_card_unselected.connect(_on_card_unselected)
 	Global.slot_chosen.connect(_on_slot_chosen)
 	MatchManager.action_summon.connect(_on_action_summon)
-	#MatchManager.action_view.connect(_on_action_view)
-	
 	User.draw_card.connect(_on_draw_card)
 	
 	# Set hand positions  
@@ -30,14 +28,13 @@ func _on_draw_card(packet: DrawCardPacket):
 	if (packet.is_you):
 		assert (packet.card_id >= 0, "draw_card was invalid")
 		add_card(packet.card_id)
-			
 
 func add_card(id: int) -> void:
 	assert(cards.size() < 5, "Hand should only store 5 cards")
 	
 	# Create new card 
 	var new_card = Card.create_card(game, id)
-	new_card.global_position = game.get_node("Deck").global_position
+	new_card.global_position = game.get_node("PlayerDeck").global_position
 	new_card.flip_card()
 	cards.append(new_card)
 	await new_card.move_card(card_positions[cards.size()-1].global_position, true)
@@ -48,7 +45,7 @@ func add_card(id: int) -> void:
 func summon(hand_pos: int, slot_no: int) -> void:
 	assert(cards.size() > 0, "Cards should exist at hand when summoning")
 	
-	var slot_pos = game.get_node("CardSlots").get_slot_pos(slot_no)
+	var slot_pos = game.get_node("PlayerField").get_slot_pos(slot_no)
 	var summon_card = cards.pop_at(hand_pos)
 	
 	Global.fill_slot.emit(slot_no, summon_card)  # Update slot 
@@ -75,7 +72,7 @@ func _on_card_selected(card: Card) -> void:
 
 func _on_card_unselected(card: Card) -> void:
 	card.shift_card_y(0)
-	Global.show_slots.emit(false)
+	Global.hide_player_slots.emit()
 	card.hide_buttons()
 	card.unselect()
 	
@@ -90,7 +87,7 @@ func another_card_selected(card: Card) -> bool:
 	return false
 
 func _on_action_summon() -> void:
-	Global.show_slots.emit(true)
+	Global.show_player_slots_for_summon.emit()
 
 #func _on_action_view() -> void:
 	#if selected_card:
@@ -101,6 +98,6 @@ func _on_slot_chosen(slot_no: int, _card: Card) -> void:
 		var summoned_card: Card = selected_card
 		
 		_on_card_unselected(summoned_card)
-		VerifyClientAction.summon.emit(summoned_card.id, CardSlots.convert_to_array(slot_no))
+		VerifyClientAction.summon.emit(summoned_card.id, Field.convert_to_array(slot_no))
 		summon(cards.find(summoned_card), slot_no)
 		

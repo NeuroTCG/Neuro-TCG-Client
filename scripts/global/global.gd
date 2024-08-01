@@ -15,12 +15,13 @@ signal enemy_slot_chosen(slot_no: int, card: Card)
 signal fill_slot(slot_no: int, card: Card)
 signal unfill_slot(slot_no: int, card: Card)
 
-# TO ENEMY CARD SLOTS 
-signal highlight_enemy_cards(card: Card, atk_range: CardStats.AttackRange)
-signal unhighlight_enemy_cards(card: Card)
+# TO ENEMY FIELD
+signal show_enemy_slots_for_attack(card: Card)
+signal hide_enemy_cards()
 
-# TO PLAYER CARD SLOTS 
-signal show_slots(flag: bool)
+# TO PLAYER FIELD 
+signal show_player_slots_for_summon
+signal hide_player_slots
 
 # TO HUD
 signal show_shortcuts(shortcuts: PackedStringArray)

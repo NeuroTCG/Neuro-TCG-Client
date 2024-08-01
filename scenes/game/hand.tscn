@@ -1,9 +1,9 @@
 [gd_scene load_steps=2 format=3 uid="uid://bopel3gld2b6o"]
 
-[ext_resource type="Script" path="res://scripts/game/hand_player.gd" id="1_o1dtg"]
+[ext_resource type="Script" path="res://scripts/game/player_hand.gd" id="1_ewhwn"]
 
-[node name="Hand" type="Node2D" groups=["hand"]]
-script = ExtResource("1_o1dtg")
+[node name="PlayerHand" type="Node2D" groups=["hand"]]
+script = ExtResource("1_ewhwn")
 
 [node name="Pos1" type="Marker2D" parent="."]
 

@@ -1,38 +1,41 @@
-extends CardSlots
+extends Field
 ## Enemy cards only need to worry about Slots and 
 ## Placement when moving them around. 
 
-@export var player_card_slots: CardSlots
+@export var player_field: Field
 
 ## List to store all destroyed enemy cards 
 var destroyed_cards := [] 
 
 func _ready() -> void:
-	Global.highlight_enemy_cards.connect(_on_highlight_enemy_cards)
-	Global.unhighlight_enemy_cards.connect(_on_unhighlight_enemy_cards)
+	Global.show_enemy_slots_for_attack.connect(show_slots_for_attack)
+	Global.hide_enemy_cards.connect(hide_slots)
 	RenderOpponentAction.attack.connect(_on_attack)
 	RenderOpponentAction.switch.connect(_on_switch)
 	
 	for slot in get_children():
 		slot.visible = false
 
-func show_slots_for_attack(flag: bool, atk_range:=CardStats.AttackRange.STANDARD) -> void:
-	if flag:
-		for slot in get_children():
-			if slot.stored_card:
-				if opponent_is_reachable(slot, atk_range):
-					slot.visible = true
-				else:
-					slot.visible = false
+#region SHOW SLOTS 
+func show_slots_for_attack(card: Card) -> void:
+	for slot in get_children():
+		if slot.stored_card:
+			if opponent_is_reachable(slot, card.card_info.attack_range):
+				slot.visible = true
 			else:
 				slot.visible = false
-	else:
-		for slot in get_children():
+		else:
 			slot.visible = false
 
+func hide_slots() -> void:
+	for slot in get_children():
+		slot.visible = false 
+#endregion
+	
+#region RENDER OPPONENT 
 func _on_switch(packet: SwitchPlacePacket) -> void:
-	var card1_pos = CardSlots.convert_to_index(packet.position1.to_array(), true)
-	var card2_pos = CardSlots.convert_to_index(packet.position2.to_array(), true)
+	var card1_pos = Field.convert_to_index(packet.position1.to_array(), true)
+	var card2_pos = Field.convert_to_index(packet.position2.to_array(), true)
 	var slot1 := get_node("Slot"+ str(card1_pos))
 	var slot2 := get_node("Slot"+ str(card2_pos))
 	var card1: Card = slot1.stored_card
@@ -51,10 +54,9 @@ func _on_switch(packet: SwitchPlacePacket) -> void:
 	else:
 		switch_cards(card1, card2)
 
-## When the opponent attacks the client
 func _on_attack(packet: AttackPacket) -> void:
 	# Update attacking card's status 
-	var atk_card_slot = CardSlots.convert_to_index(packet.attacker_position.to_array(), true)
+	var atk_card_slot = Field.convert_to_index(packet.attacker_position.to_array(), true)
 	var atk_card: Card = get_node("Slot"+ str(atk_card_slot)).stored_card
 
 	if packet.attacker_card == null:
@@ -66,20 +68,14 @@ func _on_attack(packet: AttackPacket) -> void:
 			atk_card.render_attack(packet.attacker_card.health)
 	
 	# Update target card's status 
-	var card_slot = CardSlots.convert_to_index(packet.target_position.to_array())
-	var card: Card = player_card_slots.get_node("Slot"+ str(card_slot)).stored_card
+	var card_slot = Field.convert_to_index(packet.target_position.to_array())
+	var card: Card = player_field.get_node("Slot"+ str(card_slot)).stored_card
 	
 	if packet.target_card == null: 
 		destroy_card(card_slot, card)
 	else:
 		card.render_attack(packet.target_card.health)
-
-
-func _on_highlight_enemy_cards(card: Card, atk_range: CardStats.AttackRange) -> void:
-	show_slots_for_attack(true, atk_range)
-
-func _on_unhighlight_enemy_cards(card: Card) -> void:
-	show_slots_for_attack(false)
+#endregion 
 
 func destroy_card(slot:int, card: Card) -> void:
 	print("(From Opponent) Card Destroyed!")
