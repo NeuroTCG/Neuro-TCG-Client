@@ -12,7 +12,8 @@ func _ready():
 	pressed.connect(_on_pressed)
 
 func _process(delta) -> void:
-	if buttons.visible and Input.is_action_just_pressed(shortcut_key):
+	if buttons.visible and visible and Input.is_action_just_pressed(shortcut_key):
+		print(visible, buttons.visible)
 		_on_pressed() 
 
 func _on_pressed() -> void:
@@ -33,6 +34,7 @@ func _on_pressed() -> void:
 		var player_ram = get_tree().get_first_node_in_group("ram_manager").player_ram
 		if player_ram < buttons.get_parent().cost:
 			Global.notice.emit("Insufficent Ram to summon this card!")
+			Global.hide_player_slots.emit()
 			return 
 	
 	MatchManager.current_action = button_action 

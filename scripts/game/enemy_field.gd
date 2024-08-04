@@ -62,6 +62,8 @@ func _on_attack(packet: AttackPacket) -> void:
 	if packet.attacker_card == null:
 		destroy_card(atk_card_slot, atk_card)
 	else:
+		#TODO: Update so that client can tell even without server 
+		# giving equivalent hp that the target card does not have reach 
 		## If hp is the same, target card was not able to reach
 		## the attacking card. 
 		if not atk_card.hp == packet.attacker_card.health:

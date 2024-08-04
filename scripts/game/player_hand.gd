@@ -46,11 +46,12 @@ func summon(hand_pos: int, slot_no: int) -> void:
 	assert(cards.size() > 0, "Cards should exist at hand when summoning")
 	
 	var slot_pos = game.get_node("PlayerField").get_slot_pos(slot_no)
-	var summon_card = cards.pop_at(hand_pos)
+	var summon_card: Card = cards.pop_at(hand_pos)
 	
 	Global.fill_slot.emit(slot_no, summon_card)  # Update slot 
 	
 	summon_card.placement = Card.Placement.PLAYMAT  # Update card 
+	summon_card.summon_sicknes = true 
 	
 	# Shift all cards right of summoned card
 	for i in range(hand_pos, cards.size()):

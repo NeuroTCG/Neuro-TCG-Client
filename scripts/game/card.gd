@@ -11,34 +11,60 @@ class_name Card
 @onready var atk_label = %AtkLabel
 @onready var hp_label = %HpLabel
 
-#region IMUTABLE CARD STATS 
-var id: int
-var placement := Placement.DECK 
-var owned_by_player := true 
-var card_info: CardStats 
-#endregion
-
-#region MUTABLE CARD STATS
-var hp: int  
-var atk: int 
-var cost: int 
-#endregion 
-
-var mouse_over := false
-var selected := false
-var anchor_position: Vector2
-var hover_tween: Tween 
-var unhover_tween: Tween 
-var button_y_pos: float  
-var movement_tween: Tween 
-
-## Placement for player cards. Currently unused for opponent cards. 
 enum Placement {
 	DECK,
 	HAND,
 	PLAYMAT,
 	DESTROYED
 }
+
+#region IMUTABLE CARD STATS 
+var id: int
+var owned_by_player := true 
+var card_info: CardStats 
+#endregion
+
+#region MUTABLE CARD STATS
+var hp: int:
+	set(value):
+		if value <= 0:
+			hp = 0 
+			reset_variables()
+		else:
+			hp = value 
+var atk: int 
+var cost: int 
+#endregion 
+
+#region STATUS 
+var summon_sicknes := false:
+	get:
+		if not owned_by_player:
+			assert(false, "Attribute summon_sickness not implemented for enemy cards") 
+		return summon_sicknes 
+var moved_or_acted := false:
+	set(value):
+		moved_or_acted = value 
+	get:
+		if not owned_by_player:
+			assert(false, "Attribute moved_or_acted not implemented for enemy cards") 
+		return moved_or_acted 
+var placement := Placement.DECK:
+	get:
+		if not owned_by_player:
+			assert(false, "Attribute placement not implemented for enemy cards") 
+		return placement
+var mouse_over := false
+var selected := false
+#endregion 
+
+#region TWEENS AND POSITION  
+var anchor_position: Vector2
+var hover_tween: Tween 
+var unhover_tween: Tween 
+var button_y_pos: float  
+var movement_tween: Tween 
+#endregion 
 
 static func create_card(parent_scene: Node2D, id: int) -> Card:
 	var new_card: Card = load("res://scenes/game/card.tscn").instantiate()
@@ -57,7 +83,15 @@ static func create_card(parent_scene: Node2D, id: int) -> Card:
 
 func _ready() -> void:
 	Global.mouse_input_functions.append(_on_mouse_clicked)
+	VerifyClientAction.player_finished.connect(_on_player_finished)
 	button_y_pos = buttons.position.y
+
+func reset_variables() -> void:
+	if owned_by_player:
+		summon_sicknes = false 
+		moved_or_acted = false  
+	mouse_over = false
+	selected = false
 
 func _on_mouse_clicked() -> void:
 	for button in buttons.get_children():
@@ -82,6 +116,10 @@ func _on_mouse_clicked() -> void:
 		elif selected:
 			selected = false 
 			hide_buttons()
+
+func _on_player_finished() -> void:
+	summon_sicknes = false 
+	moved_or_acted = false 
 
 func select() -> void:
 	selected = true
