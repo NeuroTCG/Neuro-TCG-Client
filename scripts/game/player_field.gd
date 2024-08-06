@@ -170,7 +170,10 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 		if not slot_is_reachable(player_slot_no, enemy_card, false):
 			return 
 		else:
+			#TODO: comment out VerifyClientAction.attack.emit( .. ) when reach is implemented server-side 
 			VerifyClientAction.attack.emit(enemy_card.id, convert_to_array(player_slot_no), convert_to_array(enemy_slot_no), true)
+			# rest of code is still needed for prediction. 
+			
 			selected_card.render_attack(max(selected_card.hp - (enemy_card.atk - 1), 0))
 			
 			if selected_card.hp <= 0:
