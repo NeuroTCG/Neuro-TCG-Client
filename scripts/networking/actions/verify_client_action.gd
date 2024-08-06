@@ -16,9 +16,9 @@ func _on_summon(card_id, position) -> void:
 	print("Summon")
 	User.send_packet(SummonRequestPacket.new(card_id, CardPosition.from_array(position)))
 	
-func _on_attack(_card_id, target_pos, attack_pos) -> void:
+func _on_attack(_card_id, target_pos, attack_pos, counterattack := false) -> void:
 	print("Attack")
-	User.send_packet(AttackRequestPacket.new(CardPosition.from_array(target_pos), CardPosition.from_array(attack_pos)))
+	User.send_packet(AttackRequestPacket.new(CardPosition.from_array(target_pos), CardPosition.from_array(attack_pos), counterattack))
 
 func _on_player_finished() -> void:
 	User.send_packet(EndTurnPacket.new())

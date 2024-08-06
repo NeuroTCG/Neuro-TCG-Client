@@ -153,29 +153,28 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 				
 		hide_slots()
 
-func _on_enemy_slot_chosen(slot_no: int, target_card: Card) -> void:
+func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
+	var player_card = selected_card
+	var player_slot_no = get_slot_no(player_card)
+	
 	if MatchManager.current_action == MatchManager.Actions.ATTACK:
-		assert(target_card, "Enemy slot chosen but no card in enemy slot!")
-		assert(selected_card, "Enemy slot chosen but no player card selected!")
+		player_card.moved_or_acted = true 
 		
-		var atk_card = selected_card
+		enemy_card.render_attack_client(player_card)
+		VerifyClientAction.attack.emit(player_card.id, convert_to_array(enemy_slot_no), convert_to_array(player_slot_no))
 		
-		atk_card.moved_or_acted = true 
+		if enemy_card.hp <= 0: 
+			enemy_field.destroy_card(enemy_slot_no, enemy_card)
 		
-		target_card.render_attack_client(atk_card)
-		assert(slot_no != get_slot_no(atk_card), "The attacker and target are both in slot %d" % slot_no)
-		VerifyClientAction.attack.emit(atk_card.id, convert_to_array(slot_no), get_slot_array(atk_card))
-		if target_card.hp <= 0: 
-			destroy_card(slot_no, target_card)
-		
-		var atk_card_slot = get_slot_no(atk_card)
-		## No counterattack if the target card cannot reach the player card
-		if not player_is_reachable(get_node("Slot%d" % atk_card_slot), target_card.card_info.attack_range):
+		# Enemy counterattack 
+		if not slot_is_reachable(player_slot_no, enemy_card, false):
 			return 
-		
-		selected_card.render_attack(max(selected_card.hp - (target_card.atk - 1), 0))
-		if selected_card.hp <= 0:
-			destroy_card(atk_card_slot, atk_card) 
+		else:
+			VerifyClientAction.attack.emit(enemy_card.id, convert_to_array(player_slot_no), convert_to_array(enemy_slot_no), true)
+			selected_card.render_attack(max(selected_card.hp - (enemy_card.atk - 1), 0))
+			
+			if selected_card.hp <= 0:
+				destroy_card(player_slot_no, player_card) 
 #endregion 
 
 func destroy_card(slot:int, card: Card) -> void:

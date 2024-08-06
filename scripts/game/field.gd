@@ -1,6 +1,9 @@
 extends Node2D
 class_name Field
 
+@export var player_field: Field
+@export var enemy_field: Field  
+
 ## Returns slot number of card 
 ## Returns 0 if card isn't in any slot 
 func get_slot_no(card: Card) -> int:
@@ -31,31 +34,54 @@ func switch_cards(card1: Card, card2: Card) -> void:
 	card1.move_card(card2_pos)
 	card2.move_card(card1_pos) 
 
-## Return true if an opponent slot is reachable by the player card 
-## Takes opponent slot and atk_range of player card
-func opponent_is_reachable(slot, atk_range: CardStats.AttackRange) -> bool:
-	if slot.slot_no in [8, 9, 10]:  # For cards in the back 
-		if atk_range == CardStats.AttackRange.REACH:  
-			return true
-		else:  # Without reach, the front row cards must be empty 
-			if slots_empty([11, 12, 13, 14]):
+## Return true if a target slot is reachable by given card 
+func slot_is_reachable(target_slot_no, atk_card: Card, atk_is_from_player: bool) -> bool:
+	var atk_front_row
+	var atk_back_row
+	var target_front_row
+	var target_back_row 
+	var atk_slot_no 
+	
+	if atk_is_from_player:
+		atk_front_row = Global.PLAYER_FRONT_ROW
+		atk_back_row = Global.PLAYER_BACK_ROW 
+		target_front_row = Global.ENEMY_FRONT_ROW
+		target_back_row = Global.ENEMY_BACK_ROW
+		
+		atk_slot_no = player_field.get_slot_no(atk_card)
+	else:
+		atk_front_row = Global.ENEMY_FRONT_ROW 
+		atk_back_row = Global.ENEMY_BACK_ROW
+		target_front_row = Global.PLAYER_FRONT_ROW
+		target_back_row = Global.PLAYER_BACK_ROW 
+		
+		atk_slot_no = enemy_field.get_slot_no(atk_card)
+	
+	if atk_slot_no in atk_front_row: 
+		if target_slot_no in target_front_row: 
+			return true  
+		elif target_slot_no in target_back_row:  
+			if atk_card.card_info.attack_range == CardStats.AttackRange.REACH:
 				return true 
-			return false  
-	else:  # Cards in the front are always reachable 
-		return true   
-
-## Return true if a player slot is reachable by the opponent card 
-## Takes player slot and atk_range of opponent card 
-func player_is_reachable(slot, atk_range: CardStats.AttackRange) -> bool:
-	if slot.slot_no in [5, 6, 7]:  # For cards in the back 
-		if atk_range == CardStats.AttackRange.REACH:  
-			return true
-		else:  # Without reach, the front row cards must be empty 
-			if slots_empty([1, 2, 3, 4]):
+			else: 
+				if slots_empty(target_front_row):
+					return true 
+				else:
+					return false  
+	elif atk_slot_no in atk_back_row:   
+		if target_slot_no in target_front_row: 
+			if atk_card.card_info.attack_range == CardStats.AttackRange.REACH:
 				return true 
+			else:
+				if slots_empty(atk_front_row):
+					return true 
+				else:
+					return false 
+		elif target_slot_no in target_back_row:
 			return false  
-	else:  # Cards in the front are always reachable 
-		return true   
+	
+	assert(false, "Someone tell Kotge there is a problem with the slot_is_reacheable function")
+	return false 
 
 ## Returns true if a list of slots are empty 
 ## Takes a list of slot numbers 

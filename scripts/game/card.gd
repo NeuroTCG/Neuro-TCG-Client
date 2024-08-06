@@ -56,6 +56,7 @@ var placement := Placement.DECK:
 		return placement
 var mouse_over := false
 var selected := false
+var dont_show_view := false 
 #endregion 
 
 #region TWEENS AND POSITION  
@@ -111,8 +112,11 @@ func _on_mouse_clicked() -> void:
 				Global.playmat_card_unselected.emit(self)
 	else:
 		if mouse_over and not selected:
-			selected = true 
-			show_buttons([MatchManager.Actions.VIEW]) 
+			if dont_show_view: 
+				dont_show_view = false
+			else: 
+				selected = true 
+				show_buttons([MatchManager.Actions.VIEW]) 
 		elif selected:
 			selected = false 
 			hide_buttons()
@@ -205,6 +209,7 @@ func flip_card(enemy:=false) -> void:
 		animation_player.play("flip_enemy")
 
 func render_attack_client(card: Card) -> void:
+	dont_show_view = true 
 	hp -= card.atk
 	animation_player.play("nuke")
 

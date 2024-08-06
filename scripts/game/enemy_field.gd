@@ -2,8 +2,6 @@ extends Field
 ## Enemy cards only need to worry about Slots and 
 ## Placement when moving them around. 
 
-@export var player_field: Field
-
 ## List to store all destroyed enemy cards 
 var destroyed_cards := [] 
 
@@ -20,7 +18,7 @@ func _ready() -> void:
 func show_slots_for_attack(card: Card) -> void:
 	for slot in get_children():
 		if slot.stored_card:
-			if opponent_is_reachable(slot, card.card_info.attack_range):
+			if slot_is_reachable(slot.slot_no, card, true):
 				slot.visible = true
 			else:
 				slot.visible = false
@@ -55,28 +53,24 @@ func _on_switch(packet: SwitchPlacePacket) -> void:
 		switch_cards(card1, card2)
 
 func _on_attack(packet: AttackPacket) -> void:
-	# Update attacking card's status 
-	var atk_card_slot = Field.convert_to_index(packet.attacker_position.to_array(), true)
-	var atk_card: Card = get_node("Slot"+ str(atk_card_slot)).stored_card
-
-	if packet.attacker_card == null:
-		destroy_card(atk_card_slot, atk_card)
+	# If the other player is being counterattacked whilst attacking 
+	if packet.counterattack:
+		var target_slot_no = Field.convert_to_index(packet.target_position.to_array(), true)
+		var target_card: Card = self.get_node("Slot"+ str(target_slot_no)).stored_card
+		
+		if packet.target_card == null: 
+			destroy_card(target_slot_no, target_card)
+		else:
+			target_card.render_attack(packet.target_card.health)
+	# If the other player is attacking 
 	else:
-		#TODO: Update so that client can tell even without server 
-		# giving equivalent hp that the target card does not have reach 
-		## If hp is the same, target card was not able to reach
-		## the attacking card. 
-		if not atk_card.hp == packet.attacker_card.health:
-			atk_card.render_attack(packet.attacker_card.health)
+		var target_slot_no = Field.convert_to_index(packet.target_position.to_array())
+		var target_card: Card = player_field.get_node("Slot"+ str(target_slot_no)).stored_card
 	
-	# Update target card's status 
-	var card_slot = Field.convert_to_index(packet.target_position.to_array())
-	var card: Card = player_field.get_node("Slot"+ str(card_slot)).stored_card
-	
-	if packet.target_card == null: 
-		destroy_card(card_slot, card)
-	else:
-		card.render_attack(packet.target_card.health)
+		if packet.target_card == null: 
+			destroy_card(target_slot_no, target_card)
+		else:
+			target_card.render_attack(packet.target_card.health)
 #endregion 
 
 func destroy_card(slot:int, card: Card) -> void:

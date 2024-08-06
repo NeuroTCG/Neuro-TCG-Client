@@ -40,8 +40,10 @@ rotation = 3.14159
 [node name="PlayerDeck" parent="." instance=ExtResource("4_kbisd")]
 position = Vector2(1069, 571)
 
-[node name="PlayerField" parent="." instance=ExtResource("7_vh228")]
+[node name="PlayerField" parent="." node_paths=PackedStringArray("player_field", "enemy_field") instance=ExtResource("7_vh228")]
 position = Vector2(266, 378)
+player_field = NodePath(".")
+enemy_field = NodePath("../EnemyField")
 
 [node name="Slot2" parent="PlayerField" index="1"]
 position = Vector2(206, -1)
@@ -61,8 +63,9 @@ position = Vector2(317, 94)
 [node name="Slot7" parent="PlayerField" index="6"]
 position = Vector2(517, 93)
 
-[node name="EnemyField" parent="." node_paths=PackedStringArray("player_field") instance=ExtResource("8_pgxhr")]
+[node name="EnemyField" parent="." node_paths=PackedStringArray("player_field", "enemy_field") instance=ExtResource("8_pgxhr")]
 player_field = NodePath("../PlayerField")
+enemy_field = NodePath(".")
 
 [node name="Slot8" parent="EnemyField" index="0"]
 position = Vector2(369, 177)

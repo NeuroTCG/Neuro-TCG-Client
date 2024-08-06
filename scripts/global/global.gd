@@ -1,6 +1,11 @@
 # Global stuffs for game functionality 
 extends Node 
 
+const PLAYER_FRONT_ROW = [1, 2, 3, 4]
+const PLAYER_BACK_ROW = [5, 6, 7]
+const ENEMY_FRONT_ROW = [11, 12, 13, 14]
+const ENEMY_BACK_ROW = [8, 9, 7]
+
 # FROM CARD
 signal hand_card_selected(card: Card)
 signal hand_card_unselected(card: Card)
