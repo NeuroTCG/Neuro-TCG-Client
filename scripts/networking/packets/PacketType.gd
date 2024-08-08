@@ -26,6 +26,9 @@ const EndTurn: String = "end_turn"
 const DrawCardRequest: String = "draw_card_request"
 const DrawCard: String = "draw_card"
 
+const UseAbilityRequest: String = "use_ability_request"
+const UseAbility: String = "use_ability"
+
 const allTypes: Array[String] = [
 	ClientInfo,
 	ClientInfoAccept,
@@ -52,4 +55,7 @@ const allTypes: Array[String] = [
 
 	DrawCardRequest,
 	DrawCard,
+	
+	UseAbilityRequest,
+	UseAbility,
 ]

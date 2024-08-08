@@ -52,7 +52,6 @@ func __on_authenticate_answer(packet: Packet):
 		print("Waiting for matchmaking")
 			
 func __on_rules_packet(packet: Packet):
-	# TODO: store them somewhere
 	print("Rules received")
 	print((packet as RuleInfoPacket).card_id_mapping)
 
@@ -116,6 +115,13 @@ func receive_command(msg: String):
 					invalid_command.emit("Switch by client failed!")
 			else:
 				RenderOpponentAction.switch.emit(packet)
+		PacketType.UseAbility:
+			if packet.is_you:
+				if not packet.valid:
+					invalid_command.emit("Ability usage by client failed!")
+			else:
+				RenderOpponentAction.ability.emit(packet)
+				
 		PacketType.StartTurn:
 			RenderOpponentAction.opponent_finished.emit()
 		

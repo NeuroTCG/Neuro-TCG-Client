@@ -27,6 +27,9 @@ static var _type_to_class: Dictionary = {
 
 	PacketType.DrawCard: DrawCardPacket,
 	PacketType.DrawCardRequest: DrawCardRequestPacket,
+	
+	PacketType.UseAbility: UseAbilityPacket,
+	PacketType.UseAbilityRequest: UseAbilityRequestPacket,
 }
 
 static func deserialize(s: String) -> Packet:
