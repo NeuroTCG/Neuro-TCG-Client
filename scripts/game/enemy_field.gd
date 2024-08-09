@@ -10,6 +10,7 @@ func _ready() -> void:
 	Global.hide_enemy_cards.connect(hide_slots)
 	RenderOpponentAction.attack.connect(_on_attack)
 	RenderOpponentAction.switch.connect(_on_switch)
+	RenderOpponentAction.ability.connect(_on_ability)
 	
 	for slot in get_children():
 		slot.visible = false
@@ -53,19 +54,6 @@ func _on_switch(packet: SwitchPlacePacket) -> void:
 		switch_cards(card1, card2)
 
 func _on_attack(packet: AttackPacket) -> void:
-	# If the other player is being counterattacked whilst attacking 
-	#TODO: Remove this first block when reach is implemented server-side 
-	if packet.counterattack:
-		var target_slot_no = Field.convert_to_index(packet.target_position.to_array(), true)
-		var target_card: Card = self.get_node("Slot"+ str(target_slot_no)).stored_card
-		
-		if packet.target_card == null: 
-			destroy_card(target_slot_no, target_card)
-		else:
-			target_card.render_attack(packet.target_card.health)
-	# If the other player is attacking 
-	else:
-		#TODO: Keep this section when reach is implemented server-side 
 		var target_slot_no = Field.convert_to_index(packet.target_position.to_array())
 		var target_card: Card = player_field.get_node("Slot"+ str(target_slot_no)).stored_card
 	
@@ -74,18 +62,22 @@ func _on_attack(packet: AttackPacket) -> void:
 		else:
 			target_card.render_attack(packet.target_card.health)
 			
-		#TODO: Uncomment this section when reach is implemented server-side 
-		#var atk_slot_no = Field.convert_to_index(packet.attacker_position.to_array(), true)
-		#var atk_card: Card = get_node("Slot"+ str(atk_slot_no)).stored_card
-		#
-		#if packet.attacker_card == null:
-			#destroy_card(atk_slot_no, atk_card)
-		#else:
-			## If hp is the same, target card was not able to counterattack 
-			## the attacking card.
-			#if atk_card.hp != packet.attacker_card.health:
-				#atk_card.render_attack(packet.attacker_card.health)
+		var atk_slot_no = Field.convert_to_index(packet.attacker_position.to_array(), true)
+		var atk_card: Card = get_node("Slot"+ str(atk_slot_no)).stored_card
+		
+		if packet.attacker_card == null:
+			destroy_card(atk_slot_no, atk_card)
+		else:
+			# If hp is the same, target card was not able to counterattack 
+			# the attacking card.
+			if atk_card.hp != packet.attacker_card.health:
+				atk_card.render_attack(packet.attacker_card.health)
 			
+func _on_ability(packet: UseAbilityPacket) -> void:
+	var target_slot_no = Field.convert_to_index(packet.target_position.to_array(), true)
+	var target_card: Card = enemy_field.get_node("Slot"+ str(target_slot_no)).stored_card
+
+	target_card.hp = packet.target_card.health
 #endregion 
 
 func destroy_card(slot:int, card: Card) -> void:

@@ -5,7 +5,7 @@ var target_position: CardPosition
 var ability_position: CardPosition
 
 func _init(target_position_: CardPosition, ability_position_: CardPosition):
-	super(PacketType.AttackRequest)
+	super(PacketType.UseAbilityRequest)
 	target_position = target_position_
 	ability_position = ability_position_
 

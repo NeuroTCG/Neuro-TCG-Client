@@ -149,6 +149,8 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 			if selected_card.card_info.ability.effect == Ability.AbilityEffect.ADD_HP_TO_ALLY_CARD:
 				print("Card ability in effect. HP before: ", card.hp)
 				card.hp += selected_card.card_info.ability.value
+				card.hp = min(card.hp, card.card_info.max_hp)
+				VerifyClientAction.ability.emit(get_slot_array(card), get_slot_array(selected_card))
 				print("Hp afterwords: ", card.hp)
 				
 		hide_slots()
@@ -163,21 +165,21 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 		enemy_card.render_attack_client(player_card)
 		VerifyClientAction.attack.emit(player_card.id, convert_to_array(enemy_slot_no), convert_to_array(player_slot_no))
 		
-		if enemy_card.hp <= 0: 
-			enemy_field.destroy_card(enemy_slot_no, enemy_card)
-		
 		# Enemy counterattack 
 		if not slot_is_reachable(player_slot_no, enemy_card, false):
 			return 
 		else:
-			#TODO: comment out VerifyClientAction.attack.emit( .. ) when reach is implemented server-side 
-			VerifyClientAction.attack.emit(enemy_card.id, convert_to_array(player_slot_no), convert_to_array(enemy_slot_no), true)
+			#VerifyClientAction.attack.emit(enemy_card.id, convert_to_array(player_slot_no), convert_to_array(enemy_slot_no), true)
 			# rest of code is still needed for prediction. 
 			
 			selected_card.render_attack(max(selected_card.hp - (enemy_card.atk - 1), 0))
 			
 			if selected_card.hp <= 0:
 				destroy_card(player_slot_no, player_card) 
+
+		if enemy_card.hp <= 0: 
+			enemy_field.destroy_card(enemy_slot_no, enemy_card)
+		
 #endregion 
 
 func destroy_card(slot:int, card: Card) -> void:
