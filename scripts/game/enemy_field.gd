@@ -26,11 +26,18 @@ func show_slots_for_attack(card: Card) -> void:
 		else:
 			slot.visible = false
 
+func show_slots_for_direct_attack() -> void:
+	for slot in get_children():
+		if slot.stored_card:
+			slot.visible = false
+		else:
+			slot.visible = false
+
 func hide_slots() -> void:
 	for slot in get_children():
 		slot.visible = false 
 #endregion
-	
+
 #region RENDER OPPONENT 
 func _on_switch(packet: SwitchPlacePacket) -> void:
 	var card1_pos = Field.convert_to_index(packet.position1.to_array(), true)
@@ -72,12 +79,48 @@ func _on_attack(packet: AttackPacket) -> void:
 			# the attacking card.
 			if atk_card.hp != packet.attacker_card.health:
 				atk_card.render_attack(packet.attacker_card.health)
-			
+	
 func _on_ability(packet: UseAbilityPacket) -> void:
-	var target_slot_no = Field.convert_to_index(packet.target_position.to_array(), true)
-	var target_card: Card = enemy_field.get_node("Slot"+ str(target_slot_no)).stored_card
+	# Ability card will always be from the opponent 
+	var ability_slot_no = Field.convert_to_index(packet.ability_position.to_array()) 
+	var ability_card: Card = enemy_field.get_node("Slot" + str(ability_slot_no)).stored_card
+	
+	if ability_card.card_info.ability.effect == Ability.AbilityEffect.ADD_HP_TO_ALLY_CARD:
+		# In this case the target card will always be an opponent card 
+		var target_slot_no = Field.convert_to_index(packet.target_position.to_array(), true)
+		var target_card: Card = enemy_field.get_node("Slot"+ str(target_slot_no)).stored_card
+		target_card.hp = packet.target_card.health
+	elif ability_card.card_info.ability.effect == Ability.AbilityEffect.ATTACK:
+		# In this case the target card will always be the player's card 
+		var target_slot_no = Field.convert_to_index(packet.target_position.to_array())
+		var target_card: Card = player_field.get_node("Slot"+ str(target_slot_no)).stored_card
+		target_card.hp = packet.target_card.health
+	elif ability_card.card_info.ability.effect == Ability.AbilityEffect.ATTACK_ROW:
+		# In this case the target card will always be the player's card 
+		var target_slot_no = Field.convert_to_index(packet.target_position.to_array())
+		var target_card: Card = player_field.get_node("Slot"+ str(target_slot_no)).stored_card
+		
+		var atk_value = target_card.card_info.ability.value
+		var row 
+		if target_slot_no in Global.PLAYER_BACK_ROW:
+			row = Global.PLAYER_BACK_ROW
+		elif target_slot_no in Global.PLAYER_FRONT_ROW:
+			row = Global.PLAYER_FRONT_ROW
+			
+			for slot_no in row:
+				var slot = player_field.get_node("Slot%d" % slot_no)
+				if slot.stored_card:
+					slot.stored_card.render_attack_with_atk_value(atk_value)
+					
+					if slot.stored_card <= 0: 
+						player_field.destroy_card(slot_no,  slot.stored_card)
+	elif ability_card.card_info.ability.effect == Ability.AbilityEffect.SEAL_ENEMY_CARD:
+		# In this case the target card will always be the player's card 
+		var target_slot_no = Field.convert_to_index(packet.target_position.to_array())
+		var target_card: Card = player_field.get_node("Slot"+ str(target_slot_no)).stored_card
+		target_card.seal = ability_card.card_info.ability.value
+	
 
-	target_card.hp = packet.target_card.health
 #endregion 
 
 func destroy_card(slot:int, card: Card) -> void:

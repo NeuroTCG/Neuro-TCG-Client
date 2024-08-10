@@ -56,6 +56,8 @@ var placement := Placement.DECK:
 		return placement
 var mouse_over := false
 var selected := false
+# Card is sealed at any level higher then 0. 
+var seal := 0 
 var dont_show_view := false 
 #endregion 
 
@@ -124,6 +126,8 @@ func _on_mouse_clicked() -> void:
 func _on_player_finished() -> void:
 	summon_sicknes = false 
 	moved_or_acted = false 
+	if seal > 0:
+		seal -= 1 
 
 func select() -> void:
 	selected = true
@@ -208,9 +212,9 @@ func flip_card(enemy:=false) -> void:
 	else:
 		animation_player.play("flip_enemy")
 
-func render_attack_client(card: Card) -> void:
+func render_attack_with_atk_value(atk_value: int) -> void:
 	dont_show_view = true 
-	hp -= card.atk
+	hp -= atk_value 
 	animation_player.play("nuke")
 
 func render_attack(_hp: int) -> void:
