@@ -64,19 +64,17 @@ func _on_card_selected(card: Card) -> void:
 	if MatchManager.current_action == MatchManager.Actions.SWITCH:
 		MatchManager.current_action = MatchManager.Actions.IDLE
 	else:
-		var default_buttons = [MatchManager.Actions.SWITCH, MatchManager.Actions.ATTACK, MatchManager.Actions.VIEW]
+		var buttons = [MatchManager.Actions.SWITCH, MatchManager.Actions.ATTACK, MatchManager.Actions.VIEW]
 		
-		if card.card_info.ability.effect != Ability.AbilityEffect.NONE:
-			default_buttons.append(MatchManager.Actions.ABILITY)	
+		if card.card_info.ability.effect != Ability.AbilityEffect.NONE and not card.ability_used:
+			buttons.append(MatchManager.Actions.ABILITY)	
 		
-		if card.summon_sicknes or card.seal > 0:
-			default_buttons.erase(MatchManager.Actions.SWITCH) 	
-			default_buttons.erase(MatchManager.Actions.ATTACK)
-			default_buttons.erase(MatchManager.Actions.ABILITY)
-		if card.moved_or_acted:
-			default_buttons.erase(MatchManager.Actions.SWITCH)
+		if card.summon_sicknes or card.seal > 0 or card.turn_phase == 0:
+			buttons = [MatchManager.Actions.VIEW]
+		elif card.turn_phase == 1:
+			buttons.erase(MatchManager.Actions.SWITCH)
 		
-		card.show_buttons(default_buttons)
+		card.show_buttons(buttons)
 		selected_card = card
 		card.select()
 
@@ -120,13 +118,14 @@ func _on_action_ability() -> void:
 ## Slot chosen functions are always run 
 ## before _on_card_selected/unselected functions 
 func _on_slot_chosen(slot_no: int, card: Card) -> void:
-	assert(selected_card, "No card selected.")
 	hide_slots()
-	selected_card.moved_or_acted = true 
 	
-	if MatchManager.current_action == MatchManager.Actions.SWITCH: 
+	if MatchManager.current_action == MatchManager.Actions.SWITCH:
+		selected_card.turn_phase = 1 
+		assert(selected_card, "No card selected.") 
+		
 		if card:
-			card.moved_or_acted = true 
+			card.turn_phase = 1 
 		
 			card.unselect()
 			VerifyClientAction.switch.emit(get_slot_array(card), get_slot_array(selected_card))
@@ -147,7 +146,11 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 			selected_card.move_card(get_slot_pos(slot_no), true)
 			
 	if MatchManager.current_action == MatchManager.Actions.ABILITY:
+		selected_card.turn_phase = 0 
+		selected_card.ability_used = true 
+		assert(selected_card, "No card selected.") 
 		
+		assert(selected_card, "No card selected.")
 		if selected_card.card_info.ability.effect == Ability.AbilityEffect.ADD_HP_TO_ALLY_CARD:
 			print("Card ability in effect. HP before: ", card.hp)
 			card.hp += selected_card.card_info.ability.value
@@ -161,7 +164,7 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 	var player_slot_no = get_slot_no(player_card)
 	
 	Global.hide_enemy_cards.emit()
-	player_card.moved_or_acted = true 
+	player_card.turn_phase = 0 
 	
 	if MatchManager.current_action == MatchManager.Actions.ATTACK:
 		enemy_card.render_attack_with_atk_value(player_card.atk)

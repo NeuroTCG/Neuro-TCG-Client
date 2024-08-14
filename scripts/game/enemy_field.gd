@@ -82,7 +82,7 @@ func _on_attack(packet: AttackPacket) -> void:
 	
 func _on_ability(packet: UseAbilityPacket) -> void:
 	# Ability card will always be from the opponent 
-	var ability_slot_no = Field.convert_to_index(packet.ability_position.to_array()) 
+	var ability_slot_no = Field.convert_to_index(packet.ability_position.to_array(), true) 
 	var ability_card: Card = enemy_field.get_node("Slot" + str(ability_slot_no)).stored_card
 	
 	if ability_card.card_info.ability.effect == Ability.AbilityEffect.ADD_HP_TO_ALLY_CARD:

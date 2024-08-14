@@ -288,6 +288,8 @@ hframes = 13
 [node name="Buttons" type="VBoxContainer" parent="."]
 unique_name_in_owner = true
 visible = false
+z_index = 1000
+z_as_relative = false
 y_sort_enabled = true
 offset_left = -30.0
 offset_top = -42.0

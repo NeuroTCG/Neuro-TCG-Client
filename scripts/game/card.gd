@@ -37,18 +37,28 @@ var cost: int
 #endregion 
 
 #region STATUS 
+var ability_used := false:
+	set(value):
+		ability_used = value 
+	get: 
+		if not owned_by_player:
+			assert(false, "Attribute summon_sickness not implemented for enemy cards")
+		return ability_used 
 var summon_sicknes := false:
 	get:
 		if not owned_by_player:
 			assert(false, "Attribute summon_sickness not implemented for enemy cards") 
-		return summon_sicknes 
-var moved_or_acted := false:
+		return summon_sicknes
+## Phase 2 -> Movement & Action allowed 
+## Phase 1 -> Action allowed 
+## Phase 0 -> Only view allowed 
+var turn_phase := 2:
 	set(value):
-		moved_or_acted = value 
+		turn_phase = value 
 	get:
 		if not owned_by_player:
-			assert(false, "Attribute moved_or_acted not implemented for enemy cards") 
-		return moved_or_acted 
+			assert(false, "Attribute turn_phase not implemented for enemy cards") 
+		return turn_phase 
 var placement := Placement.DECK:
 	get:
 		if not owned_by_player:
@@ -92,7 +102,7 @@ func _ready() -> void:
 func reset_variables() -> void:
 	if owned_by_player:
 		summon_sicknes = false 
-		moved_or_acted = false  
+		turn_phase = 2  
 	mouse_over = false
 	selected = false
 
@@ -125,7 +135,7 @@ func _on_mouse_clicked() -> void:
 
 func _on_player_finished() -> void:
 	summon_sicknes = false 
-	moved_or_acted = false 
+	turn_phase = 2 
 	if seal > 0:
 		seal -= 1 
 

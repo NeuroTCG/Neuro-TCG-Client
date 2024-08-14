@@ -49,9 +49,11 @@ func _process(delta: float) -> void:
 
 func _on_match_found(packet: MatchFoundPacket) -> void:
 	if packet.is_first_player: 
+		print("THIS PLAYER WILL GO FIRST")
 		first_player = true 
 		_opponent_turn = false 
 	else: 
+		print("THIS PLAYER WILL GO SECOND")
 		first_player = false 
 		_opponent_turn = true 
 	
