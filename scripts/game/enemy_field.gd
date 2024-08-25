@@ -29,7 +29,7 @@ func show_slots_for_attack(card: Card) -> void:
 func show_slots_for_direct_attack() -> void:
 	for slot in get_children():
 		if slot.stored_card:
-			slot.visible = false
+			slot.visible = true
 		else:
 			slot.visible = false
 

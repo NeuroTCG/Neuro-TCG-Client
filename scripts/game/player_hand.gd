@@ -51,7 +51,7 @@ func summon(hand_pos: int, slot_no: int) -> void:
 	Global.fill_slot.emit(slot_no, summon_card)  # Update slot 
 	
 	summon_card.placement = Card.Placement.PLAYMAT  # Update card 
-	summon_card.summon_sicknes = true 
+	summon_card.summon_sickness = true 
 	
 	# Shift all cards right of summoned card
 	for i in range(hand_pos, cards.size()):

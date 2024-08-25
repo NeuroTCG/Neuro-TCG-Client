@@ -44,11 +44,11 @@ var ability_used := false:
 		if not owned_by_player:
 			assert(false, "Attribute summon_sickness not implemented for enemy cards")
 		return ability_used 
-var summon_sicknes := false:
+var summon_sickness := false:
 	get:
 		if not owned_by_player:
 			assert(false, "Attribute summon_sickness not implemented for enemy cards") 
-		return summon_sicknes
+		return summon_sickness
 ## Phase 2 -> Movement & Action allowed 
 ## Phase 1 -> Action allowed 
 ## Phase 0 -> Only view allowed 
@@ -101,7 +101,7 @@ func _ready() -> void:
 
 func reset_variables() -> void:
 	if owned_by_player:
-		summon_sicknes = false 
+		summon_sickness = false 
 		turn_phase = 2  
 	mouse_over = false
 	selected = false
@@ -134,7 +134,7 @@ func _on_mouse_clicked() -> void:
 			hide_buttons()
 
 func _on_player_finished() -> void:
-	summon_sicknes = false 
+	summon_sickness = false 
 	turn_phase = 2 
 	if seal > 0:
 		seal -= 1 

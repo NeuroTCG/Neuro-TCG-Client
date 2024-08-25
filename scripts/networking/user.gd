@@ -26,12 +26,16 @@ var client: Client
 const protocol_version = 1
 
 func start_initial_packet_sequence():
+	invalid_command.connect(__on_invalid_command)
 	client_info_accept.connect(__on_client_info_answer, CONNECT_ONE_SHOT)
 	authentication_valid.connect(__on_authenticate_answer, CONNECT_ONE_SHOT)
 	disconnect.connect(__on_disconnect, CONNECT_ONE_SHOT)
 	rule_info.connect(__on_rules_packet, CONNECT_ONE_SHOT)
 	match_found.connect(__on_match_found, CONNECT_ONE_SHOT)
 	send_packet(ClientInfoPacket.new("Official Client", "0.0.1", protocol_version))
+
+func __on_invalid_command(error: String):
+	assert(false, error)
 
 func __on_unknown_packet(packet: UnknownPacketPacket):
 	print("Unknown packet with message '%s' was sent to server" % packet.message)
