@@ -41,7 +41,7 @@ func _ready() -> void:
 	VerifyClientAction.player_finished.connect(_on_player_finished)
 
 func _process(delta: float) -> void:
-	if Input.is_action_just_pressed("end_turn"):
+	if Input.is_action_just_pressed("end_turn") and not _opponent_turn:
 		print("Ending player turn")
 		for callable in Global.mouse_input_functions:
 			callable.call()
