@@ -166,11 +166,13 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 
 func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 	assert(selected_card, "No card selected.")
+	
 	var player_card = selected_card
 	var player_slot_no = get_slot_no(player_card)
 	
 	Global.hide_enemy_cards.emit()
 	player_card.turn_phase = 0 
+	enemy_card.dont_show_view = true 
 	
 	if MatchManager.current_action == MatchManager.Actions.ATTACK:
 		enemy_card.render_attack_with_atk_value(player_card.atk)

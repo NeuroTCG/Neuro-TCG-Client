@@ -231,7 +231,6 @@ func flip_card(enemy:=false) -> void:
 		animation_player.play("flip_enemy")
 
 func render_attack_with_atk_value(atk_value: int) -> void:
-	dont_show_view = true 
 	hp -= atk_value 
 	animation_player.play("nuke")
 
