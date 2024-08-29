@@ -10,6 +10,7 @@ class_name Card
 @onready var buttons = %Buttons
 @onready var atk_label = %AtkLabel
 @onready var hp_label = %HpLabel
+@onready var seal_sprite = $SealSprite
 
 enum Placement {
 	DECK,
@@ -67,7 +68,7 @@ var placement := Placement.DECK:
 var mouse_over := false
 var selected := false
 # Card is sealed at any level higher then 0. 
-var seal := 0 
+var seal := 0
 var dont_show_view := false 
 #endregion 
 
@@ -97,6 +98,7 @@ static func create_card(parent_scene: Node2D, id: int) -> Card:
 func _ready() -> void:
 	Global.mouse_input_functions.append(_on_mouse_clicked)
 	VerifyClientAction.player_finished.connect(_on_player_finished)
+	RenderOpponentAction.opponent_finished.connect(_on_opponent_finished)
 	button_y_pos = buttons.position.y
 
 func reset_variables() -> void:
@@ -134,10 +136,16 @@ func _on_mouse_clicked() -> void:
 			hide_buttons()
 
 func _on_player_finished() -> void:
-	summon_sickness = false 
-	turn_phase = 2 
-	if seal > 0:
-		seal -= 1 
+	pass
+
+func _on_opponent_finished() -> void:
+	if owned_by_player:
+		summon_sickness = false 
+		turn_phase = 2 
+		if seal > 0:
+			seal -= 1 
+		if seal == 0:
+			seal_sprite.visible = false  
 
 func select() -> void:
 	selected = true

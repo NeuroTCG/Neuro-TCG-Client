@@ -106,6 +106,12 @@ func _on_action_attack() -> void:
 	Global.show_enemy_slots_for_attack.emit(selected_card)
 
 func _on_action_ability() -> void:
+	var player_ram = get_tree().get_first_node_in_group("ram_manager").player_ram
+	if selected_card.card_info.ability.cost > player_ram:
+		Global.notice.emit("Insufficent Ram to use this ability!")
+	else:
+		Global.update_ram.emit(player_ram - selected_card.card_info.ability.cost)
+	
 	if selected_card.card_info.ability.range == Ability.AbilityRange.ALLY_CARD:
 		show_all_ally_cards()
 	elif selected_card.card_info.ability.range == Ability.AbilityRange.ENEMY_CARD \
@@ -213,11 +219,9 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 			# Play seal animation when its made but rn 
 			# all that needs to be done is verify client action which is 
 			# done for any ability. 
-			pass 
-	
-		# Uncomment when offensive abilities have been implemented server-side
-		# VerifyClientAction.ability.emit(convert_to_array(enemy_slot_no), convert_to_array(player_slot_no))
-	
+			enemy_card.seal_sprite.visible = true  
+		
+		VerifyClientAction.ability.emit(convert_to_array(enemy_slot_no), convert_to_array(player_slot_no))
 	
 
 

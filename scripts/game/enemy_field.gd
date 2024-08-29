@@ -85,6 +85,9 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 	var ability_slot_no = Field.convert_to_index(packet.ability_position.to_array(), true) 
 	var ability_card: Card = enemy_field.get_node("Slot" + str(ability_slot_no)).stored_card
 	
+	var enemy_ram = get_tree().get_first_node_in_group("ram_manager").opponent_ram
+	Global.update_enemy_ram.emit(enemy_ram - ability_card.card_info.ability.cost)
+	
 	if ability_card.card_info.ability.effect == Ability.AbilityEffect.ADD_HP_TO_ALLY_CARD:
 		# In this case the target card will always be an opponent card 
 		var target_slot_no = Field.convert_to_index(packet.target_position.to_array(), true)
@@ -115,11 +118,13 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 					if slot.stored_card <= 0: 
 						player_field.destroy_card(slot_no,  slot.stored_card)
 	elif ability_card.card_info.ability.effect == Ability.AbilityEffect.SEAL_ENEMY_CARD:
+		print("APPLYING SEAL TO CARD")
 		# In this case the target card will always be the player's card 
 		var target_slot_no = Field.convert_to_index(packet.target_position.to_array())
 		var target_card: Card = player_field.get_node("Slot"+ str(target_slot_no)).stored_card
 		target_card.seal = ability_card.card_info.ability.value
-	
+		print(target_card.seal)
+		target_card.seal_sprite.visible = true 
 
 #endregion 
 

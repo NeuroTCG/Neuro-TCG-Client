@@ -7,6 +7,7 @@ script = ExtResource("1_7kgdp")
 
 [node name="PauseScreen" type="ColorRect" parent="."]
 visible = false
+z_index = 200
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

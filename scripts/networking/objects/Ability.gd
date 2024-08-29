@@ -15,8 +15,6 @@ enum AbilityRange {
 	ALLY_CARD,
 	ENEMY_CARD, 
 	ENEMY_ROW, 
-	ALL_ENEMY_CARDS,
-	ALL_ALLY_CARDS,
 	PLAYER_DECK
 }
 
