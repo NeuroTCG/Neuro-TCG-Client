@@ -4,21 +4,6 @@ class_name Field
 @export var player_field: Field
 @export var enemy_field: Field  
 
-## Returns slot number of card 
-## Returns 0 if card isn't in any slot 
-func get_slot_no(card: Card) -> int:
-	for slot in get_children(): 
-		if slot.stored_card == card:
-			return slot.slot_no
-	return 0  
-
-func get_slot_array(card: Card) -> Array:
-	return convert_to_array(get_slot_no(card))
-
-func get_slot_pos(slot_no: int) -> Vector2: 
-	var pos = get_node("Slot" + str(slot_no)).global_position 
-	return pos
-
 func switch_cards(card1: Card, card2: Card) -> void:
 	# Change slots 
 	var card1_slot = get_slot_no(card1)
@@ -35,6 +20,7 @@ func switch_cards(card1: Card, card2: Card) -> void:
 	card2.move_card(card1_pos) 
 
 ## Return true if a target slot is reachable by given card 
+## NOTE: Field Independent
 func slot_is_reachable(target_slot_no, atk_card: Card, atk_is_from_player: bool) -> bool:
 	var atk_front_row
 	var atk_back_row
@@ -85,12 +71,38 @@ func slot_is_reachable(target_slot_no, atk_card: Card, atk_is_from_player: bool)
 
 ## Returns true if a list of slots are empty 
 ## Takes a list of slot numbers 
-func slots_empty(slot_nos: Array[int]) -> bool:
+## NOTE: Field Independent
+func slots_empty(slot_nos) -> bool:
 	for no in slot_nos: 
-		var slot = get_node("Slot%d" % no)
-		if slot.stored_card:
-			return false
+		if no in Global.PLAYER_ROWS:
+			var slot = player_field.get_node("Slot%d" % no)
+			if slot.stored_card:
+				return false
+		else: 
+			var slot = enemy_field.get_node("Slot%d" % no)
+			if slot.stored_card:
+				return false
 	return true 
+
+## Returns slot number of card 
+## Returns 0 if card isn't in any slot 
+## WARNING: Field dependent. Will only check the current field 
+func get_slot_no(card: Card) -> int:
+	for slot in get_children(): 
+		if slot.stored_card == card:
+			return slot.slot_no
+	return 0  
+
+## Returns position of card in array form 
+## WARNING: Field dependent. Will only check the current field 
+func get_slot_array(card: Card) -> Array:
+	return convert_to_array(get_slot_no(card))
+
+## Returns the Vector2 position of slot  
+## WARNING: Field dependent. Will only check the current field 
+func get_slot_pos(slot_no: int) -> Vector2: 
+	var pos = get_node("Slot" + str(slot_no)).global_position 
+	return pos
 
 #region STATIC FUNCTIONS 
 static func convert_to_array(index: int) -> Array:

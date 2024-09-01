@@ -3,8 +3,10 @@ extends Node
 
 const PLAYER_FRONT_ROW = [1, 2, 3, 4]
 const PLAYER_BACK_ROW = [5, 6, 7]
+const PLAYER_ROWS = [1, 2, 3, 4, 5, 6, 7]
 const ENEMY_FRONT_ROW = [11, 12, 13, 14]
-const ENEMY_BACK_ROW = [8, 9, 7]
+const ENEMY_BACK_ROW = [8, 9, 10]
+const ENEMY_ROWS = [8, 9, 10, 11, 12, 13, 14]
 
 # FROM CARD
 signal hand_card_selected(card: Card)

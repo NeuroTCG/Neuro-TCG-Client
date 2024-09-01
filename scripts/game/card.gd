@@ -136,9 +136,6 @@ func _on_mouse_clicked() -> void:
 			hide_buttons()
 
 func _on_player_finished() -> void:
-	pass
-
-func _on_opponent_finished() -> void:
 	if owned_by_player:
 		summon_sickness = false 
 		turn_phase = 2 
@@ -146,6 +143,13 @@ func _on_opponent_finished() -> void:
 			seal -= 1 
 		if seal == 0:
 			seal_sprite.visible = false  
+
+func _on_opponent_finished() -> void:
+	if not owned_by_player:
+		if seal > 0:
+			seal -= 1 
+		if seal == 0:
+			seal_sprite.visible = false   
 
 func select() -> void:
 	selected = true
