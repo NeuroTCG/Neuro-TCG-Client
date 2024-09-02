@@ -20,6 +20,7 @@ var cost: int
 var attack_range: AttackRange
 var card_type: CardType
 var ability: Ability
+var has_summoning_sickness: bool
 
 func _init(
 	_graphics: String, 
@@ -28,7 +29,8 @@ func _init(
 	_cost: int, 
 	_atk_range: AttackRange,
 	_card_type: CardType,
-	_ability: Ability
+	_ability: Ability,
+	_has_summoning_sickness: bool,
 ) -> void:
 	max_hp = _hp 
 	base_atk = _atk 
@@ -37,6 +39,7 @@ func _init(
 	attack_range = _atk_range
 	card_type = _card_type
 	ability = _ability
+	has_summoning_sickness = _has_summoning_sickness
 	
 func to_dict() -> Dictionary:
 	return {
@@ -46,11 +49,11 @@ func to_dict() -> Dictionary:
 		"summoning_cost": cost,
 		"attack_range": attack_range,
 		"card_type": card_type,
-		"ability": ability.to_dict()
+		"ability": ability.to_dict(),
+		"has_summoning_sickness": has_summoning_sickness,
 	}
 
 static func from_dict(d: Dictionary):
-	pass
 	return CardStats.new(
 		d["graphics"],
 		d["max_hp"], 
@@ -58,5 +61,6 @@ static func from_dict(d: Dictionary):
 		d["summoning_cost"],
 		CardStats.AttackRange.get(d["attack_range"]),
 		CardStats.CardType.get(d["card_type"]),
-		Ability.from_dict(d["ability"])
+		Ability.from_dict(d["ability"]),
+		d["has_summoning_sickness"],
 	)
