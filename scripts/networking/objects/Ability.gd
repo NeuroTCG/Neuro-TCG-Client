@@ -2,10 +2,9 @@ class_name Ability
 
 enum AbilityEffect {
 	NONE,
-	ADD_HP_TO_ALLY_CARD,
-	SEAL_ENEMY_CARD,
+	ADD_HP,
+	SEAL,
 	ATTACK,
-	ATTACK_ROW
 }
 
 enum AbilityRange {

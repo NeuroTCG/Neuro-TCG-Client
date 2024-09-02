@@ -157,7 +157,7 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 		assert(selected_card, "No card selected.") 
 		
 		assert(selected_card, "No card selected.")
-		if selected_card.card_info.ability.effect == Ability.AbilityEffect.ADD_HP_TO_ALLY_CARD:
+		if selected_card.card_info.ability.effect == Ability.AbilityEffect.ADD_HP:
 			print("Card ability in effect. HP before: ", card.hp)
 			card.hp += selected_card.card_info.ability.value
 			VerifyClientAction.ability.emit(get_slot_array(card), get_slot_array(selected_card))
@@ -191,7 +191,7 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 		#endregion 
 	
 	elif MatchManager.current_action == MatchManager.Actions.ABILITY: 
-		if player_card.card_info.ability.effect == Ability.AbilityEffect.ATTACK:
+		if player_card.card_info.ability.effect == Ability.AbilityEffect.ATTACK and player_card.card_info.ability.range == Ability.AbilityRange.ENEMY_CARD:
 			var atk_value = player_card.card_info.ability.value
 
 			enemy_card.render_attack_with_atk_value(atk_value)
@@ -199,7 +199,7 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 			if enemy_card.hp <= 0: 
 				enemy_field.destroy_card(enemy_slot_no, enemy_card)
 		
-		elif player_card.card_info.ability.effect == Ability.AbilityEffect.ATTACK_ROW:
+		elif player_card.card_info.ability.effect == Ability.AbilityEffect.ATTACK and player_card.card_info.ability.range == Ability.AbilityRange.ENEMY_ROW:
 			var atk_value = player_card.card_info.ability.value  
 			var row: Array 		
 			
@@ -216,7 +216,7 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 					if slot.stored_card.hp <= 0: 
 						enemy_field.destroy_card(slot_no, slot.stored_card)
 		
-		elif player_card.card_info.ability.effect == Ability.AbilityEffect.SEAL_ENEMY_CARD:
+		elif player_card.card_info.ability.effect == Ability.AbilityEffect.SEAL:
 			# Play seal animation when its made but rn 
 			# all that needs to be done is verify client action which is 
 			# done for any ability. 
