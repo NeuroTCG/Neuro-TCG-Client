@@ -160,7 +160,6 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 		if selected_card.card_info.ability.effect == Ability.AbilityEffect.ADD_HP_TO_ALLY_CARD:
 			print("Card ability in effect. HP before: ", card.hp)
 			card.hp += selected_card.card_info.ability.value
-			card.hp = min(card.hp, card.card_info.max_hp)
 			VerifyClientAction.ability.emit(get_slot_array(card), get_slot_array(selected_card))
 			print("Hp afterwords: ", card.hp)
 
