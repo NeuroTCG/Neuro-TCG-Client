@@ -8,7 +8,7 @@ func _ready() -> void:
 	Global.hand_card_unselected.connect(_on_card_unselected)
 	Global.slot_chosen.connect(_on_slot_chosen)
 	MatchManager.action_summon.connect(_on_action_summon)
-	User.draw_card.connect(_on_draw_card)
+	Global.network_manager.draw_card.connect(_on_draw_card)
 	
 	# Set hand positions  
 	for i in range(5):
@@ -22,7 +22,7 @@ func _process(_delta):
 	
 	if Input.is_action_just_pressed("draw_card") and cards.size() < 5:
 		print("Is opponent turn is ", MatchManager._opponent_turn)
-		User.send_packet(DrawCardRequestPacket.new())
+		Global.network_manager.send_packet(DrawCardRequestPacket.new())
 
 func _on_draw_card(packet: DrawCardPacket):
 	if (packet.is_you):

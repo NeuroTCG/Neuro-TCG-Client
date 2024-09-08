@@ -239,5 +239,3 @@ func destroy_card(slot:int, card: Card) -> void:
 	destroyed_cards.append(card)
 	card.visible = false
 	card.global_position = Vector2.ZERO 
-
-

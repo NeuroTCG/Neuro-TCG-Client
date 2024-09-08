@@ -1,3 +1,4 @@
+class_name NetworkManager
 extends Node
 
 #region COMMAND SIGNALS
@@ -21,9 +22,12 @@ signal invalid_command(error: String)
 
 signal on_packet_received(packet: Packet)
 
-var client: Client
+var client := Client.new()
 
 const protocol_version = 1
+
+func _ready() -> void:
+	add_child(client)
 
 func start_initial_packet_sequence():
 	invalid_command.connect(__on_invalid_command)
@@ -32,6 +36,7 @@ func start_initial_packet_sequence():
 	disconnect.connect(__on_disconnect, CONNECT_ONE_SHOT)
 	rule_info.connect(__on_rules_packet, CONNECT_ONE_SHOT)
 	match_found.connect(__on_match_found, CONNECT_ONE_SHOT)
+	await client.wait_until_connection_opened()
 	send_packet(ClientInfoPacket.new("Official Client", "0.0.1", protocol_version))
 
 func __on_invalid_command(error: String):

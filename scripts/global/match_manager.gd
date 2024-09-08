@@ -36,9 +36,10 @@ var current_action := Actions.IDLE:
 var first_player := false 
 
 func _ready() -> void: 
-	User.match_found.connect(_on_match_found)
 	RenderOpponentAction.opponent_finished.connect(_on_opponent_finished)
 	VerifyClientAction.player_finished.connect(_on_player_finished)
+	await Global.network_manager_ready
+	Global.network_manager.match_found.connect(_on_match_found)
 
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("end_turn") and not _opponent_turn:

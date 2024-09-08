@@ -11,12 +11,11 @@ func _init():
 		print("ERROR: Cannot connect to url!")
 
 func wait_until_connection_opened():
-	var timeout_timer = get_tree().create_timer(2)
+	var timeout_timer = get_tree().create_timer(10)
 	while ws.get_ready_state() != WebSocketPeer.STATE_OPEN:
 		await get_tree().process_frame
 		if timeout_timer.time_left == 0:
-			print("Connection failed")
-			return
+			assert(false, "Connection timed out")
 
 #func is_connection_valid() -> bool:
 	#if ws.get_ready_state() == WebSocketPeer.STATE_OPEN:
@@ -51,6 +50,6 @@ func _process(_delta):
 func parse_msg() -> bool:
 	var parsed = ws.get_packet().get_string_from_utf8()
 	
-	User.receive_command(parsed)
+	Global.network_manager.receive_command(parsed)
 	
 	return true
