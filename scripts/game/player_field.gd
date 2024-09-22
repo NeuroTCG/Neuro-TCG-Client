@@ -164,7 +164,6 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 			print("Hp afterwords: ", card.hp)
 
 		elif selected_card.card_info.ability.effect == Ability.AbilityEffect.SHIELD:
-			print("sending ability")
 			VerifyClientAction.ability.emit(get_slot_array(card), get_slot_array(selected_card))
 			card.shield = true
 
