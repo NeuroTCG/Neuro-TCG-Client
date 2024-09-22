@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://boe1h3a26dhro"]
+[gd_scene load_steps=15 format=3 uid="uid://boe1h3a26dhro"]
 
 [ext_resource type="Script" path="res://scripts/game/card.gd" id="1_5rey8"]
 [ext_resource type="Texture2D" uid="uid://b20ivgjyf57nr" path="res://assets/game/Back.png" id="2_u5h17"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://kdovff4ku5kb" path="res://assets/game/nuke_sheet.png" id="5_0v3kj"]
 [ext_resource type="PackedScene" uid="uid://b6jkjwqcsi6xw" path="res://scenes/ui/action_choice_button.tscn" id="6_txvo4"]
 [ext_resource type="Texture2D" uid="uid://kgy6gbyrbc82" path="res://assets/game/ProhibitionSign2.png" id="7_ss4wt"]
+[ext_resource type="Texture2D" uid="uid://yirbkkrlm86g" path="res://assets/game/Shield.png" id="8_dc28p"]
 
 [sub_resource type="Animation" id="Animation_qmg2o"]
 length = 0.001
@@ -332,6 +333,11 @@ visible = false
 position = Vector2(4.76837e-07, 4.76837e-07)
 scale = Vector2(0.245556, 0.245556)
 texture = ExtResource("7_ss4wt")
+
+[node name="ShieldSprite" type="Sprite2D" parent="."]
+visible = false
+scale = Vector2(0.246, 0.246)
+texture = ExtResource("8_dc28p")
 
 [connection signal="input_event" from="Area2D" to="." method="_on_input_event"]
 [connection signal="mouse_entered" from="Area2D" to="." method="_on_mouse_hover"]

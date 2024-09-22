@@ -163,6 +163,11 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 			VerifyClientAction.ability.emit(get_slot_array(card), get_slot_array(selected_card))
 			print("Hp afterwords: ", card.hp)
 
+		elif selected_card.card_info.ability.effect == Ability.AbilityEffect.SHIELD:
+			print("sending ability")
+			VerifyClientAction.ability.emit(get_slot_array(card), get_slot_array(selected_card))
+			card.shield = true
+
 func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 	assert(selected_card, "No card selected.")
 	
@@ -182,7 +187,9 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 			return 
 		else:
 			selected_card.render_attack(max(selected_card.hp - (enemy_card.atk - 1), 0))
-			
+			if player_card.shield > 0:
+				player_card.shield -= 1
+
 			if selected_card.hp <= 0:
 				destroy_card(player_slot_no, player_card) 
 
@@ -217,14 +224,12 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 						enemy_field.destroy_card(slot_no, slot.stored_card)
 		
 		elif player_card.card_info.ability.effect == Ability.AbilityEffect.SEAL:
-			# Play seal animation when its made but rn 
-			# all that needs to be done is verify client action which is 
-			# done for any ability. 
-			enemy_card.seal_sprite.visible = true  
-		
-		VerifyClientAction.ability.emit(convert_to_array(enemy_slot_no), convert_to_array(player_slot_no))
-	
+			# Play seal animation when its made but rn
+			# all that needs to be done is verify client action which is
+			# done for any ability.
+			enemy_card.seal_sprite.visible = true
 
+		VerifyClientAction.ability.emit(convert_to_array(enemy_slot_no), convert_to_array(player_slot_no))
 
 #endregion 
 

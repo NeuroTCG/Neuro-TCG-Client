@@ -68,14 +68,16 @@ func _on_attack(packet: AttackPacket) -> void:
 			destroy_card(target_slot_no, target_card)
 		else:
 			target_card.render_attack(packet.target_card.health)
-			
+			target_card.shield = packet.target_card.shield
+
 		var atk_slot_no = Field.convert_to_index(packet.attacker_position.to_array(), true)
 		var atk_card: Card = get_node("Slot"+ str(atk_slot_no)).stored_card
 		
 		if packet.attacker_card == null:
 			destroy_card(atk_slot_no, atk_card)
 		else:
-			# If hp is the same, target card was not able to counterattack 
+			atk_card.shield = packet.attacker_card.shield
+			# If hp is the same, target card was not able to counterattack
 			# the attacking card.
 			if atk_card.hp != packet.attacker_card.health:
 				atk_card.render_attack(packet.attacker_card.health)
@@ -93,11 +95,13 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 		var target_slot_no = Field.convert_to_index(packet.target_position.to_array(), true)
 		var target_card: Card = enemy_field.get_node("Slot"+ str(target_slot_no)).stored_card
 		target_card.hp = packet.target_card.health
+		target_card.shield = packet.target_card.shield
 	elif ability_card.card_info.ability.effect == Ability.AbilityEffect.ATTACK and ability_card.card_info.ability.range == Ability.AbilityRange.ENEMY_CARD:
 		# In this case the target card will always be the player's card 
 		var target_slot_no = Field.convert_to_index(packet.target_position.to_array())
 		var target_card: Card = player_field.get_node("Slot"+ str(target_slot_no)).stored_card
 		target_card.hp = packet.target_card.health
+		target_card.shield = packet.target_card.shield
 	elif ability_card.card_info.ability.effect == Ability.AbilityEffect.ATTACK and ability_card.card_info.ability.range == Ability.AbilityRange.ENEMY_ROW:
 		# In this case the target card will always be the player's card 
 		var target_slot_no = Field.convert_to_index(packet.target_position.to_array())
@@ -124,7 +128,13 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 		var target_card: Card = player_field.get_node("Slot"+ str(target_slot_no)).stored_card
 		target_card.seal = ability_card.card_info.ability.value
 		print(target_card.seal)
-		target_card.seal_sprite.visible = true 
+		target_card.seal_sprite.visible = true
+	elif ability_card.card_info.ability.effect == Ability.AbilityEffect.SHIELD:
+		print("APPLYING SHIELD TO CARD")
+		var target_slot_no = Field.convert_to_index(packet.target_position.to_array(), true)
+		var target_card: Card = enemy_field.get_node("Slot"+ str(target_slot_no)).stored_card
+		target_card.shield = ability_card.card_info.ability.value
+		print(target_card.shield)
 
 #endregion 
 
