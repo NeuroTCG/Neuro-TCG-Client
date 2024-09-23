@@ -81,7 +81,7 @@ func _on_card_selected(card: Card) -> void:
 		if card.card_info.ability.effect != Ability.AbilityEffect.NONE and not card.ability_used:
 			buttons.append(MatchManager.Actions.ABILITY)
 
-		if card.summon_sickness or card.seal > 0 or card.turn_phase == 0:
+		if card.summon_sickness or card.sealed_turns_left > 0 or card.turn_phase == 0:
 			buttons = [MatchManager.Actions.VIEW]
 		elif card.turn_phase == 1:
 			buttons.erase(MatchManager.Actions.SWITCH)

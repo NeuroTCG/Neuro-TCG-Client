@@ -69,7 +69,7 @@ var placement := Placement.DECK:
 var mouse_over := false
 var selected := false
 # Card is sealed at any level higher then 0.
-var seal := 0
+var sealed_turns_left := 0
 var _shield := 1
 var shield: int:
 	get:
@@ -153,17 +153,17 @@ func _on_player_finished() -> void:
 	if owned_by_player:
 		summon_sickness = false
 		turn_phase = 2
-		if seal > 0:
-			seal -= 1
-		if seal == 0:
+		if sealed_turns_left > 0:
+			sealed_turns_left -= 1
+		if sealed_turns_left == 0:
 			seal_sprite.visible = false
 
 
 func _on_opponent_finished() -> void:
 	if not owned_by_player:
-		if seal > 0:
-			seal -= 1
-		if seal == 0:
+		if sealed_turns_left > 0:
+			sealed_turns_left -= 1
+		if sealed_turns_left == 0:
 			seal_sprite.visible = false
 
 
