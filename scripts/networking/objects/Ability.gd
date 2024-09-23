@@ -5,6 +5,7 @@ enum AbilityEffect {
 	ADD_HP,
 	SEAL,
 	ATTACK,
+	SHIELD,
 }
 
 enum AbilityRange {

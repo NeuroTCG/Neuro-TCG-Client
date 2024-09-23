@@ -11,6 +11,7 @@ class_name Card
 @onready var atk_label = %AtkLabel
 @onready var hp_label = %HpLabel
 @onready var seal_sprite = $SealSprite
+@onready var shield_sprite = $ShieldSprite
 
 enum Placement {
 	DECK,
@@ -69,10 +70,18 @@ var mouse_over := false
 var selected := false
 # Card is sealed at any level higher then 0. 
 var seal := 0
-var dont_show_view := false 
-#endregion 
+var _shield := 1
+var shield: int:
+	get:
+		return _shield
+	set(value):
+		_shield = value
+		shield_sprite.visible = value > 0
 
-#region TWEENS AND POSITION  
+var dont_show_view := false
+#endregion
+
+#region TWEENS AND POSITION
 var anchor_position: Vector2
 var hover_tween: Tween 
 var unhover_tween: Tween 
@@ -235,7 +244,11 @@ func flip_card(enemy:=false) -> void:
 		animation_player.play("flip_enemy")
 
 func render_attack_with_atk_value(atk_value: int) -> void:
-	hp -= atk_value 
+	if shield > 0:
+		shield -= 1
+		return
+
+	hp -= atk_value
 	animation_player.play("nuke")
 
 func render_attack(_hp: int) -> void:
