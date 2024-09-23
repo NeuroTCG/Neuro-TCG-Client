@@ -1,6 +1,7 @@
 extends Packet
 class_name DisconnectPacket
 
+
 class Reason:
 	const auth_invalid: String = "auth_invalid"
 	const auth_user_banned: String = "auth_user_banned"
@@ -9,13 +10,16 @@ class Reason:
 
 	static var allReasons = [auth_invalid, auth_user_banned, protocol_too_old, opponent_disconnect]
 
+
 var message: String
 var reason: String
+
 
 func _init(reason_: String, message_: String):
 	super(PacketType.Disconnect)
 	reason = reason_
 	message = message_
+
 
 func to_dict() -> Dictionary:
 	return {
@@ -23,6 +27,7 @@ func to_dict() -> Dictionary:
 		"message": message,
 		"reason": reason,
 	}
+
 
 static func from_dict(d: Dictionary):
 	assert(d["reason"] in Reason.allReasons)

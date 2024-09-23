@@ -7,6 +7,7 @@ extends Node2D
 
 var maxValue := 1
 
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	if enemy:
@@ -20,8 +21,9 @@ func _ready():
 func _update_text():
 	label.text = "RAM: %d/%d" % [progress_bar.value, maxValue]
 
+
 func _on_update_ram(value: int):
-	progress_bar.value = value 
+	progress_bar.value = value
 	_update_text()
 
 

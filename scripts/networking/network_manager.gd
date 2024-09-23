@@ -17,7 +17,7 @@ signal draw_card(packet: DrawCardPacket)
 signal attack(packet: AttackPacket)
 #endregion
 
-# Maybe good idea to replace error with an object with more details, idk. 
+# Maybe good idea to replace error with an object with more details, idk.
 signal invalid_command(error: String)
 
 signal on_packet_received(packet: Packet)
@@ -26,8 +26,10 @@ var client := Client.new()
 
 const protocol_version = 1
 
+
 func _ready() -> void:
 	add_child(client)
+
 
 func start_initial_packet_sequence():
 	invalid_command.connect(__on_invalid_command)
@@ -39,30 +41,37 @@ func start_initial_packet_sequence():
 	await client.wait_until_connection_opened()
 	send_packet(ClientInfoPacket.new("Official Client", "0.0.1", protocol_version))
 
+
 func __on_invalid_command(error: String):
 	assert(false, error)
+
 
 func __on_unknown_packet(packet: UnknownPacketPacket):
 	print("Unknown packet with message '%s' was sent to server" % packet.message)
 	assert(false, "unknown packets should not exist")
 
+
 func __on_disconnect(packet: DisconnectPacket):
 	print("Client info was invalid: '%s' (%s)" % [packet.message, packet.reason])
+
 
 func __on_client_info_answer(_packet: ClientInfoAcceptPacket):
 	print("Connected to server (protocol v%d)" % protocol_version)
 	send_packet(AuthenticatePacket.new("Neuro"))
 
+
 func __on_authenticate_answer(packet: Packet):
 	print("User authenticated")
-	if ((packet as AuthenticationValidPacket).has_running_game):
+	if (packet as AuthenticationValidPacket).has_running_game:
 		print("Reconnecting to existing game...")
 	else:
 		print("Waiting for matchmaking")
-			
+
+
 func __on_rules_packet(packet: Packet):
 	print("Rules received")
 	print((packet as RuleInfoPacket).card_id_mapping)
+
 
 func __on_match_found(packet: MatchFoundPacket):
 	print("Match found")
@@ -77,10 +86,12 @@ func __on_match_found(packet: MatchFoundPacket):
 	rule_info.disconnect(__on_rules_packet)
 	match_found.disconnect(__on_match_found)
 
+
 func send_packet(packet: Packet):
 	var data = PacketUtils.serialize(packet)
 	client.ws.send_text(data)
 	print("'%s' packet was sent" % packet.type)
+
 
 func receive_command(msg: String):
 	var packet = PacketUtils.deserialize(msg)
@@ -130,15 +141,15 @@ func receive_command(msg: String):
 					invalid_command.emit("Ability usage by client failed!")
 			else:
 				RenderOpponentAction.ability.emit(packet)
-				
+
 		PacketType.StartTurn:
 			RenderOpponentAction.opponent_finished.emit()
-		
+
 		PacketType.DrawCard:
 			print(packet.is_you)
 			draw_card.emit(packet)
-			if (!packet.is_you):
+			if !packet.is_you:
 				RenderOpponentAction.draw_card.emit(packet)
-				
+
 		var type:
 			assert(false, "Received unhandled packet type '%s'" % type)

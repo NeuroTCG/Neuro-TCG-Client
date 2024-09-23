@@ -1,5 +1,5 @@
-# Global stuffs for game functionality 
-extends Node 
+# Global stuffs for game functionality
+extends Node
 
 const PLAYER_FRONT_ROW = [1, 2, 3, 4]
 const PLAYER_BACK_ROW = [5, 6, 7]
@@ -24,9 +24,9 @@ signal unfill_slot(slot_no: int, card: Card)
 
 # TO ENEMY FIELD
 signal show_enemy_slots_for_attack(card: Card)
-signal hide_enemy_cards()
+signal hide_enemy_cards
 
-# TO PLAYER FIELD 
+# TO PLAYER FIELD
 signal show_player_slots_for_summon
 signal hide_player_slots
 
@@ -35,7 +35,7 @@ signal show_shortcuts(shortcuts: PackedStringArray)
 signal hide_shortcuts
 signal notice(msg: String)
 
-# TO RAM 
+# TO RAM
 signal update_ram(value: int)
 signal update_max_ram(value: int)
 signal update_enemy_ram(value: int)
@@ -44,21 +44,22 @@ signal update_enemy_max_ram(value: int)
 # TO RAM MANAGER
 signal use_ram(value: int)
 
-# TO CARD VIEWER 
-signal close_view 
+# TO CARD VIEWER
+signal close_view
 
-signal network_manager_ready()
+signal network_manager_ready
 var network_manager: NetworkManager = null
 
-## Simple mouse input implementation 
-## All functions that process mouse input 
+## Simple mouse input implementation
+## All functions that process mouse input
 ## should be appended to the array
-## This is done so that mouse input can be 
+## This is done so that mouse input can be
 ## proccessed in a controlled manner
-## Current order is SLOTS -> CARDS 
+## Current order is SLOTS -> CARDS
 var mouse_input_functions: Array[Callable] = []
 
-func _process(delta: float) -> void:	
+
+func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("click"):
 		for callable in mouse_input_functions:
 			callable.call()

@@ -6,4 +6,4 @@ signal draw_card(packet: DrawCardPacket)
 signal switch(packet: SwitchPlacePacket)
 signal ability(packet: UseAbilityPacket)
 
-signal opponent_finished 
+signal opponent_finished
