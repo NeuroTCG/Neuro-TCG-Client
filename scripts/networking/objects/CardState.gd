@@ -3,7 +3,7 @@ class_name CardState
 var id: int
 var health: int
 var ability_was_used: bool
-var phase: int
+var phase: Card.TurnPhase
 var shield: int
 var sealed_turns_left: int
 
@@ -19,7 +19,7 @@ func _init(
 	id = id_
 	health = health_
 	ability_was_used = ability_was_used_
-	phase = phase_
+	phase = phase_ as Card.TurnPhase
 	shield = shield_
 	sealed_turns_left = sealed_turns_left_
 
@@ -33,6 +33,10 @@ func to_dict() -> Dictionary:
 		"shield": shield,
 		"sealed_turns_left": sealed_turns_left,
 	}
+
+
+static func fromCardStats(id_: int, stats: CardStats) -> CardState:
+	return CardState.new(id_, stats.max_hp, false, Card.TurnPhase.MoveOrAction, 0, 0)
 
 
 static func from_dict(d):

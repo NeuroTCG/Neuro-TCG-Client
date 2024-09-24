@@ -35,7 +35,7 @@ func _on_pressed() -> void:
 
 	if button_action == MatchManager.Actions.SUMMON:
 		var player_ram = get_tree().get_first_node_in_group("ram_manager").player_ram
-		if player_ram < buttons.get_parent().cost:
+		if player_ram < (buttons.get_parent() as Card).info.cost:
 			Global.notice.emit("Insufficent Ram to summon this card!")
 			Global.hide_player_slots.emit()
 			return

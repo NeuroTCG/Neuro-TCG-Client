@@ -40,7 +40,7 @@ func _on_draw_card(packet: DrawCardPacket) -> void:
 
 func get_hand_pos_from_id(id: int) -> int:
 	for card in cards:
-		if card.id == id:
+		if card.state.id == id:
 			return cards.find(card)
 
 	assert(

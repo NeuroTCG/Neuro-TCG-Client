@@ -20,32 +20,21 @@ enum Placement {
 	DESTROYED,
 }
 
-#region IMUTABLE CARD STATS
-var id: int
-var owned_by_player := true
-var card_info: CardStats
-#endregion
+enum TurnPhase {
+	Done = 0,
+	Action = 1,
+	MoveOrAction = 2,
+}
 
-#region MUTABLE CARD STATS
-var hp: int:
-	set(value):
-		if value <= 0:
-			hp = 0
-			reset_variables()
-		else:
-			hp = value
-var atk: int
-var cost: int
+#region IMUTABLE CARD STATS
+# TODO: remove
+var owned_by_player := true
+
+var state: CardState
+var info: CardStats
 #endregion
 
 #region STATUS
-var ability_used := false:
-	set(value):
-		ability_used = value
-	get:
-		if not owned_by_player:
-			assert(false, "Attribute summon_sickness not implemented for enemy cards")
-		return ability_used
 var summon_sickness := false:
 	get:
 		if not owned_by_player:
@@ -54,13 +43,6 @@ var summon_sickness := false:
 ## Phase 2 -> Movement & Action allowed
 ## Phase 1 -> Action allowed
 ## Phase 0 -> Only view allowed
-var turn_phase := 2:
-	set(value):
-		turn_phase = value
-	get:
-		if not owned_by_player:
-			assert(false, "Attribute turn_phase not implemented for enemy cards")
-		return turn_phase
 var placement := Placement.DECK:
 	get:
 		if not owned_by_player:
@@ -69,14 +51,6 @@ var placement := Placement.DECK:
 var mouse_over := false
 var selected := false
 # Card is sealed at any level higher then 0.
-var sealed_turns_left := 0
-var _shield := 1
-var shield: int:
-	get:
-		return _shield
-	set(value):
-		_shield = value
-		shield_sprite.visible = value > 0
 
 var dont_show_view := false
 #endregion
@@ -96,12 +70,9 @@ static func create_card(parent_scene: Node2D, id: int) -> Card:
 
 	parent_scene.add_child(new_card)
 
-	new_card.id = id
-	new_card.card_info = card_info
+	new_card.state = CardState.fromCardStats(id, card_info)
+	new_card.info = card_info
 	new_card.card_sprite.texture = load(card_info.graphics)
-	new_card.hp = card_info.max_hp
-	new_card.atk = card_info.base_atk
-	new_card.cost = card_info.cost
 
 	return new_card
 
@@ -116,7 +87,7 @@ func _ready() -> void:
 func reset_variables() -> void:
 	if owned_by_player:
 		summon_sickness = false
-		turn_phase = 2
+		state.phase = TurnPhase.MoveOrAction
 	mouse_over = false
 	selected = false
 
@@ -152,18 +123,18 @@ func _on_mouse_clicked() -> void:
 func _on_player_finished() -> void:
 	if owned_by_player:
 		summon_sickness = false
-		turn_phase = 2
-		if sealed_turns_left > 0:
-			sealed_turns_left -= 1
-		if sealed_turns_left == 0:
+		state.phase = TurnPhase.MoveOrAction
+		if state.sealed_turns_left > 0:
+			state.sealed_turns_left -= 1
+		if state.sealed_turns_left == 0:
 			seal_sprite.visible = false
 
 
 func _on_opponent_finished() -> void:
 	if not owned_by_player:
-		if sealed_turns_left > 0:
-			sealed_turns_left -= 1
-		if sealed_turns_left == 0:
+		if state.sealed_turns_left > 0:
+			state.sealed_turns_left -= 1
+		if state.sealed_turns_left == 0:
 			seal_sprite.visible = false
 
 
@@ -180,8 +151,8 @@ func select() -> void:
 	unhover_tween = get_tree().create_tween()
 	unhover_tween.tween_property(card_unhover_sprite, "modulate:a", 0.0, 0.5)
 
-	atk_label.text = str(atk)
-	hp_label.text = str(hp)
+	atk_label.text = str(info.base_atk)
+	hp_label.text = str(state.health)
 
 
 func unselect() -> void:
@@ -229,6 +200,8 @@ func hide_buttons() -> void:
 	buttons.visible = false
 
 
+# TODO: remove or make it update the slot
+# TODO: don't pass in anchor, whatever that does
 func move_card(end_pos: Vector2, anchor := false, time := 0.5):
 	if movement_tween:
 		movement_tween.kill()
@@ -262,17 +235,19 @@ func flip_card(enemy := false) -> void:
 		animation_player.play("flip_enemy")
 
 
+# TODO: remove or make it not change stuff
 func render_attack_with_atk_value(atk_value: int) -> void:
-	if shield > 0:
-		shield -= 1
+	if state.shield > 0:
+		state.shield -= 1
 		return
 
-	hp -= atk_value
+	state.health -= atk_value
 	animation_player.play("nuke")
 
 
+# TODO: remove or make it not change stuff
 func render_attack(_hp: int) -> void:
-	hp = _hp
+	state.health = _hp
 	animation_player.play("nuke")
 
 

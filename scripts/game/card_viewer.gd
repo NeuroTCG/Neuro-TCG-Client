@@ -19,7 +19,7 @@ func _process(delta: float) -> void:
 func _on_view(card: Card) -> void:
 	visible = true
 	sprite.texture = card.card_sprite.texture
-	description.text = "Card Name: \nHP: %d \nAtk: %d \nCost: %d" % [card.hp, card.atk, card.cost]
+	description.text = "Card Name: \nHP: %d \nAtk: %d \nCost: %d" % [card.state.health, card.info.base_atk, card.info.cost]
 
 
 func _on_close_view() -> void:

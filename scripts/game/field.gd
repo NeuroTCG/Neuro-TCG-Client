@@ -23,6 +23,7 @@ func switch_cards(card1: Card, card2: Card) -> void:
 
 ## Return true if a target slot is reachable by given card
 ## NOTE: Field Independent
+# TODO: maybe rewrite to match the server style
 func slot_is_reachable(target_slot_no, atk_card: Card, atk_is_from_player: bool) -> bool:
 	var atk_front_row
 	var atk_back_row
@@ -49,7 +50,7 @@ func slot_is_reachable(target_slot_no, atk_card: Card, atk_is_from_player: bool)
 		if target_slot_no in target_front_row:
 			return true
 		elif target_slot_no in target_back_row:
-			if atk_card.card_info.attack_range == CardStats.AttackRange.REACH:
+			if atk_card.info.attack_range == CardStats.AttackRange.REACH:
 				return true
 			else:
 				if slots_empty(target_front_row):
@@ -58,7 +59,7 @@ func slot_is_reachable(target_slot_no, atk_card: Card, atk_is_from_player: bool)
 					return false
 	elif atk_slot_no in atk_back_row:
 		if target_slot_no in target_front_row:
-			if atk_card.card_info.attack_range == CardStats.AttackRange.REACH:
+			if atk_card.info.attack_range == CardStats.AttackRange.REACH:
 				return true
 			else:
 				if slots_empty(atk_front_row):
@@ -75,6 +76,7 @@ func slot_is_reachable(target_slot_no, atk_card: Card, atk_is_from_player: bool)
 ## Returns true if a list of slots are empty
 ## Takes a list of slot numbers
 ## NOTE: Field Independent
+# TODO: typo
 func slots_empty(slot_nos) -> bool:
 	for no in slot_nos:
 		if no in Global.PLAYER_ROWS:
@@ -106,6 +108,7 @@ func get_slot_array(card: Card) -> Array:
 
 ## Returns the Vector2 position of slot
 ## WARNING: Field dependent. Will only check the current field
+# TODO: rename
 func get_slot_pos(slot_no: int) -> Vector2:
 	var pos = get_node("Slot" + str(slot_no)).global_position
 	return pos
@@ -124,9 +127,11 @@ static func convert_to_array(index: int) -> Array:
 	elif index <= 14:
 		return [0, 3 - (index - 11)]
 
+	# TODO add assert
 	return []
 
 
+# TODO: split in two or remove completely
 static func convert_to_index(array: Array, enemy := false) -> int:
 	if not enemy:
 		match array:

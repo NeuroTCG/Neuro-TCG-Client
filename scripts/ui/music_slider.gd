@@ -16,7 +16,6 @@ func _ready() -> void:
 
 func _on_value_changed(value: float):
 	AudioServer.set_bus_volume_db(bus_index, linear_to_db(value))
-
 	if bus_name == "music":
 		SavedSettings.settings.music_volume = value
 	elif bus_name == "soundfx":

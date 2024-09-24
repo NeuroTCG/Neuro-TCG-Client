@@ -63,7 +63,7 @@ func summon(hand_pos: int, slot_no: int) -> void:
 		cards[i].move_card(card_positions[i].global_position, true)
 
 	# Update ram
-	Global.use_ram.emit(summon_card.cost)
+	Global.use_ram.emit(summon_card.info.cost)
 
 	# Move card and reset card visibility
 	await summon_card.move_card(slot_pos, true)
@@ -110,5 +110,5 @@ func _on_slot_chosen(slot_no: int, _card: Card) -> void:
 		var summoned_card: Card = selected_card
 
 		_on_card_unselected(summoned_card)
-		VerifyClientAction.summon.emit(summoned_card.id, Field.convert_to_array(slot_no))
+		VerifyClientAction.summon.emit(summoned_card.state.id, Field.convert_to_array(slot_no))
 		summon(cards.find(summoned_card), slot_no)

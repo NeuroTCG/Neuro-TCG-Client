@@ -14,6 +14,7 @@ var input_paused := false
 ## Don't set this variable outside of match manager.
 ## For pausing input unrelated to the player turn use input_paused instead
 var _opponent_turn := false
+# TODO: figure otu what this is doing here
 var current_action := Actions.IDLE:
 	set(new_action):
 		current_action = new_action

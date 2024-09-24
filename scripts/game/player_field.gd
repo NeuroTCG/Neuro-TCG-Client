@@ -4,6 +4,7 @@ extends Field
 
 var cards := []
 var destroyed_cards := []
+
 var selected_card: Card = null
 
 
@@ -16,6 +17,7 @@ func _ready() -> void:
 	Global.playmat_card_unselected.connect(_on_card_unselected)
 	Global.fill_slot.connect(_on_fill_slot)
 	Global.unfill_slot.connect(_on_unfill_slot)
+
 	MatchManager.action_switch.connect(_on_action_switch)
 	MatchManager.action_attack.connect(_on_action_attack)
 	MatchManager.action_ability.connect(_on_action_ability)
@@ -78,12 +80,19 @@ func _on_card_selected(card: Card) -> void:
 			MatchManager.Actions.SWITCH, MatchManager.Actions.ATTACK, MatchManager.Actions.VIEW
 		]
 
-		if card.card_info.ability.effect != Ability.AbilityEffect.NONE and not card.ability_used:
+		if (
+			card.info.ability.effect != Ability.AbilityEffect.NONE
+			and not card.state.ability_was_used
+		):
 			buttons.append(MatchManager.Actions.ABILITY)
 
-		if card.summon_sickness or card.sealed_turns_left > 0 or card.turn_phase == 0:
+		if (
+			card.summon_sickness
+			or card.state.sealed_turns_left > 0
+			or card.state.phase == Card.TurnPhase.Done
+		):
 			buttons = [MatchManager.Actions.VIEW]
-		elif card.turn_phase == 1:
+		elif card.state.phase == Card.TurnPhase.Action:
 			buttons.erase(MatchManager.Actions.SWITCH)
 
 		card.show_buttons(buttons)
@@ -123,18 +132,19 @@ func _on_action_attack() -> void:
 	Global.show_enemy_slots_for_attack.emit(selected_card)
 
 
+# TODO: either rename this if it only checks for ram or merge it with other stuff
 func _on_action_ability() -> void:
 	var player_ram = get_tree().get_first_node_in_group("ram_manager").player_ram
-	if selected_card.card_info.ability.cost > player_ram:
+	if selected_card.info.ability.cost > player_ram:
 		Global.notice.emit("Insufficent Ram to use this ability!")
 	else:
-		Global.update_ram.emit(player_ram - selected_card.card_info.ability.cost)
+		Global.update_ram.emit(player_ram - selected_card.info.ability.cost)
 
-	if selected_card.card_info.ability.range == Ability.AbilityRange.ALLY_CARD:
+	if selected_card.info.ability.range == Ability.AbilityRange.ALLY_CARD:
 		show_all_ally_cards()
 	elif (
-		selected_card.card_info.ability.range == Ability.AbilityRange.ENEMY_CARD
-		or selected_card.card_info.ability.range == Ability.AbilityRange.ENEMY_ROW
+		selected_card.info.ability.range == Ability.AbilityRange.ENEMY_CARD
+		or selected_card.info.ability.range == Ability.AbilityRange.ENEMY_ROW
 	):
 		enemy_field.show_slots_for_direct_attack()
 
@@ -149,11 +159,11 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 	hide_slots()
 
 	if MatchManager.current_action == MatchManager.Actions.SWITCH:
-		selected_card.turn_phase = 1
+		selected_card.state.phase = Card.TurnPhase.Action
 		assert(selected_card, "No card selected.")
 
 		if card:
-			card.turn_phase = 1
+			card.state.phase = Card.TurnPhase.Action
 
 			card.unselect()
 			VerifyClientAction.switch.emit(get_slot_array(card), get_slot_array(selected_card))
@@ -174,20 +184,21 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 			selected_card.move_card(get_slot_pos(slot_no), true)
 
 	if MatchManager.current_action == MatchManager.Actions.ABILITY:
-		selected_card.turn_phase = 0
-		selected_card.ability_used = true
+		selected_card.state.phase = Card.TurnPhase.Done
+		selected_card.state.ability_was_used = true
 		assert(selected_card, "No card selected.")
 
 		assert(selected_card, "No card selected.")
-		if selected_card.card_info.ability.effect == Ability.AbilityEffect.ADD_HP:
-			print("Card ability in effect. HP before: ", card.hp)
-			card.hp += selected_card.card_info.ability.value
+		if selected_card.info.ability.effect == Ability.AbilityEffect.ADD_HP:
+			print("Card ability in effect. HP before: ", card.state.health)
+			card.state.health += selected_card.info.ability.value
 			VerifyClientAction.ability.emit(get_slot_array(card), get_slot_array(selected_card))
-			print("Hp afterwords: ", card.hp)
+			print("Hp afterwards: ", card.state.health)
 
-		elif selected_card.card_info.ability.effect == Ability.AbilityEffect.SHIELD:
+		elif selected_card.info.ability.effect == Ability.AbilityEffect.SHIELD:
 			VerifyClientAction.ability.emit(get_slot_array(card), get_slot_array(selected_card))
-			card.shield = true
+			# TODO: find out where to get the correct value
+			card.state.shield = 1
 
 
 func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
@@ -197,47 +208,51 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 	var player_slot_no = get_slot_no(player_card)
 
 	Global.hide_enemy_cards.emit()
-	player_card.turn_phase = 0
+	player_card.state.phase = Card.TurnPhase.Done
 	enemy_card.dont_show_view = true
 
 	if MatchManager.current_action == MatchManager.Actions.ATTACK:
-		enemy_card.render_attack_with_atk_value(player_card.atk)
+		# TODO: move into an attack function
+		enemy_card.render_attack_with_atk_value(player_card.info.base_atk)
 		VerifyClientAction.attack.emit(
-			player_card.id, convert_to_array(enemy_slot_no), convert_to_array(player_slot_no)
+			player_card.state.id, convert_to_array(enemy_slot_no), convert_to_array(player_slot_no)
 		)
 
 		#region Enemy counterattack
 		if not slot_is_reachable(player_slot_no, enemy_card, false):
 			return
 		else:
-			selected_card.render_attack(max(selected_card.hp - (enemy_card.atk - 1), 0))
-			if player_card.shield > 0:
-				player_card.shield -= 1
+			selected_card.render_attack(
+				max(selected_card.state.health - (enemy_card.info.base_atk - 1), 0)
+			)
+			if player_card.state.shield > 0:
+				player_card.state.shield -= 1
 
-			if selected_card.hp <= 0:
+			if selected_card.state.health <= 0:
 				destroy_card(player_slot_no, player_card)
 
-		if enemy_card.hp <= 0:
+		if enemy_card.state.health <= 0:
 			enemy_field.destroy_card(enemy_slot_no, enemy_card)
 		#endregion
 
 	elif MatchManager.current_action == MatchManager.Actions.ABILITY:
+		# TODO: make independent of ability range
 		if (
-			player_card.card_info.ability.effect == Ability.AbilityEffect.ATTACK
-			and player_card.card_info.ability.range == Ability.AbilityRange.ENEMY_CARD
+			player_card.info.ability.effect == Ability.AbilityEffect.ATTACK
+			and player_card.info.ability.range == Ability.AbilityRange.ENEMY_CARD
 		):
-			var atk_value = player_card.card_info.ability.value
+			var atk_value = player_card.info.ability.value
 
 			enemy_card.render_attack_with_atk_value(atk_value)
 
-			if enemy_card.hp <= 0:
+			if enemy_card.state.health <= 0:
 				enemy_field.destroy_card(enemy_slot_no, enemy_card)
 
 		elif (
-			player_card.card_info.ability.effect == Ability.AbilityEffect.ATTACK
-			and player_card.card_info.ability.range == Ability.AbilityRange.ENEMY_ROW
+			player_card.info.ability.effect == Ability.AbilityEffect.ATTACK
+			and player_card.info.ability.range == Ability.AbilityRange.ENEMY_ROW
 		):
-			var atk_value = player_card.card_info.ability.value
+			var atk_value = player_card.info.ability.value
 			var row: Array
 
 			if enemy_slot_no in Global.ENEMY_BACK_ROW:
@@ -253,7 +268,7 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 					if slot.stored_card.hp <= 0:
 						enemy_field.destroy_card(slot_no, slot.stored_card)
 
-		elif player_card.card_info.ability.effect == Ability.AbilityEffect.SEAL:
+		elif player_card.info.ability.effect == Ability.AbilityEffect.SEAL:
 			# Play seal animation when its made but rn
 			# all that needs to be done is verify client action which is
 			# done for any ability.
@@ -267,6 +282,7 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 #endregion
 
 
+# TODO: merge with the other destroy_card
 func destroy_card(slot: int, card: Card) -> void:
 	print("Card Destroyed!")
 	Global.unfill_slot.emit(slot, card)

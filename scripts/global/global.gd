@@ -9,6 +9,8 @@ const ENEMY_BACK_ROW = [8, 9, 10]
 const ENEMY_ROWS = [8, 9, 10, 11, 12, 13, 14]
 
 # FROM CARD
+# TODO: preferably remove all of this
+
 signal hand_card_selected(card: Card)
 signal hand_card_unselected(card: Card)
 signal playmat_card_selected(card: Card)
@@ -46,6 +48,7 @@ signal use_ram(value: int)
 
 # TO CARD VIEWER
 signal close_view
+
 
 signal network_manager_ready
 var network_manager: NetworkManager = null
