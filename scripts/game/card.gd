@@ -31,6 +31,7 @@ enum TurnPhase {
 var owned_by_player := true
 
 var state: CardState
+## Static information about a card (eg. base atk, ability)
 var info: CardStats
 #endregion
 
@@ -199,14 +200,15 @@ func hide_buttons() -> void:
 	Global.hide_shortcuts.emit()
 	buttons.visible = false
 
+func move_and_reanchor(pos: Vector2):
+	anchor_position = pos
+	visually_move_card(anchor_position)
 
 # TODO: remove or make it update the slot
-# TODO: don't pass in anchor, whatever that does
-func move_card(end_pos: Vector2, anchor := false, time := 0.5):
+func visually_move_card(end_pos: Vector2, time := 0.5):
 	if movement_tween:
 		movement_tween.kill()
-	if anchor:
-		anchor_position = end_pos
+
 	movement_tween = get_tree().create_tween()
 	movement_tween.tween_property(self, "position", end_pos, time)
 

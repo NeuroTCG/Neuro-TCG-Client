@@ -5,6 +5,7 @@ extends Field
 var cards := []
 var destroyed_cards := []
 
+# TODO: replace with selected_slot
 var selected_card: Card = null
 
 
@@ -167,7 +168,7 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 
 			card.unselect()
 			VerifyClientAction.switch.emit(get_slot_array(card), get_slot_array(selected_card))
-			switch_cards(card, selected_card)
+			switch_cards(get_slot_no(card), get_slot_no(selected_card))
 
 			# Update card slots
 			selected_card = null
@@ -181,7 +182,7 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 			Global.fill_slot.emit(slot_no, selected_card)
 
 			# Change visuals
-			selected_card.move_card(get_slot_pos(slot_no), true)
+			selected_card.move_and_reanchor(get_slot_pos(slot_no))
 
 	if MatchManager.current_action == MatchManager.Actions.ABILITY:
 		selected_card.state.phase = Card.TurnPhase.Done
@@ -261,6 +262,7 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 				row = Global.ENEMY_FRONT_ROW
 
 			for slot_no in row:
+				# TODO: don't manually get from slot
 				var slot = enemy_field.get_node("Slot%d" % slot_no)
 				if slot.stored_card:
 					slot.stored_card.render_attack_with_atk_value(atk_value)

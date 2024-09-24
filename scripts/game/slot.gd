@@ -1,3 +1,4 @@
+class_name CardSlot
 extends Node2D
 
 @export var enemy := false
@@ -5,7 +6,7 @@ extends Node2D
 
 @onready var sprite_2d = $Sprite2D
 
-var stored_card = null
+var stored_card: Card = null
 var mouse_over := false
 
 

@@ -41,7 +41,7 @@ func add_card(id: int) -> void:
 	new_card.global_position = game.get_node("PlayerDeck").global_position
 	new_card.flip_card()
 	cards.append(new_card)
-	await new_card.move_card(card_positions[cards.size() - 1].global_position, true)
+	await new_card.move_and_reanchor(card_positions[cards.size() - 1].global_position)
 
 	# Make Hand command available (Summon)
 	new_card.placement = Card.Placement.HAND
@@ -60,13 +60,13 @@ func summon(hand_pos: int, slot_no: int) -> void:
 
 	# Shift all cards right of summoned card
 	for i in range(hand_pos, cards.size()):
-		cards[i].move_card(card_positions[i].global_position, true)
+		cards[i].move_and_reanchor(card_positions[i].global_position)
 
 	# Update ram
 	Global.use_ram.emit(summon_card.info.cost)
 
 	# Move card and reset card visibility
-	await summon_card.move_card(slot_pos, true)
+	await summon_card.move_and_reanchor(slot_pos)
 	summon_card.set_card_visibility()
 
 

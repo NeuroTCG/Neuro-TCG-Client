@@ -49,8 +49,9 @@ func hide_slots() -> void:
 func _on_switch(packet: SwitchPlacePacket) -> void:
 	var card1_pos = Field.convert_to_index(packet.position1.to_array(), true)
 	var card2_pos = Field.convert_to_index(packet.position2.to_array(), true)
-	var slot1 := get_node("Slot" + str(card1_pos))
-	var slot2 := get_node("Slot" + str(card2_pos))
+	# TODO: don't manually get slots
+	var slot1 := get_slot(card1_pos)
+	var slot2 := get_slot(card2_pos)
 	var card1: Card = slot1.stored_card
 	var card2: Card = slot2.stored_card
 
@@ -59,19 +60,20 @@ func _on_switch(packet: SwitchPlacePacket) -> void:
 		# TODO: don't manually move cards
 		Global.unfill_slot.emit(card2_pos, card2)
 		Global.fill_slot.emit(card1_pos, card2)
-		card2.move_card(slot1.global_position)
+		card2.visually_move_card(slot1.global_position)
 	elif card2 == null:
 		assert(card1 != null)
 		# TODO: don't manually move cards
 		Global.unfill_slot.emit(card1_pos, card1)
 		Global.fill_slot.emit(card2_pos, card1)
-		card1.move_card(slot2.global_position)
+		card1.visually_move_card(slot2.global_position)
 	else:
-		switch_cards(card1, card2)
+		switch_cards(slot1.slot_no, slot2.slot_no)
 
 
 func _on_attack(packet: AttackPacket) -> void:
 	var target_slot_no = Field.convert_to_index(packet.target_position.to_array())
+	# TODO: don't manually get slots
 	var target_card: Card = player_field.get_node("Slot" + str(target_slot_no)).stored_card
 
 	if packet.target_card == null:
@@ -87,6 +89,7 @@ func _on_attack(packet: AttackPacket) -> void:
 		# If hp is the same, target card was not able to counterattack
 		# the attacking card.
 	var atk_slot_no = Field.convert_to_index(packet.attacker_position.to_array(), true)
+	# TODO: don't manually get slots
 	var atk_card: Card = get_node("Slot" + str(atk_slot_no)).stored_card
 
 	if packet.attacker_card == null:
@@ -96,7 +99,7 @@ func _on_attack(packet: AttackPacket) -> void:
 		# the attacking card.
 	else:
 		# TODO: make this an assert and calculate it correctly
-		atk_card.statestate..shield = packet.attacker_card.shield
+		atk_card.state.shield = packet.attacker_card.shield
 		# If hp is the same, target card was not able to counterattack
 		# the attacking card.
 		if atk_card.state.health != packet.attacker_card.health:
@@ -106,6 +109,7 @@ func _on_attack(packet: AttackPacket) -> void:
 func _on_ability(packet: UseAbilityPacket) -> void:
 	# Ability card will always be from the opponent
 	var ability_slot_no = Field.convert_to_index(packet.ability_position.to_array(), true)
+	# TODO: don't manually get slots
 	var ability_card: Card = enemy_field.get_node("Slot" + str(ability_slot_no)).stored_card
 
 	# TODO: don't manually touch RAM
@@ -116,6 +120,7 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 	if ability_card.info.ability.effect == Ability.AbilityEffect.ADD_HP:
 		# In this case the target card will always be an opponent card
 		var target_slot_no = Field.convert_to_index(packet.target_position.to_array(), true)
+		# TODO: don't manually get slots
 		var target_card: Card = enemy_field.get_node("Slot" + str(target_slot_no)).stored_card
 		# TODO: don't manually touch health and shield
 		target_card.state.health = packet.target_card.health
@@ -126,6 +131,7 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 	):
 		# In this case the target card will always be the player's card
 		var target_slot_no = Field.convert_to_index(packet.target_position.to_array())
+		# TODO: don't manually get slots
 		var target_card: Card = player_field.get_node("Slot" + str(target_slot_no)).stored_card
 		# TODO: don't manually touch health and shield
 		target_card.state.health = packet.target_card.health
@@ -136,6 +142,7 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 	):
 		# In this case the target card will always be the player's card
 		var target_slot_no = Field.convert_to_index(packet.target_position.to_array())
+		# TODO: don't manually get slots
 		var target_card: Card = player_field.get_node("Slot" + str(target_slot_no)).stored_card
 
 		var atk_value = target_card.info.ability.value
@@ -146,6 +153,7 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 			row = Global.PLAYER_FRONT_ROW
 
 			for slot_no in row:
+				# TODO: don't manually get slots
 				var slot = player_field.get_node("Slot%d" % slot_no)
 				if slot.stored_card:
 					slot.stored_card.render_attack_with_atk_value(atk_value)
@@ -157,6 +165,7 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 		print("APPLYING SEAL TO CARD")
 		# In this case the target card will always be the player's card
 		var target_slot_no = Field.convert_to_index(packet.target_position.to_array())
+		# TODO: don't manually get slots
 		var target_card: Card = player_field.get_node("Slot" + str(target_slot_no)).stored_card
 		target_card.state.sealed_turns_left = ability_card.info.ability.value
 		print(target_card.state.sealed_turns_left)
@@ -164,6 +173,7 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 	elif ability_card.info.ability.effect == Ability.AbilityEffect.SHIELD:
 		print("APPLYING SHIELD TO CARD")
 		var target_slot_no = Field.convert_to_index(packet.target_position.to_array(), true)
+		# TODO: don't manually get slots
 		var target_card: Card = enemy_field.get_node("Slot" + str(target_slot_no)).stored_card
 		target_card.state.shield = ability_card.info.ability.value
 		print(target_card.state.shield)

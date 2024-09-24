@@ -25,10 +25,10 @@ func _on_summon(packet: SummonPacket) -> void:
 
 	# Shift all cards right of summoned card
 	for i in range(hand_pos, cards.size()):
-		cards[i].move_card(card_positions[i].global_position, true)
+		cards[i].move_and_reanchor(card_positions[i].global_position)
 
 	Global.fill_slot.emit(slot_no, summon_card)  # Update slot
-	summon_card.move_card(slot_pos, true)
+	summon_card.move_and_reanchor(slot_pos)
 
 	Global.update_enemy_ram.emit(packet.new_ram)
 
@@ -58,7 +58,7 @@ func add_card(id: int) -> void:
 	new_card.global_position = game.get_node("EnemyDeck").global_position
 	new_card.flip_card(true)
 	cards.append(new_card)
-	await new_card.move_card(card_positions[cards.size() - 1].global_position, true)
+	await new_card.move_and_reanchor(card_positions[cards.size() - 1].global_position)
 
 	new_card.owned_by_player = false
 

@@ -5,20 +5,31 @@ class_name Field
 @export var enemy_field: Field
 
 
-func switch_cards(card1: Card, card2: Card) -> void:
-	# Change slots
-	var card1_slot = get_slot_no(card1)
-	var card2_slot = get_slot_no(card2)
+func get_slot(slot: int) -> CardSlot:
+	var player_slot = player_field.get_node_or_null("Slot" + str(slot))
+	var enemy_slot = enemy_field.get_node_or_null("Slot" + str(slot))
 
-	Global.fill_slot.emit(card1_slot, card2)
-	Global.fill_slot.emit(card2_slot, card1)
+	if player_slot != null:
+		return player_slot
+
+	assert(enemy_slot != null, "Slot nr. %d wasn't found" % slot)
+	return enemy_slot
+
+
+func switch_cards(slot_no1: int, slot_no2: int) -> void:
+	# Change slots
+	var slot1 := get_slot(slot_no1)
+	var slot2 := get_slot(slot_no2)
+
+	var card1 := slot1.stored_card
+	var card2 := slot2.stored_card
+
+	Global.fill_slot.emit(slot_no1, card2)
+	Global.fill_slot.emit(slot_no2, card1)
 
 	# Change visuals
-	var card1_pos = card1.global_position
-	var card2_pos = card2.global_position
-
-	card1.move_card(card2_pos)
-	card2.move_card(card1_pos)
+	card1.move_and_reanchor(slot2.global_position)
+	card2.move_and_reanchor(slot1.global_position)
 
 
 ## Return true if a target slot is reachable by given card
@@ -80,10 +91,12 @@ func slot_is_reachable(target_slot_no, atk_card: Card, atk_is_from_player: bool)
 func slots_empty(slot_nos) -> bool:
 	for no in slot_nos:
 		if no in Global.PLAYER_ROWS:
+			# TODO: don't manually get from slot
 			var slot = player_field.get_node("Slot%d" % no)
 			if slot.stored_card:
 				return false
 		else:
+			# TODO: don't manually get from slot
 			var slot = enemy_field.get_node("Slot%d" % no)
 			if slot.stored_card:
 				return false
@@ -108,10 +121,10 @@ func get_slot_array(card: Card) -> Array:
 
 ## Returns the Vector2 position of slot
 ## WARNING: Field dependent. Will only check the current field
-# TODO: rename
+# TODO: remove, because only used for stupid things
 func get_slot_pos(slot_no: int) -> Vector2:
-	var pos = get_node("Slot" + str(slot_no)).global_position
-	return pos
+	# TODO: don't manually get from slot
+	return get_slot(slot_no).global_position
 
 
 #region STATIC FUNCTIONS
