@@ -16,6 +16,7 @@ func get_slot(slot: int) -> CardSlot:
 	return enemy_slot
 
 
+## Swaps two cards. or a card and an emoty slot
 func switch_cards(slot_no1: int, slot_no2: int) -> void:
 	# Change slots
 	var slot1 := get_slot(slot_no1)
@@ -24,12 +25,38 @@ func switch_cards(slot_no1: int, slot_no2: int) -> void:
 	var card1 := slot1.stored_card
 	var card2 := slot2.stored_card
 
-	Global.fill_slot.emit(slot_no1, card2)
-	Global.fill_slot.emit(slot_no2, card1)
+	# TODO: figure out if these are needed to prevent wrong usage.
+	if card1 == null:
+		assert(card2 != null)
+	if card2 == null:
+		assert(card1 != null)
 
-	# Change visuals
-	card1.move_and_reanchor(slot2.global_position)
-	card2.move_and_reanchor(slot1.global_position)
+	if card2 != null:
+		card2.remove_from_slot()
+		card2.set_slot(slot1)
+
+		card2.move_and_reanchor(slot1.global_position)
+	if card1 != null:
+		card1.remove_from_slot()
+		card1.set_slot(slot2)
+
+		card1.move_and_reanchor(slot2.global_position)
+
+
+func move_card(from: int, to: int) -> void:
+	var from_slot := get_slot(from)
+	var to_slot := get_slot(to)
+
+	var card = from_slot.stored_card
+	assert(
+		to_slot.stored_card == null,
+		"tried to move a card onto another one; use switch_cards to swap them"
+	)
+
+	card.remove_from_slot()
+	card.set_slot(to_slot)
+
+	card.move_and_reanchor(to_slot.global_position)
 
 
 ## Return true if a target slot is reachable by given card
@@ -107,10 +134,7 @@ func slots_empty(slot_nos) -> bool:
 ## Returns 0 if card isn't in any slot
 ## WARNING: Field dependent. Will only check the current field
 func get_slot_no(card: Card) -> int:
-	for slot in get_children():
-		if slot.stored_card == card:
-			return slot.slot_no
-	return 0
+	return card.current_slot.slot_no
 
 
 ## Returns position of card in array form
@@ -129,7 +153,7 @@ func get_slot_pos(slot_no: int) -> Vector2:
 
 #region STATIC FUNCTIONS
 static func convert_to_array(index: int) -> Array:
-	assert(index != 0, "There is no 0 slot")
+	assert(index > 0 && index <= 14, "Index is only defined from 1 to 14, not %d" % index)
 
 	if index <= 4:
 		return [0, index - 1]
@@ -140,7 +164,7 @@ static func convert_to_array(index: int) -> Array:
 	elif index <= 14:
 		return [0, 3 - (index - 11)]
 
-	# TODO add assert
+	assert(false, "Something has gone very very wrong.")
 	return []
 
 

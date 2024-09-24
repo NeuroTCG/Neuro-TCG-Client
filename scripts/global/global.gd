@@ -20,10 +20,6 @@ signal playmat_card_unselected(card: Card)
 signal slot_chosen(slot_no: int, card: Card)
 signal enemy_slot_chosen(slot_no: int, card: Card)
 
-# TO SLOT
-signal fill_slot(slot_no: int, card: Card)
-signal unfill_slot(slot_no: int, card: Card)
-
 # TO ENEMY FIELD
 signal show_enemy_slots_for_attack(card: Card)
 signal hide_enemy_cards

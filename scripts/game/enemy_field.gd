@@ -16,10 +16,20 @@ func _ready() -> void:
 	for slot in get_children():
 		slot.visible = false
 
+		# TODO: don't remove this one. This stays for debugging
+		var label = Label.new()
+		add_child(label)
+		label.text = str(slot.slot_no)
+		label.global_position = slot.global_position + Vector2(40, 0)
+		label.set("theme_override_colors/font_color", Color(0, 0, 0, 1))
+
 
 #region SHOW SLOTS
 func show_slots_for_attack(card: Card) -> void:
 	for slot in get_children():
+		if (slot is not CardSlot):
+			continue
+
 		if slot.stored_card:
 			if slot_is_reachable(slot.slot_no, card, true):
 				slot.visible = true
@@ -31,6 +41,9 @@ func show_slots_for_attack(card: Card) -> void:
 
 func show_slots_for_direct_attack() -> void:
 	for slot in get_children():
+		if (slot is not CardSlot):
+			continue
+
 		if slot.stored_card:
 			slot.visible = true
 		else:
@@ -39,6 +52,9 @@ func show_slots_for_direct_attack() -> void:
 
 func hide_slots() -> void:
 	for slot in get_children():
+		if (slot is not CardSlot):
+			continue
+
 		slot.visible = false
 
 
@@ -47,28 +63,10 @@ func hide_slots() -> void:
 
 #region RENDER OPPONENT
 func _on_switch(packet: SwitchPlacePacket) -> void:
-	var card1_pos = Field.convert_to_index(packet.position1.to_array(), true)
-	var card2_pos = Field.convert_to_index(packet.position2.to_array(), true)
-	# TODO: don't manually get slots
-	var slot1 := get_slot(card1_pos)
-	var slot2 := get_slot(card2_pos)
-	var card1: Card = slot1.stored_card
-	var card2: Card = slot2.stored_card
+	var slot1 = Field.convert_to_index(packet.position1.to_array(), true)
+	var slot2 = Field.convert_to_index(packet.position2.to_array(), true)
 
-	if card1 == null:
-		assert(card2 != null)
-		# TODO: don't manually move cards
-		Global.unfill_slot.emit(card2_pos, card2)
-		Global.fill_slot.emit(card1_pos, card2)
-		card2.visually_move_card(slot1.global_position)
-	elif card2 == null:
-		assert(card1 != null)
-		# TODO: don't manually move cards
-		Global.unfill_slot.emit(card1_pos, card1)
-		Global.fill_slot.emit(card2_pos, card1)
-		card1.visually_move_card(slot2.global_position)
-	else:
-		switch_cards(slot1.slot_no, slot2.slot_no)
+	switch_cards(slot1, slot2)
 
 
 func _on_attack(packet: AttackPacket) -> void:
@@ -184,7 +182,9 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 
 func destroy_card(slot: int, card: Card) -> void:
 	print("(From Opponent) Card Destroyed!")
-	Global.unfill_slot.emit(slot, card)
+
+	card.remove_from_slot()
+
 	destroyed_cards.append(card)
 	card.visible = false
 	card.global_position = Vector2.ZERO

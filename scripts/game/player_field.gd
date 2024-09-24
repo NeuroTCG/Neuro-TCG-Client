@@ -16,8 +16,6 @@ func _ready() -> void:
 	Global.enemy_slot_chosen.connect(_on_enemy_slot_chosen)
 	Global.playmat_card_selected.connect(_on_card_selected)
 	Global.playmat_card_unselected.connect(_on_card_unselected)
-	Global.fill_slot.connect(_on_fill_slot)
-	Global.unfill_slot.connect(_on_unfill_slot)
 
 	MatchManager.action_switch.connect(_on_action_switch)
 	MatchManager.action_attack.connect(_on_action_attack)
@@ -26,20 +24,20 @@ func _ready() -> void:
 	for slot in get_children():
 		slot.visible = false
 
-
-func _on_fill_slot(slot_no: int, card: Card) -> void:
-	if card.owned_by_player:
-		cards.append(card)
-
-
-func _on_unfill_slot(slot_no: int, card: Card) -> void:
-	if card.owned_by_player:
-		cards.erase(card)
+		# TODO: don't remove this one. This stays for debugging
+		var label = Label.new()
+		add_child(label)
+		label.text = str(slot.slot_no)
+		label.global_position = slot.global_position + Vector2(40, 0)
+		label.set("theme_override_colors/font_color", Color(0, 0, 0, 1))
 
 
 #region SHOW SLOT
 func show_slots_for_summon() -> void:
 	for slot in get_children():
+		if (slot is not CardSlot):
+			continue
+
 		if not slot.stored_card:
 			slot.visible = true
 		else:
@@ -48,6 +46,9 @@ func show_slots_for_summon() -> void:
 
 func show_slots_for_transfer() -> void:
 	for slot in get_children():
+		if (slot is not CardSlot):
+			continue
+
 		slot.visible = true
 
 		# Don't show selected card
@@ -58,6 +59,9 @@ func show_slots_for_transfer() -> void:
 
 func show_all_ally_cards() -> void:
 	for slot in get_children():
+		if (slot is not CardSlot):
+			continue
+
 		if slot.stored_card:
 			slot.visible = true
 		else:
@@ -66,6 +70,9 @@ func show_all_ally_cards() -> void:
 
 func hide_slots() -> void:
 	for slot in get_children():
+		if (slot is not CardSlot):
+			continue
+
 		slot.visible = false
 
 
@@ -160,29 +167,16 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 	hide_slots()
 
 	if MatchManager.current_action == MatchManager.Actions.SWITCH:
-		selected_card.state.phase = Card.TurnPhase.Action
 		assert(selected_card, "No card selected.")
+
+		selected_card.state.phase = Card.TurnPhase.Action
 
 		if card:
 			card.state.phase = Card.TurnPhase.Action
-
 			card.unselect()
-			VerifyClientAction.switch.emit(get_slot_array(card), get_slot_array(selected_card))
-			switch_cards(get_slot_no(card), get_slot_no(selected_card))
 
-			# Update card slots
-			selected_card = null
-
-		else:  # If an empty slot was chosen
-			# Send packet
-			VerifyClientAction.switch.emit(get_slot_array(selected_card), convert_to_array(slot_no))
-
-			# Change slots
-			Global.unfill_slot.emit(get_slot_no(selected_card), selected_card)
-			Global.fill_slot.emit(slot_no, selected_card)
-
-			# Change visuals
-			selected_card.move_and_reanchor(get_slot_pos(slot_no))
+		VerifyClientAction.switch.emit(convert_to_array(slot_no), get_slot_array(selected_card))
+		switch_cards(slot_no, get_slot_no(selected_card))
 
 	if MatchManager.current_action == MatchManager.Actions.ABILITY:
 		selected_card.state.phase = Card.TurnPhase.Done
@@ -287,7 +281,9 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 # TODO: merge with the other destroy_card
 func destroy_card(slot: int, card: Card) -> void:
 	print("Card Destroyed!")
-	Global.unfill_slot.emit(slot, card)
+
+	card.remove_from_slot()
+
 	cards.erase(card)
 	if selected_card == card:
 		selected_card = null

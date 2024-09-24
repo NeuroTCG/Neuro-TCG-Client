@@ -26,14 +26,14 @@ enum TurnPhase {
 	MoveOrAction = 2,
 }
 
-#region IMUTABLE CARD STATS
 # TODO: remove
 var owned_by_player := true
 
 var state: CardState
 ## Static information about a card (eg. base atk, ability)
 var info: CardStats
-#endregion
+
+var current_slot: CardSlot
 
 #region STATUS
 var summon_sickness := false:
@@ -200,11 +200,12 @@ func hide_buttons() -> void:
 	Global.hide_shortcuts.emit()
 	buttons.visible = false
 
+# TODO: remove or make it update the slot
 func move_and_reanchor(pos: Vector2):
 	anchor_position = pos
 	visually_move_card(anchor_position)
 
-# TODO: remove or make it update the slot
+# TODO: remove because bad style
 func visually_move_card(end_pos: Vector2, time := 0.5):
 	if movement_tween:
 		movement_tween.kill()
@@ -217,6 +218,16 @@ func visually_move_card(end_pos: Vector2, time := 0.5):
 	await get_tree().create_timer(time).timeout
 	MatchManager.input_paused = false
 
+func set_slot(slot: CardSlot):
+	assert(current_slot == null)
+	current_slot = slot
+	slot.stored_card = self
+
+
+func remove_from_slot():
+	assert (current_slot != null)
+	current_slot.stored_card = null
+	current_slot = null
 
 ## By default sets z index to 0
 func set_card_visibility(index := 0):

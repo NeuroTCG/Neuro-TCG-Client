@@ -31,5 +31,6 @@ enemy = true
 slot_no = 13
 
 [node name="Slot14" parent="." instance=ExtResource("2_n7lfh")]
+position = Vector2(16, 24)
 enemy = true
 slot_no = 14
