@@ -16,6 +16,7 @@ func _ready() -> void:
 	if enemy:
 		sprite_2d.texture = preload("res://assets/game/CardSlotHighlightRed.png")
 
+
 func _on_mouse_clicked():
 	if MatchManager.input_paused or MatchManager._opponent_turn:
 		return

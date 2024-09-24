@@ -35,7 +35,7 @@ func _ready() -> void:
 #region SHOW SLOT
 func show_slots_for_summon() -> void:
 	for slot in get_children():
-		if (slot is not CardSlot):
+		if not slot is CardSlot:
 			continue
 
 		if not slot.stored_card:
@@ -46,7 +46,7 @@ func show_slots_for_summon() -> void:
 
 func show_slots_for_transfer() -> void:
 	for slot in get_children():
-		if (slot is not CardSlot):
+		if not slot is CardSlot:
 			continue
 
 		slot.visible = true
@@ -59,7 +59,7 @@ func show_slots_for_transfer() -> void:
 
 func show_all_ally_cards() -> void:
 	for slot in get_children():
-		if (slot is not CardSlot):
+		if not slot is CardSlot:
 			continue
 
 		if slot.stored_card:
@@ -70,7 +70,7 @@ func show_all_ally_cards() -> void:
 
 func hide_slots() -> void:
 	for slot in get_children():
-		if (slot is not CardSlot):
+		if not slot is CardSlot:
 			continue
 
 		slot.visible = false

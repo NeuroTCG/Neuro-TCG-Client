@@ -45,7 +45,6 @@ signal use_ram(value: int)
 # TO CARD VIEWER
 signal close_view
 
-
 signal network_manager_ready
 var network_manager: NetworkManager = null
 

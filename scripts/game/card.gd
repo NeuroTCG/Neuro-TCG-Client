@@ -200,10 +200,12 @@ func hide_buttons() -> void:
 	Global.hide_shortcuts.emit()
 	buttons.visible = false
 
+
 # TODO: remove or make it update the slot
 func move_and_reanchor(pos: Vector2):
 	anchor_position = pos
 	visually_move_card(anchor_position)
+
 
 # TODO: remove because bad style
 func visually_move_card(end_pos: Vector2, time := 0.5):
@@ -218,6 +220,7 @@ func visually_move_card(end_pos: Vector2, time := 0.5):
 	await get_tree().create_timer(time).timeout
 	MatchManager.input_paused = false
 
+
 func set_slot(slot: CardSlot):
 	assert(current_slot == null)
 	current_slot = slot
@@ -225,9 +228,10 @@ func set_slot(slot: CardSlot):
 
 
 func remove_from_slot():
-	assert (current_slot != null)
+	assert(current_slot != null)
 	current_slot.stored_card = null
 	current_slot = null
+
 
 ## By default sets z index to 0
 func set_card_visibility(index := 0):
