@@ -5,6 +5,7 @@ class_name Field
 @export var enemy_field: Field
 
 
+## searches both fields for the slot, so it doesn't matter which side is used
 func get_slot(slot: int) -> CardSlot:
 	var player_slot = player_field.get_node_or_null("Slot" + str(slot))
 	var enemy_slot = enemy_field.get_node_or_null("Slot" + str(slot))

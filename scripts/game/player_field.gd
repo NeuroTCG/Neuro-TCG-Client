@@ -1,4 +1,5 @@
 extends Field
+class_name PlayerField
 ## When moving a card, keep track of card.placement, Slots,
 ## cards, and selected_card
 
@@ -180,20 +181,20 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 
 	if MatchManager.current_action == MatchManager.Actions.ABILITY:
 		selected_card.state.phase = Card.TurnPhase.Done
+		# TODO: don't manually write to state
 		selected_card.state.ability_was_used = true
 		assert(selected_card, "No card selected.")
 
 		assert(selected_card, "No card selected.")
 		if selected_card.info.ability.effect == Ability.AbilityEffect.ADD_HP:
 			print("Card ability in effect. HP before: ", card.state.health)
-			card.state.health += selected_card.info.ability.value
+			card.heal(selected_card.info.ability.value)
 			VerifyClientAction.ability.emit(get_slot_array(card), get_slot_array(selected_card))
 			print("Hp afterwards: ", card.state.health)
 
 		elif selected_card.info.ability.effect == Ability.AbilityEffect.SHIELD:
 			VerifyClientAction.ability.emit(get_slot_array(card), get_slot_array(selected_card))
-			# TODO: find out where to get the correct value
-			card.state.shield = 1
+			card.set_shield(selected_card.info.ability.value)
 
 
 func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
@@ -207,27 +208,18 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 	enemy_card.dont_show_view = true
 
 	if MatchManager.current_action == MatchManager.Actions.ATTACK:
-		# TODO: move into an attack function
-		enemy_card.render_attack_with_atk_value(player_card.info.base_atk)
 		VerifyClientAction.attack.emit(
 			player_card.state.id, convert_to_array(enemy_slot_no), convert_to_array(player_slot_no)
 		)
+
+		enemy_card.do_damage(player_card.info.base_atk)
 
 		#region Enemy counterattack
 		if not slot_is_reachable(player_slot_no, enemy_card, false):
 			return
 		else:
-			selected_card.render_attack(
-				max(selected_card.state.health - (enemy_card.info.base_atk - 1), 0)
-			)
-			if player_card.state.shield > 0:
-				player_card.state.shield -= 1
+			selected_card.do_damage(max(enemy_card.info.base_atk - 1, 0))
 
-			if selected_card.state.health <= 0:
-				destroy_card(player_slot_no, player_card)
-
-		if enemy_card.state.health <= 0:
-			enemy_field.destroy_card(enemy_slot_no, enemy_card)
 		#endregion
 
 	elif MatchManager.current_action == MatchManager.Actions.ABILITY:
@@ -238,10 +230,7 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 		):
 			var atk_value = player_card.info.ability.value
 
-			enemy_card.render_attack_with_atk_value(atk_value)
-
-			if enemy_card.state.health <= 0:
-				enemy_field.destroy_card(enemy_slot_no, enemy_card)
+			enemy_card.do_damage(atk_value)
 
 		elif (
 			player_card.info.ability.effect == Ability.AbilityEffect.ATTACK
@@ -259,10 +248,7 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 				# TODO: don't manually get from slot
 				var slot = enemy_field.get_node("Slot%d" % slot_no)
 				if slot.stored_card:
-					slot.stored_card.render_attack_with_atk_value(atk_value)
-
-					if slot.stored_card.hp <= 0:
-						enemy_field.destroy_card(slot_no, slot.stored_card)
+					slot.stored_card.do_damage(atk_value)
 
 		elif player_card.info.ability.effect == Ability.AbilityEffect.SEAL:
 			# Play seal animation when its made but rn

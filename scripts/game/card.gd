@@ -29,6 +29,7 @@ enum TurnPhase {
 # TODO: remove
 var owned_by_player := true
 
+## no touchy
 var state: CardState
 ## Static information about a card (eg. base atk, ability)
 var info: CardStats
@@ -41,9 +42,7 @@ var summon_sickness := false:
 		if not owned_by_player:
 			assert(false, "Attribute summon_sickness not implemented for enemy cards")
 		return summon_sickness
-## Phase 2 -> Movement & Action allowed
-## Phase 1 -> Action allowed
-## Phase 0 -> Only view allowed
+
 var placement := Placement.DECK:
 	get:
 		if not owned_by_player:
@@ -233,6 +232,36 @@ func remove_from_slot():
 	current_slot = null
 
 
+func set_shield(num_turns: int):
+	state.shield = num_turns
+	shield_sprite.visible = num_turns > 0
+
+
+func do_damage(amount: int):
+	assert(amount >= 0)
+
+	if state.shield > 0:
+		state.shield -= 1
+
+		if (state.shield == 0):
+			shield_sprite.visible = false
+		return
+
+	state.health -= amount
+	if state.health <= 0:
+		# TODO: use global field
+		(get_tree().root.get_node("../PlayerField") as PlayerField).destroy_card(
+			current_slot.slot_no, self
+		)
+
+	render_attack(state.health)
+
+
+func heal(amount: int):
+	assert(amount > 0)
+	state.health += amount  # not capped by design
+
+
 ## By default sets z index to 0
 func set_card_visibility(index := 0):
 	z_index = index
@@ -252,19 +281,8 @@ func flip_card(enemy := false) -> void:
 		animation_player.play("flip_enemy")
 
 
-# TODO: remove or make it not change stuff
-func render_attack_with_atk_value(atk_value: int) -> void:
-	if state.shield > 0:
-		state.shield -= 1
-		return
 
-	state.health -= atk_value
-	animation_player.play("nuke")
-
-
-# TODO: remove or make it not change stuff
 func render_attack(_hp: int) -> void:
-	state.health = _hp
 	animation_player.play("nuke")
 
 
