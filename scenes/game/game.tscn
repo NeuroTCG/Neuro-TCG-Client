@@ -24,10 +24,9 @@ metadata/_edit_lock_ = true
 
 [node name="HUD" parent="." instance=ExtResource("2_846mn")]
 
-[node name="PlayerHand" parent="." node_paths=PackedStringArray("game", "ram_manager") instance=ExtResource("3_tjohb")]
+[node name="PlayerHand" parent="." node_paths=PackedStringArray("game") instance=ExtResource("3_tjohb")]
 position = Vector2(431, 566)
 game = NodePath("..")
-ram_manager = NodePath("../RamManager")
 
 [node name="EnemyHand" parent="." node_paths=PackedStringArray("game") instance=ExtResource("5_l60w6")]
 position = Vector2(433, 81)

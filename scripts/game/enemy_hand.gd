@@ -32,7 +32,7 @@ func _on_summon(packet: SummonPacket) -> void:
 	summon_card.set_slot(slot)
 	summon_card.move_and_reanchor(slot.global_position)
 
-	Global.update_enemy_ram.emit(packet.new_ram)
+	Global.enemy_ram_changed.emit(packet.new_ram)
 
 
 func _on_draw_card(packet: DrawCardPacket) -> void:

@@ -143,11 +143,11 @@ func _on_action_attack() -> void:
 
 # TODO: either rename this if it only checks for ram or merge it with other stuff
 func _on_action_ability() -> void:
-	var player_ram = get_tree().get_first_node_in_group("ram_manager").player_ram
+	var player_ram = Global.ram_manager.player_ram
 	if selected_card.info.ability.cost > player_ram:
 		Global.notice.emit("Insufficent Ram to use this ability!")
 	else:
-		Global.update_ram.emit(player_ram - selected_card.info.ability.cost)
+		Global.use_ram.emit(selected_card.info.ability.cost)
 
 	if selected_card.info.ability.range == Ability.AbilityRange.ALLY_CARD:
 		show_all_ally_cards()

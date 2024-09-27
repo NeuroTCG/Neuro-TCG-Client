@@ -26,8 +26,12 @@ func __on_match_found(_packet: MatchFoundPacket):
 	loading_text = "Match found"
 	var game = game_node.instantiate()
 	get_parent().add_child(game)
+
 	Global.player_field = game.get_node("PlayerField")
 	Global.enemy_field = game.get_node("EnemyField")
+
+	Global.ram_manager = game.get_tree().get_first_node_in_group("ram_manager")
+
 	queue_free()
 
 

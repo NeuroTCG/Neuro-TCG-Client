@@ -34,13 +34,14 @@ signal hide_shortcuts
 signal notice(msg: String)
 
 # TO RAM
-signal update_ram(value: int)
+signal player_ram_changed(value: int)
 signal update_max_ram(value: int)
-signal update_enemy_ram(value: int)
+signal enemy_ram_changed(value: int)
 signal update_enemy_max_ram(value: int)
 
 # TO RAM MANAGER
 signal use_ram(value: int)
+signal use_enemy_ram(value: int)
 
 # TO CARD VIEWER
 signal close_view
@@ -51,6 +52,8 @@ var network_manager: NetworkManager = null
 # TODO: merge these into one
 var player_field: PlayerField = null
 var enemy_field: EnemyField = null
+
+var ram_manager: RamManager = null
 
 ## Simple mouse input implementation
 ## All functions that process mouse input

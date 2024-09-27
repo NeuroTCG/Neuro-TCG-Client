@@ -1,7 +1,6 @@
 extends Hand
 
 @export var game: Node2D
-@export var ram_manager: Node2D
 
 
 func _ready() -> void:

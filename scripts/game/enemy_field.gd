@@ -94,9 +94,7 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 	var ability_slot_no = Field.convert_to_index(packet.ability_position.to_array(), true)
 	var ability_card: Card = enemy_field.get_slot(ability_slot_no).stored_card
 
-	# TODO: don't manually touch RAM
-	var enemy_ram = get_tree().get_first_node_in_group("ram_manager").opponent_ram
-	Global.update_enemy_ram.emit(enemy_ram - ability_card.info.ability.cost)
+	Global.use_enemy_ram.emit(ability_card.info.ability.cost)
 
 	# TODO: make this a match?
 	if ability_card.info.ability.effect == Ability.AbilityEffect.ADD_HP:
