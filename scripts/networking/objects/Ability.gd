@@ -7,7 +7,8 @@ enum AbilityEffect {
 	ATTACK,
 	SHIELD,
 }
-
+##
+##
 enum AbilityRange {
 	NONE,
 	ALLY_FIELD,

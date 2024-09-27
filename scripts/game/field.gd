@@ -1,6 +1,8 @@
 extends Node2D
 class_name Field
 
+var destroyed_cards := []
+
 @export var player_field: Field
 @export var enemy_field: Field
 
@@ -152,6 +154,13 @@ static func convert_to_array(index: int) -> Array:
 
 	assert(false, "Something has gone very very wrong.")
 	return []
+	
+func destroy_card(slot : int, card: Card) -> void:
+	card.remove_from_slot()
+
+	destroyed_cards.append(card)
+	card.visible = false
+	card.global_position = Vector2.ZERO
 
 
 # TODO: split in two or remove completely

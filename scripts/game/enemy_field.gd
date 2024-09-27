@@ -4,7 +4,6 @@ class_name EnemyField
 ## Placement when moving them around.
 
 ## List to store all destroyed enemy cards
-var destroyed_cards := []
 
 
 func _ready() -> void:
@@ -77,14 +76,14 @@ func _on_attack(packet: AttackPacket) -> void:
 	var target_card: Card = player_field.get_slot(target_slot_no).stored_card
 	var atk_card: Card = player_field.get_slot(atk_slot_no).stored_card
 
-	# do_damage deletes the card if it dies so it may not exist after
+	# take_damage deletes the card if it dies so it may not exist after
 	var target_atk = target_card.info.base_atk
 
-	target_card.do_damage(atk_card.info.base_atk)
+	target_card.take_damage(atk_card.info.base_atk)
 	if target_card.current_slot:  # it did't die
 		assert(target_card.state.shield == packet.target_card.shield)
 
-	atk_card.do_damage(max(target_atk - 1, 0))
+	atk_card.take_damage(max(target_atk - 1, 0))
 	if atk_card.current_slot:  # it did't die
 		assert(atk_card.state.shield == packet.attacker_card.shield)
 
@@ -112,7 +111,7 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 		var target_slot_no = Field.convert_to_index(packet.target_position.to_array())
 		var target_card: Card = player_field.get_slot(target_slot_no).stored_card
 
-		target_card.do_damage(target_card.state.health - packet.target_card.health)
+		target_card.take_damage(target_card.state.health - packet.target_card.health)
 		assert(target_card.state.shield == packet.target_card.shield)
 
 	elif (
@@ -133,7 +132,7 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 			for slot_no in row:
 				var slot = player_field.get_slot(slot_no)
 				if slot.stored_card:
-					slot.stored_card.do_damage(atk_value)
+					slot.stored_card.take_damage(atk_value)
 
 	elif ability_card.info.ability.effect == Ability.AbilityEffect.SEAL:
 		print("APPLYING SEAL TO CARD")
@@ -157,11 +156,11 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 #endregion
 
 
-func destroy_card(slot: int, card: Card) -> void:
-	print("(From Opponent) Card Destroyed!")
+#func destroy_card(slot: int, card: Card) -> void:
+	#print("(From Opponent) Card Destroyed!")
 
-	card.remove_from_slot()
+	#card.remove_from_slot()
 
-	destroyed_cards.append(card)
-	card.visible = false
-	card.global_position = Vector2.ZERO
+	#destroyed_cards.append(card)
+	#card.visible = false
+	#card.global_position = Vector2.ZERO

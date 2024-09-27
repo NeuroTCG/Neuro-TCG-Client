@@ -88,6 +88,8 @@ func reset_variables() -> void:
 	if owned_by_player:
 		summon_sickness = false
 		state.phase = TurnPhase.MoveOrAction
+	summon_sickness = false
+	state.phase = TurnPhase.MoveOrAction
 	mouse_over = false
 	selected = false
 
@@ -235,7 +237,7 @@ func set_shield(num_turns: int):
 	shield_sprite.visible = num_turns > 0
 
 
-func do_damage(amount: int):
+func take_damage(amount: int):
 	assert(amount >= 0)
 
 	if state.shield > 0:
