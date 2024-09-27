@@ -92,8 +92,7 @@ func _on_attack(packet: AttackPacket) -> void:
 func _on_ability(packet: UseAbilityPacket) -> void:
 	# Ability card will always be from the opponent
 	var ability_slot_no = Field.convert_to_index(packet.ability_position.to_array(), true)
-	# TODO: don't manually get slots
-	var ability_card: Card = enemy_field.get_node("Slot" + str(ability_slot_no)).stored_card
+	var ability_card: Card = enemy_field.get_slot(ability_slot_no).stored_card
 
 	# TODO: don't manually touch RAM
 	var enemy_ram = get_tree().get_first_node_in_group("ram_manager").opponent_ram
@@ -103,8 +102,7 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 	if ability_card.info.ability.effect == Ability.AbilityEffect.ADD_HP:
 		# In this case the target card will always be an opponent card
 		var target_slot_no = Field.convert_to_index(packet.target_position.to_array(), true)
-		# TODO: don't manually get slots
-		var target_card: Card = enemy_field.get_node("Slot" + str(target_slot_no)).stored_card
+		var target_card: Card = enemy_field.get_slot(target_slot_no).stored_card
 
 		target_card.heal(packet.target_card.health - target_card.state.health)
 
@@ -114,8 +112,7 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 	):
 		# In this case the target card will always be the player's card
 		var target_slot_no = Field.convert_to_index(packet.target_position.to_array())
-		# TODO: don't manually get slots
-		var target_card: Card = player_field.get_node("Slot" + str(target_slot_no)).stored_card
+		var target_card: Card = player_field.get_slot(target_slot_no).stored_card
 
 		target_card.do_damage(target_card.state.health - packet.target_card.health)
 		assert(target_card.state.shield == packet.target_card.shield)
@@ -126,8 +123,7 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 	):
 		# In this case the target card will always be the player's card
 		var target_slot_no = Field.convert_to_index(packet.target_position.to_array())
-		# TODO: don't manually get slots
-		var target_card: Card = player_field.get_node("Slot" + str(target_slot_no)).stored_card
+		var target_card: Card = player_field.get_slot(target_slot_no).stored_card
 
 		var atk_value = target_card.info.ability.value
 		var row
@@ -137,8 +133,7 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 			row = Global.PLAYER_FRONT_ROW
 
 			for slot_no in row:
-				# TODO: don't manually get slots
-				var slot = player_field.get_node("Slot%d" % slot_no)
+				var slot = player_field.get_slot(slot_no)
 				if slot.stored_card:
 					slot.stored_card.do_damage(atk_value)
 
@@ -146,8 +141,7 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 		print("APPLYING SEAL TO CARD")
 		# In this case the target card will always be the player's card
 		var target_slot_no = Field.convert_to_index(packet.target_position.to_array())
-		# TODO: don't manually get slots
-		var target_card: Card = player_field.get_node("Slot" + str(target_slot_no)).stored_card
+		var target_card: Card = player_field.get_slot(target_slot_no).stored_card
 		# TODO: don't manually write to state
 		target_card.state.sealed_turns_left = ability_card.info.ability.value
 		print(target_card.state.sealed_turns_left)
@@ -155,8 +149,7 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 	elif ability_card.info.ability.effect == Ability.AbilityEffect.SHIELD:
 		print("APPLYING SHIELD TO CARD")
 		var target_slot_no = Field.convert_to_index(packet.target_position.to_array(), true)
-		# TODO: don't manually get slots
-		var target_card: Card = enemy_field.get_node("Slot" + str(target_slot_no)).stored_card
+		var target_card: Card = enemy_field.get_slot(target_slot_no).stored_card
 
 		target_card.set_shield(ability_card.info.ability.value)
 		assert(target_card.state.shield == packet.target_card.shield)

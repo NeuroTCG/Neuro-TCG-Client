@@ -50,11 +50,10 @@ func add_card(id: int) -> void:
 func summon(hand_pos: int, slot_no: int) -> void:
 	assert(cards.size() > 0, "Cards should exist at hand when summoning")
 
-	var slot = game.get_node("PlayerField").get_slot(slot_no)
+	var slot = Global.player_field.get_slot(slot_no)
 	var summon_card: Card = cards.pop_at(hand_pos)
 
-	# TODO: remove, bad
-	game.get_node("PlayerField").cards.append(summon_card)
+	Global.player_field.cards.append(summon_card)
 
 	summon_card.placement = Card.Placement.PLAYMAT  # Update card
 	summon_card.summon_sickness = true

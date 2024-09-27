@@ -200,13 +200,11 @@ func hide_buttons() -> void:
 	buttons.visible = false
 
 
-# TODO: remove or make it update the slot
 func move_and_reanchor(pos: Vector2):
 	anchor_position = pos
 	visually_move_card(anchor_position)
 
 
-# TODO: remove because bad style
 func visually_move_card(end_pos: Vector2, time := 0.5):
 	if movement_tween:
 		movement_tween.kill()

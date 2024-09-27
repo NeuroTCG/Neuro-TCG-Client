@@ -19,7 +19,7 @@ func _on_summon(packet: SummonPacket) -> void:
 	assert(cards.size() > 0, "Failed to render enemy.  Cards should exist at hand when summoning")
 
 	var slot_no = Field.convert_to_index(packet.position.to_array(), true)
-	var slot = game.get_node("EnemyField").get_slot(slot_no)
+	var slot = Global.enemy_field.get_slot(slot_no)
 	var hand_pos := get_hand_pos_from_id(packet.new_card.id)
 	var summon_card = cards.pop_at(hand_pos)
 

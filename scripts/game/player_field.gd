@@ -247,8 +247,7 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 				row = Global.ENEMY_FRONT_ROW
 
 			for slot_no in row:
-				# TODO: don't manually get from slot
-				var slot = enemy_field.get_node("Slot%d" % slot_no)
+				var slot = enemy_field.get_slot(slot_no)
 				if slot.stored_card:
 					slot.stored_card.do_damage(atk_value)
 
