@@ -48,6 +48,10 @@ signal close_view
 signal network_manager_ready
 var network_manager: NetworkManager = null
 
+# TODO: merge these into one
+var player_field: PlayerField = null
+var enemy_field: EnemyField = null
+
 ## Simple mouse input implementation
 ## All functions that process mouse input
 ## should be appended to the array

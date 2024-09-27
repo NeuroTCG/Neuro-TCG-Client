@@ -20,7 +20,6 @@ func _on_summon(packet: SummonPacket) -> void:
 
 	var slot_no = Field.convert_to_index(packet.position.to_array(), true)
 	var slot = game.get_node("EnemyField").get_slot(slot_no)
-	var slot_pos = game.get_node("EnemyField").get_slot_pos(slot_no)
 	var hand_pos := get_hand_pos_from_id(packet.new_card.id)
 	var summon_card = cards.pop_at(hand_pos)
 
@@ -31,8 +30,7 @@ func _on_summon(packet: SummonPacket) -> void:
 	assert(slot.stored_card == null)
 
 	summon_card.set_slot(slot)
-
-	summon_card.move_and_reanchor(slot_pos)
+	summon_card.move_and_reanchor(slot.global_position)
 
 	Global.update_enemy_ram.emit(packet.new_ram)
 

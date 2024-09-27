@@ -115,19 +115,12 @@ func slot_is_reachable(target_slot_no, atk_card: Card, atk_is_from_player: bool)
 ## Returns true if a list of slots are empty
 ## Takes a list of slot numbers
 ## NOTE: Field Independent
-# TODO: typo
-func slots_empty(slot_nos) -> bool:
-	for no in slot_nos:
-		if no in Global.PLAYER_ROWS:
-			# TODO: don't manually get from slot
-			var slot = player_field.get_node("Slot%d" % no)
-			if slot.stored_card:
-				return false
-		else:
-			# TODO: don't manually get from slot
-			var slot = enemy_field.get_node("Slot%d" % no)
-			if slot.stored_card:
-				return false
+func slots_empty(slot_pos) -> bool:
+	for no in slot_pos:
+		var slot = player_field.get_slot(no)
+		if slot.stored_card != null:
+			return false
+
 	return true
 
 
@@ -142,14 +135,6 @@ func get_slot_no(card: Card) -> int:
 ## WARNING: Field dependent. Will only check the current field
 func get_slot_array(card: Card) -> Array:
 	return convert_to_array(get_slot_no(card))
-
-
-## Returns the Vector2 position of slot
-## WARNING: Field dependent. Will only check the current field
-# TODO: remove, because only used for stupid things
-func get_slot_pos(slot_no: int) -> Vector2:
-	# TODO: don't manually get from slot
-	return get_slot(slot_no).global_position
 
 
 #region STATIC FUNCTIONS

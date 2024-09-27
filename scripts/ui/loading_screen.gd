@@ -1,7 +1,7 @@
 extends Control
 class_name LoadingScreen
 
-var game = load("res://scenes/game/game.tscn")
+var game_node = load("res://scenes/game/game.tscn")
 
 var loading_text: String = "Loading...":
 	set(new_text):
@@ -24,7 +24,10 @@ func _ready():
 
 func __on_match_found(_packet: MatchFoundPacket):
 	loading_text = "Match found"
-	get_parent().add_child(game.instantiate())
+	var game = game_node.instantiate()
+	get_parent().add_child(game)
+	Global.player_field = game.get_node("PlayerField")
+	Global.enemy_field = game.get_node("EnemyField")
 	queue_free()
 
 

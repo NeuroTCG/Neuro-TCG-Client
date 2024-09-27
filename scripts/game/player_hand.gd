@@ -50,11 +50,8 @@ func add_card(id: int) -> void:
 func summon(hand_pos: int, slot_no: int) -> void:
 	assert(cards.size() > 0, "Cards should exist at hand when summoning")
 
-	var slot_pos = game.get_node("PlayerField").get_slot_pos(slot_no)
 	var slot = game.get_node("PlayerField").get_slot(slot_no)
 	var summon_card: Card = cards.pop_at(hand_pos)
-
-	summon_card.set_slot(slot)
 
 	# TODO: remove, bad
 	game.get_node("PlayerField").cards.append(summon_card)
@@ -70,7 +67,8 @@ func summon(hand_pos: int, slot_no: int) -> void:
 	Global.use_ram.emit(summon_card.info.cost)
 
 	# Move card and reset card visibility
-	await summon_card.move_and_reanchor(slot_pos)
+	summon_card.set_slot(slot)
+	await summon_card.move_and_reanchor(slot.global_position)
 	summon_card.set_card_visibility()
 
 

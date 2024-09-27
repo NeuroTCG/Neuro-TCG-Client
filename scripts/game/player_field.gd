@@ -180,12 +180,11 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 		switch_cards(slot_no, get_slot_no(selected_card))
 
 	if MatchManager.current_action == MatchManager.Actions.ABILITY:
+		assert(selected_card, "No card selected.")
 		selected_card.state.phase = Card.TurnPhase.Done
 		# TODO: don't manually write to state
 		selected_card.state.ability_was_used = true
-		assert(selected_card, "No card selected.")
 
-		assert(selected_card, "No card selected.")
 		if selected_card.info.ability.effect == Ability.AbilityEffect.ADD_HP:
 			print("Card ability in effect. HP before: ", card.state.health)
 			card.heal(selected_card.info.ability.value)
@@ -212,10 +211,13 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 			player_card.state.id, convert_to_array(enemy_slot_no), convert_to_array(player_slot_no)
 		)
 
+		# do_damage deletes the card if it dies
+		var can_counterattack = not slot_is_reachable(player_slot_no, enemy_card, false)
+
 		enemy_card.do_damage(player_card.info.base_atk)
 
 		#region Enemy counterattack
-		if not slot_is_reachable(player_slot_no, enemy_card, false):
+		if can_counterattack:
 			return
 		else:
 			selected_card.do_damage(max(enemy_card.info.base_atk - 1, 0))

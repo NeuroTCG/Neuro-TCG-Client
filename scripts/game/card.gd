@@ -243,16 +243,13 @@ func do_damage(amount: int):
 	if state.shield > 0:
 		state.shield -= 1
 
-		if (state.shield == 0):
+		if state.shield == 0:
 			shield_sprite.visible = false
 		return
 
 	state.health -= amount
 	if state.health <= 0:
-		# TODO: use global field
-		(get_tree().root.get_node("../PlayerField") as PlayerField).destroy_card(
-			current_slot.slot_no, self
-		)
+		Global.player_field.destroy_card(current_slot.slot_no, self)
 
 	render_attack(state.health)
 
@@ -279,7 +276,6 @@ func flip_card(enemy := false) -> void:
 		animation_player.play("flip")
 	else:
 		animation_player.play("flip_enemy")
-
 
 
 func render_attack(_hp: int) -> void:

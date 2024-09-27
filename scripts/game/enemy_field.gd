@@ -1,4 +1,5 @@
 extends Field
+class_name EnemyField
 ## Enemy cards only need to worry about Slots and
 ## Placement when moving them around.
 
@@ -80,10 +81,12 @@ func _on_attack(packet: AttackPacket) -> void:
 	var target_atk = target_card.info.base_atk
 
 	target_card.do_damage(atk_card.info.base_atk)
-	assert(target_card.state.shield == packet.target_card.shield)
+	if target_card.current_slot:  # it did't die
+		assert(target_card.state.shield == packet.target_card.shield)
 
 	atk_card.do_damage(max(target_atk - 1, 0))
-	assert(atk_card.state.shield == packet.attacker_card.shield)
+	if atk_card.current_slot:  # it did't die
+		assert(atk_card.state.shield == packet.attacker_card.shield)
 
 
 func _on_ability(packet: UseAbilityPacket) -> void:
