@@ -7,8 +7,10 @@ enum AbilityEffect {
 	ATTACK,
 	SHIELD,
 }
-##
-##
+
+# TODO: Maybe rename the range constants to be more clear.
+# (Would have to rename them in the server code as well, so hold off for now.)
+
 enum AbilityRange {
 	NONE,
 	ALLY_FIELD,

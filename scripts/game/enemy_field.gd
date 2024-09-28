@@ -154,13 +154,3 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 
 
 #endregion
-
-
-#func destroy_card(slot: int, card: Card) -> void:
-	#print("(From Opponent) Card Destroyed!")
-
-	#card.remove_from_slot()
-
-	#destroyed_cards.append(card)
-	#card.visible = false
-	#card.global_position = Vector2.ZERO

@@ -7,7 +7,6 @@ var cards := []
 
 
 
-#var selected_card: Card = null
 var selected_slot: CardSlot = null
 
 
@@ -55,7 +54,6 @@ func show_slots_for_transfer() -> void:
 
 		# Don't show selected card
 		if slot.stored_card:
-			#if slot.stored_card == selected_card:
 			if slot.stored_card == selected_slot.stored_card:
 				slot.visible = false
 
@@ -84,7 +82,7 @@ func hide_slots() -> void:
 
 #region SELECT
 func _on_card_selected(card: Card) -> void:
-	
+
 	if MatchManager.current_action == MatchManager.Actions.SWITCH:
 		MatchManager.current_action = MatchManager.Actions.IDLE
 	else:
@@ -106,7 +104,7 @@ func _on_card_selected(card: Card) -> void:
 			buttons = [MatchManager.Actions.VIEW]
 		elif card.state.phase == Card.TurnPhase.Action:
 			buttons.erase(MatchManager.Actions.SWITCH)
-		
+
 		card.show_buttons(buttons)
 		selected_slot = card.current_slot
 		selected_slot.stored_card = card;
@@ -121,7 +119,6 @@ func _on_card_unselected(card: Card) -> void:
 	# Update these values from the _on_card_selected
 	# that will run from that card being clicked on
 	if not another_card_selected(card):
-		#selected_slot = null
 		MatchManager.current_action = MatchManager.Actions.IDLE
 
 
@@ -229,7 +226,7 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 		#endregion
 
 	elif MatchManager.current_action == MatchManager.Actions.ABILITY:
-		
+
 		# TODO: make independent of ability range
 		if (
 			player_card.info.ability.effect == Ability.AbilityEffect.ATTACK

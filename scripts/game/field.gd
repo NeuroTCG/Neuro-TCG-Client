@@ -154,7 +154,7 @@ static func convert_to_array(index: int) -> Array:
 
 	assert(false, "Something has gone very very wrong.")
 	return []
-	
+
 func destroy_card(slot : int, card: Card) -> void:
 	card.remove_from_slot()
 
