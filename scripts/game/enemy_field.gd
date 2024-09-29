@@ -63,15 +63,15 @@ func hide_slots() -> void:
 
 #region RENDER OPPONENT
 func _on_switch(packet: SwitchPlacePacket) -> void:
-	var slot1 = Field.convert_to_index(packet.position1.to_array(), true)
-	var slot2 = Field.convert_to_index(packet.position2.to_array(), true)
+	var slot1 = Field.array_to_index(packet.position1.to_array(), Field.Side.Enemy)
+	var slot2 = Field.array_to_index(packet.position2.to_array(), Field.Side.Enemy)
 
 	switch_cards(slot1, slot2)
 
 
 func _on_attack(packet: AttackPacket) -> void:
-	var target_slot_no = Field.convert_to_index(packet.target_position.to_array())
-	var atk_slot_no = Field.convert_to_index(packet.attacker_position.to_array(), true)
+	var target_slot_no = Field.array_to_index(packet.target_position.to_array(), Field.Side.Player)
+	var atk_slot_no = Field.array_to_index(packet.attacker_position.to_array(), Field.Side.Enemy)
 
 	var target_card: Card = player_field.get_slot(target_slot_no).stored_card
 	var atk_card: Card = player_field.get_slot(atk_slot_no).stored_card
@@ -90,7 +90,7 @@ func _on_attack(packet: AttackPacket) -> void:
 
 func _on_ability(packet: UseAbilityPacket) -> void:
 	# Ability card will always be from the opponent
-	var ability_slot_no = Field.convert_to_index(packet.ability_position.to_array(), true)
+	var ability_slot_no = Field.array_to_index(packet.ability_position.to_array(), Field.Side.Enemy)
 	var ability_card: Card = enemy_field.get_slot(ability_slot_no).stored_card
 
 	Global.use_enemy_ram.emit(ability_card.info.ability.cost)
@@ -98,7 +98,7 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 	# TODO: make this a match?
 	if ability_card.info.ability.effect == Ability.AbilityEffect.ADD_HP:
 		# In this case the target card will always be an opponent card
-		var target_slot_no = Field.convert_to_index(packet.target_position.to_array(), true)
+		var target_slot_no = Field.array_to_index(packet.target_position.to_array(), Field.Side.Enemy)
 		var target_card: Card = enemy_field.get_slot(target_slot_no).stored_card
 
 		target_card.heal(packet.target_card.health - target_card.state.health)
@@ -108,7 +108,7 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 		and ability_card.info.ability.range == Ability.AbilityRange.ENEMY_CARD
 	):
 		# In this case the target card will always be the player's card
-		var target_slot_no = Field.convert_to_index(packet.target_position.to_array())
+		var target_slot_no = Field.array_to_index(packet.target_position.to_array(), Field.Side.Player)
 		var target_card: Card = player_field.get_slot(target_slot_no).stored_card
 
 		target_card.take_damage(target_card.state.health - packet.target_card.health)
@@ -119,7 +119,7 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 		and ability_card.info.ability.range == Ability.AbilityRange.ENEMY_ROW
 	):
 		# In this case the target card will always be the player's card
-		var target_slot_no = Field.convert_to_index(packet.target_position.to_array())
+		var target_slot_no = Field.array_to_index(packet.target_position.to_array(), Field.Side.Player)
 		var target_card: Card = player_field.get_slot(target_slot_no).stored_card
 
 		var atk_value = target_card.info.ability.value
@@ -137,18 +137,17 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 	elif ability_card.info.ability.effect == Ability.AbilityEffect.SEAL:
 		print("APPLYING SEAL TO CARD")
 		# In this case the target card will always be the player's card
-		var target_slot_no = Field.convert_to_index(packet.target_position.to_array())
+		var target_slot_no = Field.array_to_index(packet.target_position.to_array(), Field.Side.Player)
 		var target_card: Card = player_field.get_slot(target_slot_no).stored_card
 		target_card.set_seal(ability_card.info.ability.value)
 		print(target_card.state.sealed_turns_left)
 	elif ability_card.info.ability.effect == Ability.AbilityEffect.SHIELD:
 		print("APPLYING SHIELD TO CARD")
-		var target_slot_no = Field.convert_to_index(packet.target_position.to_array(), true)
+		var target_slot_no = Field.array_to_index(packet.target_position.to_array(), Field.Side.Enemy)
 		var target_card: Card = enemy_field.get_slot(target_slot_no).stored_card
 
 		target_card.set_shield(ability_card.info.ability.value)
 		assert(target_card.state.shield == packet.target_card.shield)
 		print(target_card.state.shield)
-
 
 #endregion

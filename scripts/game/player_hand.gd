@@ -110,5 +110,5 @@ func _on_slot_chosen(slot_no: int, _card: Card) -> void:
 		var summoned_card: Card = selected_card
 
 		_on_card_unselected(summoned_card)
-		VerifyClientAction.summon.emit(summoned_card.state.id, Field.convert_to_array(slot_no))
+		VerifyClientAction.summon.emit(summoned_card.state.id, Field.index_to_array(slot_no))
 		summon(cards.find(summoned_card), slot_no)

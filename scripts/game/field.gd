@@ -8,6 +8,11 @@ var destroyed_cards := []
 
 signal on_card_destroyed(slot: int, card: Card)
 
+enum Side {
+	Player,
+	Enemy,
+}
+
 
 ## searches both fields for the slot, so it doesn't matter which side is used
 func get_slot(slot: int) -> CardSlot:
@@ -130,19 +135,17 @@ func slots_empty(slot_pos) -> bool:
 
 ## Returns slot number of card
 ## Returns 0 if card isn't in any slot
-## WARNING: Field dependent. Will only check the current field
 func get_slot_no(card: Card) -> int:
 	return card.current_slot.slot_no
 
 
 ## Returns position of card in array form
-## WARNING: Field dependent. Will only check the current field
 func get_slot_array(card: Card) -> Array:
-	return convert_to_array(get_slot_no(card))
+	return index_to_array(get_slot_no(card))
 
 
 #region STATIC FUNCTIONS
-static func convert_to_array(index: int) -> Array:
+static func index_to_array(index: int) -> Array:
 	assert(index > 0 && index <= 14, "Index is only defined from 1 to 14, not %d" % index)
 
 	if index <= 4:
@@ -175,8 +178,8 @@ func destroy_card(slot: int, card: Card) -> void:
 
 
 # TODO: split in two or remove completely
-static func convert_to_index(array: Array, enemy := false) -> int:
-	if not enemy:
+static func array_to_index(array: Array, side: Field.Side) -> int:
+	if side == Side.Player:
 		match array:
 			[0, 0]:
 				return 1
@@ -209,5 +212,6 @@ static func convert_to_index(array: Array, enemy := false) -> int:
 			[0, 0]:
 				return 14
 
+	assert(false)
 	return 0
 #endregion

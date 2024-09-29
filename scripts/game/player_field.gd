@@ -177,7 +177,7 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 			card.unselect()
 
 		VerifyClientAction.switch.emit(
-			convert_to_array(slot_no), get_slot_array(selected_slot.stored_card)
+			index_to_array(slot_no), get_slot_array(selected_slot.stored_card)
 		)
 		switch_cards(slot_no, get_slot_no(selected_slot.stored_card))
 
@@ -214,7 +214,7 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 
 	if MatchManager.current_action == MatchManager.Actions.ATTACK:
 		VerifyClientAction.attack.emit(
-			player_card.state.id, convert_to_array(enemy_slot_no), convert_to_array(player_slot_no)
+			player_card.state.id, index_to_array(enemy_slot_no), index_to_array(player_slot_no)
 		)
 
 		# take_damage deletes the card if it dies
@@ -264,7 +264,7 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 			enemy_card.set_seal(player_card.info.ability.value)
 
 		VerifyClientAction.ability.emit(
-			convert_to_array(enemy_slot_no), convert_to_array(player_slot_no)
+			index_to_array(enemy_slot_no), index_to_array(player_slot_no)
 		)
 
 
