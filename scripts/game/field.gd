@@ -6,6 +6,8 @@ var destroyed_cards := []
 @export var player_field: Field
 @export var enemy_field: Field
 
+signal on_card_destroyed(slot: int, card: Card)
+
 
 ## searches both fields for the slot, so it doesn't matter which side is used
 func get_slot(slot: int) -> CardSlot:
@@ -155,12 +157,21 @@ static func convert_to_array(index: int) -> Array:
 	assert(false, "Something has gone very very wrong.")
 	return []
 
-func destroy_card(slot : int, card: Card) -> void:
+
+func destroy_card(slot: int, card: Card) -> void:
+	print("Card Destroyed!")
 	card.remove_from_slot()
+
+	card.placement = Card.Placement.DESTROYED
 
 	destroyed_cards.append(card)
 	card.visible = false
 	card.global_position = Vector2.ZERO
+	if card.current_slot != null:
+		card.remove_from_slot()
+
+	player_field.on_card_destroyed.emit(slot, card)
+	enemy_field.on_card_destroyed.emit(slot, card)
 
 
 # TODO: split in two or remove completely

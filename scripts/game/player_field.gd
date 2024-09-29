@@ -5,8 +5,6 @@ class_name PlayerField
 
 var cards := []
 
-
-
 var selected_slot: CardSlot = null
 
 
@@ -21,6 +19,8 @@ func _ready() -> void:
 	MatchManager.action_switch.connect(_on_action_switch)
 	MatchManager.action_attack.connect(_on_action_attack)
 	MatchManager.action_ability.connect(_on_action_ability)
+
+	on_card_destroyed.connect(__on_destroy_card)
 
 	for slot in get_children():
 		slot.visible = false
@@ -82,7 +82,6 @@ func hide_slots() -> void:
 
 #region SELECT
 func _on_card_selected(card: Card) -> void:
-
 	if MatchManager.current_action == MatchManager.Actions.SWITCH:
 		MatchManager.current_action = MatchManager.Actions.IDLE
 	else:
@@ -107,7 +106,7 @@ func _on_card_selected(card: Card) -> void:
 
 		card.show_buttons(buttons)
 		selected_slot = card.current_slot
-		selected_slot.stored_card = card;
+		selected_slot.stored_card = card
 		card.select()
 
 
@@ -177,7 +176,9 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 			card.state.phase = Card.TurnPhase.Action
 			card.unselect()
 
-		VerifyClientAction.switch.emit(convert_to_array(slot_no), get_slot_array(selected_slot.stored_card))
+		VerifyClientAction.switch.emit(
+			convert_to_array(slot_no), get_slot_array(selected_slot.stored_card)
+		)
 		switch_cards(slot_no, get_slot_no(selected_slot.stored_card))
 
 	if MatchManager.current_action == MatchManager.Actions.ABILITY:
@@ -189,11 +190,15 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 		if selected_slot.stored_card.info.ability.effect == Ability.AbilityEffect.ADD_HP:
 			print("Card ability in effect. HP before: ", card.state.health)
 			card.heal(selected_slot.stored_card.info.ability.value)
-			VerifyClientAction.ability.emit(get_slot_array(card), get_slot_array(selected_slot.stored_card))
+			VerifyClientAction.ability.emit(
+				get_slot_array(card), get_slot_array(selected_slot.stored_card)
+			)
 			print("Hp afterwards: ", card.state.health)
 
 		elif selected_slot.stored_card.info.ability.effect == Ability.AbilityEffect.SHIELD:
-			VerifyClientAction.ability.emit(get_slot_array(card), get_slot_array(selected_slot.stored_card))
+			VerifyClientAction.ability.emit(
+				get_slot_array(card), get_slot_array(selected_slot.stored_card)
+			)
 			card.set_shield(selected_slot.stored_card.info.ability.value)
 
 
@@ -226,7 +231,6 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 		#endregion
 
 	elif MatchManager.current_action == MatchManager.Actions.ABILITY:
-
 		# TODO: make independent of ability range
 		if (
 			player_card.info.ability.effect == Ability.AbilityEffect.ATTACK
@@ -267,17 +271,7 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 #endregion
 
 
-# TODO: merge with the other destroy_card
-func destroy_card(slot: int, card: Card) -> void:
-	print("Card Destroyed!")
-
-	card.remove_from_slot()
-
+func __on_destroy_card(_slot: int, card: Card) -> void:
 	cards.erase(card)
-	if selected_slot.stored_card == card:
+	if selected_slot != null and selected_slot.stored_card == card:
 		selected_slot.stored_card = null
-	card.placement = Card.Placement.DESTROYED
-
-	destroyed_cards.append(card)
-	card.visible = false
-	card.global_position = Vector2.ZERO
