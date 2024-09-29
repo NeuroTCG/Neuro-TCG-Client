@@ -177,7 +177,6 @@ func destroy_card(slot: int, card: Card) -> void:
 	enemy_field.on_card_destroyed.emit(slot, card)
 
 
-# TODO: split in two or remove completely
 static func array_to_index(array: Array, side: Field.Side) -> int:
 	if side == Side.Player:
 		match array:
