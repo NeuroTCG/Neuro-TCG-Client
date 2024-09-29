@@ -13,6 +13,7 @@ signal switch_place(packet: SwitchPlacePacket)
 signal use_ability(packet: UseAbilityPacket)
 signal start_turn(packet: StartTurnPacket)
 signal draw_card(packet: DrawCardPacket)
+signal game_over(packet: GameOverPacket)
 
 signal attack(packet: AttackPacket)
 #endregion
@@ -153,6 +154,10 @@ func receive_command(msg: String) -> void:
 			draw_card.emit(packet)
 			if !packet.is_you:
 				RenderOpponentAction.draw_card.emit(packet)
+
+		PacketType.GameOver:
+			print("game is over!")
+			game_over.emit(packet)
 
 		var type:
 			assert(false, "Received unhandled packet type '%s'" % type)
