@@ -13,12 +13,7 @@ enum Side {
 	Enemy,
 }
 
-
-enum RowPositions {
-	UNKNOWN = -1,
-	FRONT = 0,
-	BACK = 1
-}
+enum RowPositions { UNKNOWN = -1, FRONT = 0, BACK = 1 }
 
 
 ## searches both fields for the slot, so it doesn't matter which side is used
@@ -69,6 +64,7 @@ func move_card(from: int, to: int) -> void:
 
 	card.move_and_reanchor(to_slot.global_position)
 
+
 func get_row_for_card_slot(slot_no: int) -> RowPositions:
 	if slot_no in Global.PLAYER_FRONT_ROW or slot_no in Global.ENEMY_FRONT_ROW:
 		return RowPositions.FRONT
@@ -77,6 +73,7 @@ func get_row_for_card_slot(slot_no: int) -> RowPositions:
 
 	assert(false, "slot_no isn't valid for a call to get_row_for_card_slot")
 	return RowPositions.UNKNOWN
+
 
 ## Return true if a target slot is reachable by given card
 ## NOTE: Field Independent
@@ -103,6 +100,7 @@ func slot_is_reachable(target_slot_no: int, atk_card: Card) -> bool:
 		_:
 			assert(false, "something was invalid when calling slot_is_reachable")
 			return false
+
 
 ## Returns true if a list of slots are empty
 ## Takes a list of slot numbers

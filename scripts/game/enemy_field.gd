@@ -97,18 +97,28 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 
 	match ability_card.info.ability.effect:
 		Ability.AbilityEffect.ADD_HP:
-			var target_slot_no = Field.array_to_index(packet.target_position.to_array(), Field.Side.Enemy)
+			var target_slot_no = Field.array_to_index(
+				packet.target_position.to_array(), Field.Side.Enemy
+			)
 			var target_card: Card = enemy_field.get_slot(target_slot_no).stored_card
 
 			target_card.heal(packet.target_card.health - target_card.state.health)
-		Ability.AbilityEffect.ATTACK when ability_card.info.ability.range == Ability.AbilityRange.ENEMY_CARD:
-			var target_slot_no = Field.array_to_index(packet.target_position.to_array(), Field.Side.Player)
+		Ability.AbilityEffect.ATTACK when (
+			ability_card.info.ability.range == Ability.AbilityRange.ENEMY_CARD
+		):
+			var target_slot_no = Field.array_to_index(
+				packet.target_position.to_array(), Field.Side.Player
+			)
 			var target_card: Card = player_field.get_slot(target_slot_no).stored_card
 
 			target_card.take_damage(target_card.state.health - packet.target_card.health)
 			assert(target_card.state.shield == packet.target_card.shield)
-		Ability.AbilityEffect.ATTACK when ability_card.info.ability.range == Ability.AbilityRange.ENEMY_ROW:
-			var target_slot_no = Field.array_to_index(packet.target_position.to_array(), Field.Side.Player)
+		Ability.AbilityEffect.ATTACK when (
+			ability_card.info.ability.range == Ability.AbilityRange.ENEMY_ROW
+		):
+			var target_slot_no = Field.array_to_index(
+				packet.target_position.to_array(), Field.Side.Player
+			)
 			var target_card: Card = player_field.get_slot(target_slot_no).stored_card
 
 			var atk_value = target_card.info.ability.value
@@ -125,13 +135,17 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 		Ability.AbilityEffect.SEAL:
 			print("APPLYING SEAL TO CARD")
 			# In this case the target card will always be the player's card
-			var target_slot_no = Field.array_to_index(packet.target_position.to_array(), Field.Side.Player)
+			var target_slot_no = Field.array_to_index(
+				packet.target_position.to_array(), Field.Side.Player
+			)
 			var target_card: Card = player_field.get_slot(target_slot_no).stored_card
 			target_card.set_seal(ability_card.info.ability.value)
 			print(target_card.state.sealed_turns_left)
 		Ability.AbilityEffect.SHIELD:
 			print("APPLYING SHIELD TO CARD")
-			var target_slot_no = Field.array_to_index(packet.target_position.to_array(), Field.Side.Enemy)
+			var target_slot_no = Field.array_to_index(
+				packet.target_position.to_array(), Field.Side.Enemy
+			)
 			var target_card: Card = enemy_field.get_slot(target_slot_no).stored_card
 
 			target_card.set_shield(ability_card.info.ability.value)
