@@ -14,6 +14,13 @@ enum Side {
 }
 
 
+enum RowPositions {
+	UNKNOWN = -1,
+	FRONT = 0,
+	BACK = 1
+}
+
+
 ## searches both fields for the slot, so it doesn't matter which side is used
 func get_slot(slot: int) -> CardSlot:
 	var player_slot = player_field.get_node_or_null("Slot" + str(slot))
@@ -34,12 +41,6 @@ func switch_cards(slot_no1: int, slot_no2: int) -> void:
 
 	var card1 := slot1.stored_card
 	var card2 := slot2.stored_card
-
-	# TODO: figure out if these are needed to prevent wrong usage.
-	if card1 == null:
-		assert(card2 != null)
-	if card2 == null:
-		assert(card1 != null)
 
 	if card2 != null:
 		card2.remove_from_slot()
@@ -68,65 +69,47 @@ func move_card(from: int, to: int) -> void:
 
 	card.move_and_reanchor(to_slot.global_position)
 
+func get_row_for_card_slot(slot_no: int) -> RowPositions:
+	if slot_no in Global.PLAYER_FRONT_ROW or slot_no in Global.ENEMY_FRONT_ROW:
+		return RowPositions.FRONT
+	elif slot_no in Global.PLAYER_BACK_ROW or slot_no in Global.ENEMY_BACK_ROW:
+		return RowPositions.BACK
+
+	assert(false, "slot_no isn't valid for a call to get_row_for_card_slot")
+	return RowPositions.UNKNOWN
 
 ## Return true if a target slot is reachable by given card
 ## NOTE: Field Independent
-# TODO: maybe rewrite to match the server style
-func slot_is_reachable(target_slot_no, atk_card: Card, atk_is_from_player: bool) -> bool:
-	var atk_front_row
-	var atk_back_row
-	var target_front_row
-	var target_back_row
-	var atk_slot_no
+func slot_is_reachable(target_slot_no: int, atk_card: Card) -> bool:
+	var atk_slot_no = get_slot_no(atk_card)
 
-	if atk_is_from_player:
-		atk_front_row = Global.PLAYER_FRONT_ROW
-		atk_back_row = Global.PLAYER_BACK_ROW
-		target_front_row = Global.ENEMY_FRONT_ROW
-		target_back_row = Global.ENEMY_BACK_ROW
+	var is_player_front_empty = slots_empty(Global.PLAYER_FRONT_ROW)
+	var is_opponent_front_empty = slots_empty(Global.ENEMY_FRONT_ROW)
 
-		atk_slot_no = player_field.get_slot_no(atk_card)
-	else:
-		atk_front_row = Global.ENEMY_FRONT_ROW
-		atk_back_row = Global.ENEMY_BACK_ROW
-		target_front_row = Global.PLAYER_FRONT_ROW
-		target_back_row = Global.PLAYER_BACK_ROW
+	var attacker_reach = atk_card.info.attack_range
 
-		atk_slot_no = enemy_field.get_slot_no(atk_card)
+	var atk_row = get_row_for_card_slot(atk_slot_no)
+	var target_row = get_row_for_card_slot(target_slot_no)
 
-	if atk_slot_no in atk_front_row:
-		if target_slot_no in target_front_row:
+	match [atk_row, target_row]:
+		[RowPositions.FRONT, RowPositions.FRONT]:
 			return true
-		elif target_slot_no in target_back_row:
-			if atk_card.info.attack_range == CardStats.AttackRange.REACH:
-				return true
-			else:
-				if slots_empty(target_front_row):
-					return true
-				else:
-					return false
-	elif atk_slot_no in atk_back_row:
-		if target_slot_no in target_front_row:
-			if atk_card.info.attack_range == CardStats.AttackRange.REACH:
-				return true
-			else:
-				if slots_empty(atk_front_row):
-					return true
-				else:
-					return false
-		elif target_slot_no in target_back_row:
+		[RowPositions.FRONT, RowPositions.BACK]:
+			return is_opponent_front_empty || attacker_reach == CardStats.AttackRange.REACH
+		[RowPositions.BACK, RowPositions.FRONT]:
+			return is_player_front_empty || attacker_reach == CardStats.AttackRange.REACH
+		[RowPositions.BACK, RowPositions.BACK]:
+			return attacker_reach == CardStats.AttackRange.REACH
+		_:
+			assert(false, "something was invalid when calling slot_is_reachable")
 			return false
-
-	assert(false, "Someone tell Kotge there is a problem with the slot_is_reacheable function")
-	return false
-
 
 ## Returns true if a list of slots are empty
 ## Takes a list of slot numbers
 ## NOTE: Field Independent
 func slots_empty(slot_pos) -> bool:
 	for no in slot_pos:
-		var slot = player_field.get_slot(no)
+		var slot = get_slot(no)
 		if slot.stored_card != null:
 			return false
 
@@ -211,6 +194,6 @@ static func array_to_index(array: Array, side: Field.Side) -> int:
 			[0, 0]:
 				return 14
 
-	assert(false)
+	assert(false, "impossible case reached in array_to_index in field.gd")
 	return 0
 #endregion

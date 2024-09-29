@@ -25,7 +25,7 @@ func _ready() -> void:
 	for slot in get_children():
 		slot.visible = false
 
-		# TODO: don't remove this one. This stays for debugging
+		# NOTE: don't remove this one. This stays for debugging
 		var label = Label.new()
 		add_child(label)
 		label.text = str(slot.slot_no)
@@ -218,7 +218,7 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 		)
 
 		# take_damage deletes the card if it dies
-		var can_counterattack = not slot_is_reachable(player_slot_no, enemy_card, false)
+		var can_counterattack = not slot_is_reachable(player_slot_no, enemy_card)
 
 		enemy_card.take_damage(player_card.info.base_atk)
 
