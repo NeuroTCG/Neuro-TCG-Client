@@ -261,7 +261,7 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 			# Play seal animation when its made but rn
 			# all that needs to be done is verify client action which is
 			# done for any ability.
-			enemy_card.seal_sprite.visible = true
+			enemy_card.set_seal(player_card.info.ability.value)
 
 		VerifyClientAction.ability.emit(
 			convert_to_array(enemy_slot_no), convert_to_array(player_slot_no)

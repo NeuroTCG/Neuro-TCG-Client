@@ -233,8 +233,15 @@ func remove_from_slot():
 
 
 func set_shield(num_turns: int):
+	assert(num_turns >= 0)
 	state.shield = num_turns
 	shield_sprite.visible = num_turns > 0
+
+
+func set_seal(num_turns: int):
+	assert(num_turns >= 0)
+	state.sealed_turns_left = num_turns
+	seal_sprite.visible = num_turns > 0
 
 
 func take_damage(amount: int):

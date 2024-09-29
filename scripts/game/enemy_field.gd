@@ -139,10 +139,8 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 		# In this case the target card will always be the player's card
 		var target_slot_no = Field.convert_to_index(packet.target_position.to_array())
 		var target_card: Card = player_field.get_slot(target_slot_no).stored_card
-		# TODO: don't manually write to state
-		target_card.state.sealed_turns_left = ability_card.info.ability.value
+		target_card.set_seal(ability_card.info.ability.value)
 		print(target_card.state.sealed_turns_left)
-		target_card.seal_sprite.visible = true
 	elif ability_card.info.ability.effect == Ability.AbilityEffect.SHIELD:
 		print("APPLYING SHIELD TO CARD")
 		var target_slot_no = Field.convert_to_index(packet.target_position.to_array(), true)
