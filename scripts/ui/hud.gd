@@ -27,7 +27,7 @@ func _on_hide_shortcuts() -> void:
 	shortcuts_label.text = "   "
 
 
-func _process(delta) -> void:
+func _process(_delta) -> void:
 	if Input.is_action_just_pressed("pause"):
 		if pause_screen.visible:
 			pause_screen.visible = false

@@ -63,7 +63,7 @@ var ram_manager: RamManager = null
 var mouse_input_functions: Array[Callable] = []
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("click"):
 		for callable in mouse_input_functions:
 			callable.call()

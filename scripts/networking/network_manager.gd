@@ -10,8 +10,8 @@ signal rule_info(packet: RuleInfoPacket)
 signal match_found(packet: MatchFoundPacket)
 signal unknown_packet(packet: UnknownPacketPacket)
 signal switch_place(packet: SwitchPlacePacket)
+signal use_ability(packet: UseAbilityPacket)
 signal start_turn(packet: StartTurnPacket)
-signal end_turn(packet: EndTurnPacket)
 signal draw_card(packet: DrawCardPacket)
 
 signal attack(packet: AttackPacket)
@@ -131,18 +131,21 @@ func receive_command(msg: String):
 
 		PacketType.SwitchPlace:
 			if packet.is_you:
+				switch_place.emit(packet)
 				if not packet.valid:
 					invalid_command.emit("Switch by connection failed!")
 			else:
 				RenderOpponentAction.switch.emit(packet)
 		PacketType.UseAbility:
 			if packet.is_you:
+				use_ability.emit(packet)
 				if not packet.valid:
 					invalid_command.emit("Ability usage by connection failed!")
 			else:
 				RenderOpponentAction.ability.emit(packet)
 
 		PacketType.StartTurn:
+			start_turn.emit(packet)
 			RenderOpponentAction.opponent_finished.emit()
 
 		PacketType.DrawCard:

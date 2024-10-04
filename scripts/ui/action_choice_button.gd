@@ -13,7 +13,7 @@ func _ready():
 	pressed.connect(_on_pressed)
 
 
-func _process(delta) -> void:
+func _process(_delta) -> void:
 	if buttons.visible and visible and Input.is_action_just_pressed(shortcut_key):
 		print(visible, buttons.visible)
 		_on_pressed()

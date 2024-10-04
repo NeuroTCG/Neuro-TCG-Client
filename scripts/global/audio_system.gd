@@ -55,6 +55,7 @@ func play_music(sound):
 
 func end_music():
 	music_player.stop()
+	music_ended.emit()
 
 
 func set_music_volume(vol, dur = 0.5):
@@ -106,10 +107,10 @@ func _remove_tween(player: AudioStreamPlayer) -> void:
 
 func _on_fade_completed(
 	player: AudioStreamPlayer,
-	tween: Tween,
-	from: float,
+	_tween: Tween,
+	_from: float,
 	to: float,
-	duration: float,
+	_duration: float,
 	property = "volume_db"
 ):
 	_remove_tween(player)
@@ -119,13 +120,15 @@ func _on_fade_completed(
 		"volume_db":
 			if to <= -79.0:
 				player.stop()
+				music_ended.emit()
 		"pitch_scale":
 			if to < 0.1:
 				player.stop()
+				music_ended.emit()
 
 
 # ########################################################## #
-func _process(delta):
+func _process(_delta):
 	# Play a queued sound if any players are available.
 	if not queue.is_empty() and not available_sounds.is_empty():
 		available_sounds[0].stream = queue.pop_front()

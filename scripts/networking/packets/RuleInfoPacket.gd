@@ -17,8 +17,8 @@ func to_dict() -> Dictionary:
 
 
 static func from_dict(d: Dictionary):
-	var card_id_mapping = {}
+	var card_id_mapping_ = {}
 	var map = d["card_id_mapping"]
 	for i in map:
-		card_id_mapping[int(i)] = CardStats.from_dict(map[i])
-	return RuleInfoPacket.new(card_id_mapping)
+		card_id_mapping_[int(i)] = CardStats.from_dict(map[i])
+	return RuleInfoPacket.new(card_id_mapping_)

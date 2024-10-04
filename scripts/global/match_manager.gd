@@ -36,7 +36,7 @@ func _ready() -> void:
 	Global.network_manager.match_found.connect(_on_match_found)
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("end_turn") and not _opponent_turn:
 		print("Ending player turn")
 		for callable in Global.mouse_input_functions:

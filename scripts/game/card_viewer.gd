@@ -11,7 +11,7 @@ func _ready():
 	Global.close_view.connect(_on_close_view)
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("space"):
 		visible = false
 
