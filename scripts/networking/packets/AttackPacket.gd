@@ -16,7 +16,7 @@ func _init(
 	attacker_position_: CardPosition,
 	target_card_: CardState,
 	attacker_card_: CardState
-):
+) -> void:
 	super(PacketType.Attack)
 	is_you = is_you_
 	valid = valid_
@@ -38,7 +38,7 @@ func to_dict() -> Dictionary:
 	}
 
 
-static func from_dict(d: Dictionary):
+static func from_dict(d: Dictionary) -> AttackPacket:
 	return AttackPacket.new(
 		d["is_you"],
 		d["valid"],

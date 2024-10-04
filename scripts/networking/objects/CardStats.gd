@@ -56,7 +56,7 @@ func to_dict() -> Dictionary:
 	}
 
 
-static func from_dict(d: Dictionary):
+static func from_dict(d: Dictionary) -> CardStats:
 	return CardStats.new(
 		d["graphics"],
 		d["max_hp"],

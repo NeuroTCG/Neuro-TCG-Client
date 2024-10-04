@@ -4,7 +4,7 @@ extends Packet
 var board: BoardState
 
 
-func _init(board_: BoardState):
+func _init(board_: BoardState) -> void:
 	super(PacketType.GetBoardStateResponse)
 	board = board_
 
@@ -16,5 +16,5 @@ func to_dict() -> Dictionary:
 	}
 
 
-static func from_dict(d: Dictionary):
+static func from_dict(d: Dictionary) -> GetBoardStateResponsePacket:
 	return GetBoardStateResponsePacket.new(BoardState.from_dict(d["board"]))

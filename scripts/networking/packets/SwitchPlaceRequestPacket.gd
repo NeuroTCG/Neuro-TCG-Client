@@ -5,7 +5,7 @@ var position1: CardPosition
 var position2: CardPosition
 
 
-func _init(position1_: CardPosition, position2_: CardPosition):
+func _init(position1_: CardPosition, position2_: CardPosition) -> void:
 	super(PacketType.SwitchPlaceRequest)
 	position1 = position1_
 	position2 = position2_
@@ -19,7 +19,7 @@ func to_dict() -> Dictionary:
 	}
 
 
-static func from_dict(d: Dictionary):
+static func from_dict(d: Dictionary) -> SwitchPlaceRequestPacket:
 	return SwitchPlaceRequestPacket.new(
 		CardPosition.from_array(d["position1"]), CardPosition.from_array(d["position2"])
 	)

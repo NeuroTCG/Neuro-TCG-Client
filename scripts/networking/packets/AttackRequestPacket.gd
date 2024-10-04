@@ -5,7 +5,7 @@ var target_position: CardPosition
 var attacker_position: CardPosition
 
 
-func _init(target_position_: CardPosition, attacker_position_: CardPosition):
+func _init(target_position_: CardPosition, attacker_position_: CardPosition) -> void:
 	super(PacketType.AttackRequest)
 	target_position = target_position_
 	attacker_position = attacker_position_
@@ -19,7 +19,7 @@ func to_dict() -> Dictionary:
 	}
 
 
-static func from_dict(d: Dictionary):
+static func from_dict(d: Dictionary) -> AttackRequestPacket:
 	return AttackRequestPacket.new(
 		CardPosition.from_array(d["target_position"]),
 		CardPosition.from_array(d["attacker_position"])

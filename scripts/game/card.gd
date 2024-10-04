@@ -1,17 +1,17 @@
 extends Node2D
 class_name Card
 
-@onready var animation_player := $AnimationPlayer
-@onready var card_hover_sprite = $CardBack/CardHover
-@onready var card_unhover_sprite = $CardBack/CardUnhover
-@onready var collision = $Area2D/CollisionShape2D
-@onready var card_sprite = $CardBack/CardFront
-@onready var attack_sprite = $AttackSprite
-@onready var buttons = %Buttons
-@onready var atk_label = %AtkLabel
-@onready var hp_label = %HpLabel
-@onready var seal_sprite = $SealSprite
-@onready var shield_sprite = $ShieldSprite
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var card_hover_sprite := $CardBack/CardHover
+@onready var card_unhover_sprite := $CardBack/CardUnhover
+@onready var collision: CollisionShape2D = $Area2D/CollisionShape2D
+@onready var card_sprite := $CardBack/CardFront
+@onready var attack_sprite := $AttackSprite
+@onready var buttons := %Buttons
+@onready var atk_label: Label = %AtkLabel
+@onready var hp_label: Label = %HpLabel
+@onready var seal_sprite: Sprite2D = $SealSprite
+@onready var shield_sprite: Sprite2D = $ShieldSprite
 
 enum Placement {
 	DECK,
@@ -175,7 +175,7 @@ func show_buttons(actions: Array) -> void:
 	buttons.visible = true
 	buttons.position.y = button_y_pos - actions.size() * 13
 
-	var shortcut_strings = []
+	var shortcut_strings := []
 
 	for button in buttons.get_children():
 		if button.button_action in actions:
@@ -202,12 +202,12 @@ func hide_buttons() -> void:
 	buttons.visible = false
 
 
-func move_and_reanchor(pos: Vector2):
+func move_and_reanchor(pos: Vector2) -> void:
 	anchor_position = pos
 	visually_move_card(anchor_position)
 
 
-func visually_move_card(end_pos: Vector2, time := 0.5):
+func visually_move_card(end_pos: Vector2, time := 0.5) -> void:
 	if movement_tween:
 		movement_tween.kill()
 
@@ -220,31 +220,31 @@ func visually_move_card(end_pos: Vector2, time := 0.5):
 	MatchManager.input_paused = false
 
 
-func set_slot(slot: CardSlot):
+func set_slot(slot: CardSlot) -> void:
 	assert(current_slot == null)
 	current_slot = slot
 	slot.stored_card = self
 
 
-func remove_from_slot():
+func remove_from_slot() -> void:
 	assert(current_slot != null)
 	current_slot.stored_card = null
 	current_slot = null
 
 
-func set_shield(num_turns: int):
+func set_shield(num_turns: int) -> void:
 	assert(num_turns >= 0)
 	state.shield = num_turns
 	shield_sprite.visible = num_turns > 0
 
 
-func set_seal(num_turns: int):
+func set_seal(num_turns: int) -> void:
 	assert(num_turns >= 0)
 	state.sealed_turns_left = num_turns
 	seal_sprite.visible = num_turns > 0
 
 
-func take_damage(amount: int):
+func take_damage(amount: int) -> void:
 	assert(amount >= 0)
 
 	if state.shield > 0:
@@ -261,17 +261,17 @@ func take_damage(amount: int):
 	render_attack(state.health)
 
 
-func heal(amount: int):
+func heal(amount: int) -> void:
 	assert(amount > 0)
 	state.health += amount  # not capped by design
 
 
 ## By default sets z index to 0
-func set_card_visibility(index := 0):
+func set_card_visibility(index := 0) -> void:
 	z_index = index
 
 
-func shift_card_y(amount: float, time := 0.1):
+func shift_card_y(amount: float, time := 0.1) -> void:
 	if movement_tween:
 		movement_tween.kill()
 	movement_tween = get_tree().create_tween()
@@ -289,9 +289,9 @@ func render_attack(_hp: int) -> void:
 	animation_player.play("nuke")
 
 
-func _on_mouse_hover():
+func _on_mouse_hover() -> void:
 	mouse_over = true
 
 
-func _on_mouse_exit():
+func _on_mouse_exit() -> void:
 	mouse_over = false

@@ -15,7 +15,7 @@ func _init(
 	phase_: int,
 	shield_: int,
 	sealed_turns_left_: int
-):
+) -> void:
 	id = id_
 	health = health_
 	ability_was_used = ability_was_used_
@@ -39,7 +39,7 @@ static func fromCardStats(id_: int, stats: CardStats) -> CardState:
 	return CardState.new(id_, stats.max_hp, false, Card.TurnPhase.MoveOrAction, 0, 0)
 
 
-static func from_dict(d):
+static func from_dict(d: Dictionary) -> CardState:
 	if d == null:
 		return null
 

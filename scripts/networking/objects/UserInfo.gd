@@ -4,7 +4,7 @@ var username: String
 var region: String
 
 
-func _init(username_: String, region_: String):
+func _init(username_: String, region_: String) -> void:
 	username = username_
 	region = region_
 
@@ -16,5 +16,5 @@ func to_dict() -> Dictionary:
 	}
 
 
-static func from_dict(d: Dictionary):
+static func from_dict(d: Dictionary) -> UserInfo:
 	return UserInfo.new(d["username"], d["region"])

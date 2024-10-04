@@ -9,7 +9,7 @@ var ram: Array[int]
 
 func _init(
 	cards_: Array, traps_: Array, first_player_active_: bool, hands_: Array, ram_: Array[int]
-):
+) -> void:
 	cards = cards_
 	traps = traps_
 	first_player_active = first_player_active_
@@ -18,7 +18,7 @@ func _init(
 
 
 func to_dict() -> Dictionary:
-	var lcards = []
+	var lcards := []
 	for player in cards:
 		lcards.append([])
 		for row in player:
@@ -36,8 +36,8 @@ func to_dict() -> Dictionary:
 	}
 
 
-static func from_dict(d: Dictionary):
-	var lcards = []
+static func from_dict(d: Dictionary) -> BoardState:
+	var lcards := []
 	for player in d["cards"]:
 		lcards.append([])
 		for row in player:

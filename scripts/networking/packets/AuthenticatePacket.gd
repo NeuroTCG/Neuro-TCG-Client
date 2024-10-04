@@ -4,7 +4,7 @@ class_name AuthenticatePacket
 var username: String
 
 
-func _init(username_: String):
+func _init(username_: String) -> void:
 	super(PacketType.Authenticate)
 	username = username_
 
@@ -16,5 +16,5 @@ func to_dict() -> Dictionary:
 	}
 
 
-static func from_dict(d: Dictionary):
+static func from_dict(d: Dictionary) -> AuthenticatePacket:
 	return AuthenticatePacket.new(d["username"])

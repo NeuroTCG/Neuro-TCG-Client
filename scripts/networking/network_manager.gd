@@ -24,14 +24,14 @@ signal on_packet_received(packet: Packet)
 
 var connection := Connection.new()
 
-const protocol_version = 1
+const PROTOCOL_VERSION := 1
 
 
 func _ready() -> void:
 	add_child(connection)
 
 
-func start_initial_packet_sequence():
+func start_initial_packet_sequence() -> void:
 	invalid_command.connect(__on_invalid_command)
 	client_info_accept.connect(__on_client_info_answer, CONNECT_ONE_SHOT)
 	authentication_valid.connect(__on_authenticate_answer, CONNECT_ONE_SHOT)
@@ -39,28 +39,28 @@ func start_initial_packet_sequence():
 	rule_info.connect(__on_rules_packet, CONNECT_ONE_SHOT)
 	match_found.connect(__on_match_found, CONNECT_ONE_SHOT)
 	await connection.wait_until_connection_opened()
-	send_packet(ClientInfoPacket.new("Official Client", "0.0.1", protocol_version))
+	send_packet(ClientInfoPacket.new("Official Client", "0.0.1", PROTOCOL_VERSION))
 
 
-func __on_invalid_command(error: String):
+func __on_invalid_command(error: String) -> void:
 	assert(false, error)
 
 
-func __on_unknown_packet(packet: UnknownPacketPacket):
+func __on_unknown_packet(packet: UnknownPacketPacket) -> void:
 	print("Unknown packet with message '%s' was sent to server" % packet.message)
 	assert(false, "unknown packets should not exist")
 
 
-func __on_disconnect(packet: DisconnectPacket):
+func __on_disconnect(packet: DisconnectPacket) -> void:
 	print("Client info was invalid: '%s' (%s)" % [packet.message, packet.reason])
 
 
-func __on_client_info_answer(_packet: ClientInfoAcceptPacket):
-	print("Connected to server (protocol v%d)" % protocol_version)
+func __on_client_info_answer(_packet: ClientInfoAcceptPacket) -> void:
+	print("Connected to server (protocol v%d)" % PROTOCOL_VERSION)
 	send_packet(AuthenticatePacket.new("Neuro"))
 
 
-func __on_authenticate_answer(packet: Packet):
+func __on_authenticate_answer(packet: Packet) -> void:
 	print("User authenticated")
 	if (packet as AuthenticationValidPacket).has_running_game:
 		print("Reconnecting to existing game...")
@@ -68,12 +68,12 @@ func __on_authenticate_answer(packet: Packet):
 		print("Waiting for matchmaking")
 
 
-func __on_rules_packet(packet: Packet):
+func __on_rules_packet(packet: Packet) -> void:
 	print("Rules received")
 	print((packet as RuleInfoPacket).card_id_mapping)
 
 
-func __on_match_found(packet: MatchFoundPacket):
+func __on_match_found(packet: MatchFoundPacket) -> void:
 	print("Match found")
 	if packet.is_first_player:
 		print("We are first")
@@ -87,14 +87,14 @@ func __on_match_found(packet: MatchFoundPacket):
 	match_found.disconnect(__on_match_found)
 
 
-func send_packet(packet: Packet):
-	var data = PacketUtils.serialize(packet)
+func send_packet(packet: Packet) -> void:
+	var data := PacketUtils.serialize(packet)
 	connection.ws.send_text(data)
 	print("'%s' packet was sent" % packet.type)
 
 
-func receive_command(msg: String):
-	var packet = PacketUtils.deserialize(msg)
+func receive_command(msg: String) -> void:
+	var packet := PacketUtils.deserialize(msg)
 	print("'%s' packet received by packet logger" % [packet.type])
 
 	on_packet_received.emit(packet)

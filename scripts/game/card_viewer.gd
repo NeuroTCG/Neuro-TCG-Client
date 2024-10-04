@@ -2,11 +2,11 @@ extends Node2D
 
 var tween: Tween
 
-@onready var sprite = $Sprite2D
-@onready var description = $Description
+@onready var sprite: Sprite2D = $Sprite2D
+@onready var description: RichTextLabel = $Description
 
 
-func _ready():
+func _ready() -> void:
 	MatchManager.action_view.connect(_on_view)
 	Global.close_view.connect(_on_close_view)
 

@@ -1,9 +1,9 @@
 extends Control
 
-var main_menu = preload("res://scenes/ui/main_menu.tscn")
+var main_menu := preload("res://scenes/ui/main_menu.tscn")
 
 
-func _on_return_button_pressed():
+func _on_return_button_pressed() -> void:
 	SavedSettings.save_settings.emit()
 
 	get_parent().add_child(main_menu.instantiate())

@@ -2,12 +2,12 @@ extends Node2D
 
 var tween: Tween
 
-@onready var sprite = $Sprite2D
+@onready var sprite: Sprite2D = $Sprite2D
 
 var current_displaid_card: Card
 
 
-func _ready():
+func _ready() -> void:
 	Global.hand_card_selected.connect(_on_card_selected)
 	Global.hand_card_unselected.connect(_on_card_unselected)
 

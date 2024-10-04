@@ -16,14 +16,14 @@ func _ready() -> void:
 	ability.connect(_on_ability)
 
 
-func _on_summon(card_id, position) -> void:
+func _on_summon(card_id: int, position: Array[int]) -> void:
 	print("Summon")
 	Global.network_manager.send_packet(
 		SummonRequestPacket.new(card_id, CardPosition.from_array(position))
 	)
 
 
-func _on_attack(_card_id, target_pos, attack_pos) -> void:
+func _on_attack(_card_id: int, target_pos: Array[int], attack_pos: Array[int]) -> void:
 	print("Attack")
 	Global.network_manager.send_packet(
 		AttackRequestPacket.new(
@@ -36,14 +36,14 @@ func _on_player_finished() -> void:
 	Global.network_manager.send_packet(EndTurnPacket.new())
 
 
-func _on_switch(pos1, pos2) -> void:
+func _on_switch(pos1: Array[int], pos2: Array[int]) -> void:
 	print("Switch")
 	Global.network_manager.send_packet(
 		SwitchPlaceRequestPacket.new(CardPosition.from_array(pos1), CardPosition.from_array(pos2))
 	)
 
 
-func _on_ability(target_pos, ability_pos) -> void:
+func _on_ability(target_pos: Array[int], ability_pos: Array[int]) -> void:
 	print("Ability")
 	Global.network_manager.send_packet(
 		UseAbilityRequestPacket.new(

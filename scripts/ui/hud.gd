@@ -1,13 +1,13 @@
 extends CanvasLayer
 
-@onready var pause_screen = $PauseScreen
-@onready var shortcuts_label = $ShortcutsLabel
+@onready var pause_screen := $PauseScreen
+@onready var shortcuts_label: Label = $ShortcutsLabel
 
-@onready var notice = $Notice
-@onready var notice_text = %NoticeText
-@onready var close_notice_button = %CloseNoticeButton
+@onready var notice := $Notice
+@onready var notice_text: Label = %NoticeText
+@onready var close_notice_button: Button = %CloseNoticeButton
 
-var main_menu = preload("res://scenes/ui/main_menu.tscn")
+var main_menu := preload("res://scenes/ui/main_menu.tscn")
 
 
 func _ready() -> void:
@@ -40,7 +40,7 @@ func return_to_menu() -> void:
 	get_parent().queue_free()
 
 
-func _on_quit_button_pressed():
+func _on_quit_button_pressed() -> void:
 	return_to_menu()
 
 
@@ -51,5 +51,5 @@ func _on_notice(msg: String) -> void:
 	notice.visible = false
 
 
-func _on_close_notice_button_pressed():
+func _on_close_notice_button_pressed() -> void:
 	notice.visible = false

@@ -1,17 +1,17 @@
 extends Control
 class_name LoadingScreen
 
-var game_node = load("res://scenes/game/game.tscn")
+var game_node := load("res://scenes/game/game.tscn")
 
 var loading_text: String = "Loading...":
 	set(new_text):
 		$Label.text = new_text
 
-var duration: float = 2.0
+var duration := 2.0
 
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	Global.network_manager = NetworkManager.new()
 	Global.add_child(Global.network_manager)
 	Global.network_manager_ready.emit()
@@ -22,7 +22,7 @@ func _ready():
 	Global.network_manager.start_initial_packet_sequence()
 
 
-func __on_match_found(_packet: MatchFoundPacket):
+func __on_match_found(_packet: MatchFoundPacket) -> void:
 	loading_text = "Match found"
 	var game = game_node.instantiate()
 	get_parent().add_child(game)
@@ -35,13 +35,13 @@ func __on_match_found(_packet: MatchFoundPacket):
 	queue_free()
 
 
-func __on_client_info_accept(_packet: ClientInfoAcceptPacket):
+func __on_client_info_accept(_packet: ClientInfoAcceptPacket) -> void:
 	loading_text = "Authenticating..."
 
 
-func __on_authentication_valid(_packet: AuthenticationValidPacket):
+func __on_authentication_valid(_packet: AuthenticationValidPacket) -> void:
 	loading_text = "Waiting for opponent..."
 
 
-func __tmp_on_disconnect(packet: DisconnectPacket):
+func __tmp_on_disconnect(packet: DisconnectPacket) -> void:
 	print("Disconnected with message %s" % packet.message)

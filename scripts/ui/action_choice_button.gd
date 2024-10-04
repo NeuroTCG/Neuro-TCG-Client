@@ -3,13 +3,13 @@ extends Button
 @export var button_action: MatchManager.Actions
 @export var shortcut_key: String
 
-@onready var buttons = get_parent()
+@onready var buttons := get_parent()
 
 var mouse_over := false
 
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	pressed.connect(_on_pressed)
 
 
@@ -45,9 +45,9 @@ func _on_pressed() -> void:
 	buttons.hide()
 
 
-func _on_mouse_entered():
+func _on_mouse_entered() -> void:
 	mouse_over = true
 
 
-func _on_mouse_exited():
+func _on_mouse_exited() -> void:
 	mouse_over = false

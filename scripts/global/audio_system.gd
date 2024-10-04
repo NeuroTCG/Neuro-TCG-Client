@@ -2,21 +2,21 @@ extends Node
 
 signal music_ended
 
-var num_of_sound_effects = 8
-var music_bus = "music"
-var sound_bus = "soundfx"
+var num_of_sound_effects := 8
+var music_bus := "music"
+var sound_bus := "soundfx"
 
 var music_player: AudioStreamPlayer
-var available_sounds = []
-var queue = []
-var queue_vol = []
-var queue_pos = []
+var available_sounds: Array[AudioStreamPlayer2D] = []
+var queue: Array[AudioStream] = []
+var queue_vol: Array[float] = []
+var queue_pos: Array[Vector2] = []
 
 var tweens: Dictionary = {}
 
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	AudioServer.add_bus()
 	AudioServer.add_bus()
 	AudioServer.set_bus_name(1, music_bus)
@@ -25,26 +25,25 @@ func _ready():
 	#create a pool
 	self.process_mode = Node.PROCESS_MODE_ALWAYS
 	for i in num_of_sound_effects:
-		var p = AudioStreamPlayer2D.new()
-		add_child(p)
-		available_sounds.append(p)
-		p.attenuation = 7.0
-		p.connect("finished", _on_stream_finished.bind(p))
-		p.bus = sound_bus
-	var mu = AudioStreamPlayer.new()
-	add_child(mu)
-	mu.process_mode = Node.PROCESS_MODE_ALWAYS
-	mu.bus = music_bus
-	music_player = mu
+		var player := AudioStreamPlayer2D.new()
+		add_child(player)
+		available_sounds.append(player)
+		player.attenuation = 7.0
+		player.connect("finished", _on_stream_finished.bind(player))
+		player.bus = sound_bus
+	music_player = AudioStreamPlayer.new()
+	add_child(music_player)
+	music_player.process_mode = Node.PROCESS_MODE_ALWAYS
+	music_player.bus = music_bus
 
 
-func play_sfx(sound, position, vol = 1.0):
+func play_sfx(sound: AudioStream, position: Vector2, vol := 1.0) -> void:
 	queue.append(sound)
 	queue_pos.append(position)
 	queue_vol.append(vol)
 
 
-func play_music(sound):
+func play_music(sound: AudioStream) -> void:
 	_remove_tween(music_player)
 
 	music_player.stream = sound
@@ -53,16 +52,16 @@ func play_music(sound):
 	music_player.pitch_scale = 1
 
 
-func end_music():
+func end_music() -> void:
 	music_player.stop()
 	music_ended.emit()
 
 
-func set_music_volume(vol, dur = 0.5):
+func set_music_volume(vol: float, dur := 0.5) -> void:
 	fade_volume(music_player, music_player.volume_db, linear_to_db(vol), dur)
 
 
-func set_music_pitch(pitch, dur = 0.5):
+func set_music_pitch(pitch: float, dur := 0.5) -> void:
 	fade_volume(music_player, music_player.pitch_scale, pitch, dur, "pitch_scale")
 
 
@@ -111,8 +110,8 @@ func _on_fade_completed(
 	_from: float,
 	to: float,
 	_duration: float,
-	property = "volume_db"
-):
+	property := "volume_db"
+) -> void:
 	_remove_tween(player)
 
 	# If we just faded out then our player is now available
@@ -128,7 +127,7 @@ func _on_fade_completed(
 
 
 # ########################################################## #
-func _process(_delta):
+func _process(_delta: float) -> void:
 	# Play a queued sound if any players are available.
 	if not queue.is_empty() and not available_sounds.is_empty():
 		available_sounds[0].stream = queue.pop_front()
@@ -138,6 +137,6 @@ func _process(_delta):
 		available_sounds.pop_front()
 
 
-func _on_stream_finished(stream):
+func _on_stream_finished(stream: AudioStreamPlayer2D) -> void:
 	# When finished playing a stream, make the player available again.
 	available_sounds.append(stream)

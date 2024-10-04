@@ -7,7 +7,7 @@ var position1: CardPosition
 var position2: CardPosition
 
 
-func _init(is_you_: bool, valid_: bool, position1_: CardPosition, position2_: CardPosition):
+func _init(is_you_: bool, valid_: bool, position1_: CardPosition, position2_: CardPosition) -> void:
 	super(PacketType.SwitchPlace)
 	is_you = is_you_
 	valid = valid_
@@ -25,7 +25,7 @@ func to_dict() -> Dictionary:
 	}
 
 
-static func from_dict(d: Dictionary):
+static func from_dict(d: Dictionary) -> SwitchPlacePacket:
 	return SwitchPlacePacket.new(
 		d["is_you"],
 		d["valid"],

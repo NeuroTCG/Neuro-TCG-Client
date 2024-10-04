@@ -9,7 +9,7 @@ enum WindowMode {
 	BORDERLESS_FULL_SCREEN,
 }
 
-var save_path = "user://saved_options_v1.save"
+var save_path := "user://saved_options_v1.save"
 
 #region SETTINGS
 var settings := {
@@ -28,7 +28,7 @@ func _ready() -> void:
 
 func load_data() -> void:
 	if FileAccess.file_exists(save_path):
-		var file = FileAccess.open(save_path, FileAccess.READ)
+		var file := FileAccess.open(save_path, FileAccess.READ)
 		settings = file.get_var()
 		if not settings.has("ai_selected"):
 			settings.ai_selected = 0
@@ -39,7 +39,7 @@ func load_data() -> void:
 
 
 func save_data() -> void:
-	var file = FileAccess.open(save_path, FileAccess.WRITE)
+	var file := FileAccess.open(save_path, FileAccess.WRITE)
 	file.store_var(settings)
 
 

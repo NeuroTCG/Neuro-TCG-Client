@@ -10,7 +10,7 @@ var new_ram: int
 
 func _init(
 	is_you_: bool, valid_: bool, position_: CardPosition, new_card_: CardState, new_ram_: int
-):
+) -> void:
 	super(PacketType.Summon)
 	is_you = is_you_
 	valid = valid_
@@ -30,7 +30,7 @@ func to_dict() -> Dictionary:
 	}
 
 
-static func from_dict(d: Dictionary):
+static func from_dict(d: Dictionary) -> SummonPacket:
 	return SummonPacket.new(
 		d["is_you"],
 		d["valid"],

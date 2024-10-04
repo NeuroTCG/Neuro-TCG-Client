@@ -3,7 +3,7 @@ class_name Packet
 var type: String
 
 
-func _init(type_: String):
+func _init(type_: String) -> void:
 	assert(type_ in PacketType.allTypes)
 	type = type_
 

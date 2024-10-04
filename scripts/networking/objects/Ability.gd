@@ -43,7 +43,7 @@ func to_dict() -> Dictionary:
 	}
 
 
-static func from_dict(d: Dictionary):
+static func from_dict(d: Dictionary) -> Ability:
 	return Ability.new(
 		AbilityEffect.get(d["effect"]), d["value"], AbilityRange.get(d["range"]), d["cost"]
 	)

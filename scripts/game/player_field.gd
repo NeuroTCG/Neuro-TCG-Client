@@ -3,7 +3,7 @@ class_name PlayerField
 ## When moving a card, keep track of card.placement, Slots,
 ## cards, and selected_card
 
-var cards := []
+var cards: Array[Card] = []
 
 var selected_slot: CardSlot = null
 
@@ -26,7 +26,7 @@ func _ready() -> void:
 		slot.visible = false
 
 		# NOTE: don't remove this one. This stays for debugging
-		var label = Label.new()
+		var label := Label.new()
 		add_child(label)
 		label.text = str(slot.slot_no)
 		label.global_position = slot.global_position + Vector2(40, 0)
@@ -85,7 +85,7 @@ func _on_card_selected(card: Card) -> void:
 	if MatchManager.current_action == MatchManager.Actions.SWITCH:
 		MatchManager.current_action = MatchManager.Actions.IDLE
 	else:
-		var buttons = [
+		var buttons := [
 			MatchManager.Actions.SWITCH, MatchManager.Actions.ATTACK, MatchManager.Actions.VIEW
 		]
 
@@ -143,7 +143,7 @@ func _on_action_attack() -> void:
 
 # TODO: either rename this if it only checks for ram or merge it with other stuff
 func _on_action_ability() -> void:
-	var player_ram = Global.ram_manager.player_ram
+	var player_ram := Global.ram_manager.player_ram
 	if selected_slot.stored_card.info.ability.cost > player_ram:
 		Global.notice.emit("Insufficent Ram to use this ability!")
 	else:
@@ -205,8 +205,8 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 	assert(selected_slot.stored_card, "No card selected.")
 
-	var player_card = selected_slot.stored_card
-	var player_slot_no = get_slot_no(player_card)
+	var player_card := selected_slot.stored_card
+	var player_slot_no := get_slot_no(player_card)
 
 	Global.hide_enemy_cards.emit()
 	player_card.state.phase = Card.TurnPhase.Done
@@ -218,7 +218,7 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 		)
 
 		# take_damage deletes the card if it dies
-		var can_counterattack = not slot_is_reachable(player_slot_no, enemy_card)
+		var can_counterattack := not slot_is_reachable(player_slot_no, enemy_card)
 
 		enemy_card.take_damage(player_card.info.base_atk)
 
@@ -244,8 +244,8 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 			player_card.info.ability.effect == Ability.AbilityEffect.ATTACK
 			and player_card.info.ability.range == Ability.AbilityRange.ENEMY_ROW
 		):
-			var atk_value = player_card.info.ability.value
-			var row: Array
+			var atk_value := player_card.info.ability.value
+			var row: Array[int]
 
 			if enemy_slot_no in Global.ENEMY_BACK_ROW:
 				row = Global.ENEMY_BACK_ROW

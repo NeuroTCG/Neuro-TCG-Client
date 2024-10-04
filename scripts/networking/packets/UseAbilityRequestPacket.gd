@@ -5,7 +5,7 @@ var target_position: CardPosition
 var ability_position: CardPosition
 
 
-func _init(target_position_: CardPosition, ability_position_: CardPosition):
+func _init(target_position_: CardPosition, ability_position_: CardPosition) -> void:
 	super(PacketType.UseAbilityRequest)
 	target_position = target_position_
 	ability_position = ability_position_
@@ -19,7 +19,7 @@ func to_dict() -> Dictionary:
 	}
 
 
-static func from_dict(d: Dictionary):
+static func from_dict(d: Dictionary) -> UseAbilityRequestPacket:
 	return UseAbilityRequestPacket.new(
 		CardPosition.from_array(d["target_position"]),
 		CardPosition.from_array(d["ability_position"])

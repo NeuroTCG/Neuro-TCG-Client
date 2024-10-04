@@ -1,7 +1,7 @@
 extends Node2D
 class_name Field
 
-var destroyed_cards := []
+var destroyed_cards: Array[Card] = []
 
 @export var player_field: Field
 @export var enemy_field: Field
@@ -13,13 +13,17 @@ enum Side {
 	Enemy,
 }
 
-enum RowPositions { UNKNOWN = -1, FRONT = 0, BACK = 1 }
+enum RowPositions {
+	UNKNOWN = -1,
+	FRONT = 0,
+	BACK = 1,
+}
 
 
 ## searches both fields for the slot, so it doesn't matter which side is used
 func get_slot(slot: int) -> CardSlot:
-	var player_slot = player_field.get_node_or_null("Slot" + str(slot))
-	var enemy_slot = enemy_field.get_node_or_null("Slot" + str(slot))
+	var player_slot: CardSlot = player_field.get_node_or_null("Slot" + str(slot))
+	var enemy_slot: CardSlot = enemy_field.get_node_or_null("Slot" + str(slot))
 
 	if player_slot != null:
 		return player_slot
@@ -53,7 +57,7 @@ func move_card(from: int, to: int) -> void:
 	var from_slot := get_slot(from)
 	var to_slot := get_slot(to)
 
-	var card = from_slot.stored_card
+	var card := from_slot.stored_card
 	assert(
 		to_slot.stored_card == null,
 		"tried to move a card onto another one; use switch_cards to swap them"
@@ -78,15 +82,15 @@ func get_row_for_card_slot(slot_no: int) -> RowPositions:
 ## Return true if a target slot is reachable by given card
 ## NOTE: Field Independent
 func slot_is_reachable(target_slot_no: int, atk_card: Card) -> bool:
-	var atk_slot_no = get_slot_no(atk_card)
+	var atk_slot_no := get_slot_no(atk_card)
 
-	var is_player_front_empty = slots_empty(Global.PLAYER_FRONT_ROW)
-	var is_opponent_front_empty = slots_empty(Global.ENEMY_FRONT_ROW)
+	var is_player_front_empty := slots_empty(Global.PLAYER_FRONT_ROW)
+	var is_opponent_front_empty := slots_empty(Global.ENEMY_FRONT_ROW)
 
-	var attacker_reach = atk_card.info.attack_range
+	var attacker_reach := atk_card.info.attack_range
 
-	var atk_row = get_row_for_card_slot(atk_slot_no)
-	var target_row = get_row_for_card_slot(target_slot_no)
+	var atk_row := get_row_for_card_slot(atk_slot_no)
+	var target_row := get_row_for_card_slot(target_slot_no)
 
 	match [atk_row, target_row]:
 		[RowPositions.FRONT, RowPositions.FRONT]:
@@ -105,7 +109,7 @@ func slot_is_reachable(target_slot_no: int, atk_card: Card) -> bool:
 ## Returns true if a list of slots are empty
 ## Takes a list of slot numbers
 ## NOTE: Field Independent
-func slots_empty(slot_pos) -> bool:
+func slots_empty(slot_pos: Array) -> bool:
 	for no in slot_pos:
 		var slot = get_slot(no)
 		if slot.stored_card != null:
@@ -115,18 +119,17 @@ func slots_empty(slot_pos) -> bool:
 
 
 ## Returns slot number of card
-## Returns 0 if card isn't in any slot
 func get_slot_no(card: Card) -> int:
 	return card.current_slot.slot_no
 
 
 ## Returns position of card in array form
-func get_slot_array(card: Card) -> Array:
+func get_slot_array(card: Card) -> Array[int]:
 	return index_to_array(get_slot_no(card))
 
 
 #region STATIC FUNCTIONS
-static func index_to_array(index: int) -> Array:
+static func index_to_array(index: int) -> Array[int]:
 	assert(index > 0 && index <= 14, "Index is only defined from 1 to 14, not %d" % index)
 
 	if index <= 4:

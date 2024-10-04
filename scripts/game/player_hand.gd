@@ -1,6 +1,6 @@
 extends Hand
 
-@export var game: Node2D
+@export var game: Game
 
 
 func _ready() -> void:
@@ -17,7 +17,7 @@ func _ready() -> void:
 	await game.ready
 
 
-func _process(_delta):
+func _process(_delta) -> void:
 	if MatchManager.input_paused or MatchManager._opponent_turn:
 		return
 
@@ -26,7 +26,7 @@ func _process(_delta):
 		Global.network_manager.send_packet(DrawCardRequestPacket.new())
 
 
-func _on_draw_card(packet: DrawCardPacket):
+func _on_draw_card(packet: DrawCardPacket) -> void:
 	if packet.is_you:
 		assert(packet.card_id >= 0, "draw_card was invalid")
 		add_card(packet.card_id)
@@ -36,11 +36,11 @@ func add_card(id: int) -> void:
 	assert(cards.size() < 5, "Hand should only store 5 cards")
 
 	# Create new card
-	var new_card = Card.create_card(game, id)
+	var new_card := Card.create_card(game, id)
 	new_card.global_position = game.get_node("PlayerDeck").global_position
 	new_card.flip_card()
 	cards.append(new_card)
-	await new_card.move_and_reanchor(card_positions[cards.size() - 1].global_position)
+	new_card.move_and_reanchor(card_positions[cards.size() - 1].global_position)
 
 	# Make Hand command available (Summon)
 	new_card.placement = Card.Placement.HAND
@@ -49,7 +49,7 @@ func add_card(id: int) -> void:
 func summon(hand_pos: int, slot_no: int) -> void:
 	assert(cards.size() > 0, "Cards should exist at hand when summoning")
 
-	var slot = Global.player_field.get_slot(slot_no)
+	var slot := Global.player_field.get_slot(slot_no)
 	var summon_card: Card = cards.pop_at(hand_pos)
 
 	Global.player_field.cards.append(summon_card)
@@ -66,7 +66,7 @@ func summon(hand_pos: int, slot_no: int) -> void:
 
 	# Move card and reset card visibility
 	summon_card.set_slot(slot)
-	await summon_card.move_and_reanchor(slot.global_position)
+	summon_card.move_and_reanchor(slot.global_position)
 	summon_card.set_card_visibility()
 
 
@@ -98,11 +98,6 @@ func another_card_selected(card: Card) -> bool:
 
 func _on_action_summon() -> void:
 	Global.show_player_slots_for_summon.emit()
-
-
-#func _on_action_view() -> void:
-#if selected_card:
-#Global.view_card.emit(selected_card)
 
 
 func _on_slot_chosen(slot_no: int, _card: Card) -> void:

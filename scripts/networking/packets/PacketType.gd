@@ -1,33 +1,33 @@
 class_name PacketType
 
-const ClientInfo: String = "client_info"
-const ClientInfoAccept: String = "client_info_accept"
-const Disconnect: String = "disconnect"
-const Authenticate: String = "authenticate"
-const AuthenticationValid: String = "authentication_valid"
-const RuleInfo: String = "rule_info"
-const MatchFound: String = "match_found"
-const UnknownPacket: String = "unknown_packet"
-const GetBoardState: String = "get_board_state"
-const GetBoardStateResponse: String = "get_board_state_response"
+const ClientInfo := "client_info"
+const ClientInfoAccept := "client_info_accept"
+const Disconnect := "disconnect"
+const Authenticate := "authenticate"
+const AuthenticationValid := "authentication_valid"
+const RuleInfo := "rule_info"
+const MatchFound := "match_found"
+const UnknownPacket := "unknown_packet"
+const GetBoardState := "get_board_state"
+const GetBoardStateResponse := "get_board_state_response"
 
-const Summon: String = "summon"
-const SummonRequest: String = "summon_request"
+const Summon := "summon"
+const SummonRequest := "summon_request"
 
-const Attack: String = "attack"
-const AttackRequest: String = "attack_request"
+const Attack := "attack"
+const AttackRequest := "attack_request"
 
-const SwitchPlaceRequest: String = "switch_place_request"
-const SwitchPlace: String = "switch_place"
+const SwitchPlaceRequest := "switch_place_request"
+const SwitchPlace := "switch_place"
 
-const StartTurn: String = "start_turn"
-const EndTurn: String = "end_turn"
+const StartTurn := "start_turn"
+const EndTurn := "end_turn"
 
-const DrawCardRequest: String = "draw_card_request"
-const DrawCard: String = "draw_card"
+const DrawCardRequest := "draw_card_request"
+const DrawCard := "draw_card"
 
-const UseAbilityRequest: String = "use_ability_request"
-const UseAbility: String = "use_ability"
+const UseAbilityRequest := "use_ability_request"
+const UseAbility := "use_ability"
 
 const allTypes: Array[String] = [
 	ClientInfo,

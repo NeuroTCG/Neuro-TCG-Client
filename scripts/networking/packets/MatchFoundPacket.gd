@@ -7,7 +7,7 @@ var is_reconnect: bool
 var is_first_player: bool
 
 
-func _init(opponent_: UserInfo, game_id_: int, is_reconnect_: bool, is_first_player_: bool):
+func _init(opponent_: UserInfo, game_id_: int, is_reconnect_: bool, is_first_player_: bool) -> void:
 	super(PacketType.MatchFound)
 	opponent = opponent_
 	game_id = game_id_
@@ -25,7 +25,7 @@ func to_dict() -> Dictionary:
 	}
 
 
-static func from_dict(d: Dictionary):
+static func from_dict(d: Dictionary) -> MatchFoundPacket:
 	return MatchFoundPacket.new(
 		UserInfo.from_dict(d["opponent"]), d["game_id"], d["is_reconnect"], d["is_first_player"]
 	)

@@ -27,7 +27,7 @@ static var _type_to_class: Dictionary = {
 
 
 static func deserialize(s: String) -> Packet:
-	var d = JSON.parse_string(s)
+	var d: Dictionary = JSON.parse_string(s)
 	assert(d.has("type"))
 	assert(_type_to_class.has(d["type"]), "Add %s to PacketUtils._type_to_class" % d["type"])
 
@@ -35,7 +35,7 @@ static func deserialize(s: String) -> Packet:
 
 
 static func serialize(packet: Packet) -> String:
-	var d_packet = packet.to_dict()
+	var d_packet := packet.to_dict()
 	assert(d_packet.has("type"))
 	assert(d_packet["type"] in PacketType.allTypes)
 	return JSON.stringify(d_packet)

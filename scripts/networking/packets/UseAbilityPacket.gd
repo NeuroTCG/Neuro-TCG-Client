@@ -17,7 +17,7 @@ func _init(
 	ability_position_: CardPosition,
 	target_card_: CardState,
 	attacker_card_: CardState
-):
+) -> void:
 	super(PacketType.UseAbility)
 	is_you = is_you_
 	valid = valid_
@@ -39,7 +39,7 @@ func to_dict() -> Dictionary:
 	}
 
 
-static func from_dict(d: Dictionary):
+static func from_dict(d: Dictionary) -> UseAbilityPacket:
 	return UseAbilityPacket.new(
 		d["is_you"],
 		d["valid"],

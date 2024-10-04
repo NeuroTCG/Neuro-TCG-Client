@@ -8,7 +8,14 @@ signal action_ability
 ## View is handeled separately compared to any other other action
 signal action_view(card: Card)
 
-enum Actions { SUMMON, SWITCH, ATTACK, ABILITY, VIEW, IDLE }
+enum Actions {
+	SUMMON,
+	SWITCH,
+	ATTACK,
+	ABILITY,
+	VIEW,
+	IDLE,
+}
 
 var input_paused := false
 ## Don't set this variable outside of match manager.
