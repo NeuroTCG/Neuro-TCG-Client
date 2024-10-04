@@ -1,4 +1,3 @@
-# TODO: rename to something better
 extends Node
 class_name Connection
 
