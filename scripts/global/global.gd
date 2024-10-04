@@ -9,7 +9,6 @@ const ENEMY_BACK_ROW = [8, 9, 10]
 const ENEMY_ROWS = [8, 9, 10, 11, 12, 13, 14]
 
 # FROM CARD
-# TODO: preferably remove all of this
 
 signal hand_card_selected(card: Card)
 signal hand_card_unselected(card: Card)

@@ -22,13 +22,13 @@ signal invalid_command(error: String)
 
 signal on_packet_received(packet: Packet)
 
-var client := Client.new()
+var connection := Connection.new()
 
 const protocol_version = 1
 
 
 func _ready() -> void:
-	add_child(client)
+	add_child(connection)
 
 
 func start_initial_packet_sequence():
@@ -38,7 +38,7 @@ func start_initial_packet_sequence():
 	disconnect.connect(__on_disconnect, CONNECT_ONE_SHOT)
 	rule_info.connect(__on_rules_packet, CONNECT_ONE_SHOT)
 	match_found.connect(__on_match_found, CONNECT_ONE_SHOT)
-	await client.wait_until_connection_opened()
+	await connection.wait_until_connection_opened()
 	send_packet(ClientInfoPacket.new("Official Client", "0.0.1", protocol_version))
 
 
@@ -89,7 +89,7 @@ func __on_match_found(packet: MatchFoundPacket):
 
 func send_packet(packet: Packet):
 	var data = PacketUtils.serialize(packet)
-	client.ws.send_text(data)
+	connection.ws.send_text(data)
 	print("'%s' packet was sent" % packet.type)
 
 
@@ -117,14 +117,14 @@ func receive_command(msg: String):
 		PacketType.Summon:
 			if packet.is_you:
 				if not packet.valid:
-					invalid_command.emit("Summon by client failed!")
+					invalid_command.emit("Summon by connection failed!")
 			else:
 				RenderOpponentAction.summon.emit(packet)
 		PacketType.Attack:
 			attack.emit(packet)
 			if packet.is_you:
 				if not packet.valid:
-					invalid_command.emit("Attack by client failed!")
+					invalid_command.emit("Attack by connection failed!")
 			else:
 				print("Attack Packet is received and IS FROM OPPONENT")
 				RenderOpponentAction.attack.emit(packet)
@@ -132,13 +132,13 @@ func receive_command(msg: String):
 		PacketType.SwitchPlace:
 			if packet.is_you:
 				if not packet.valid:
-					invalid_command.emit("Switch by client failed!")
+					invalid_command.emit("Switch by connection failed!")
 			else:
 				RenderOpponentAction.switch.emit(packet)
 		PacketType.UseAbility:
 			if packet.is_you:
 				if not packet.valid:
-					invalid_command.emit("Ability usage by client failed!")
+					invalid_command.emit("Ability usage by connection failed!")
 			else:
 				RenderOpponentAction.ability.emit(packet)
 

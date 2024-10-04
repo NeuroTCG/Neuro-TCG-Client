@@ -1,6 +1,6 @@
 # TODO: rename to something better
 extends Node
-class_name Client
+class_name Connection
 
 var url = "ws://127.0.0.1:9933/game"
 var ws = WebSocketPeer.new()
@@ -19,18 +19,6 @@ func wait_until_connection_opened():
 		await get_tree().process_frame
 		if timeout_timer.time_left == 0:
 			assert(false, "Connection timed out")
-
-
-#func is_connection_valid() -> bool:
-#if ws.get_ready_state() == WebSocketPeer.STATE_OPEN:
-#var error = ws.send_text("Test")
-#if error == OK:
-#print("Connection seems OK (server feedback yet to be tested)")
-#return true
-#else:
-#print("ERROR: Connection failed!")
-#
-#return false
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
