@@ -39,7 +39,8 @@ static func fromCardStats(id_: int, stats: CardStats) -> CardState:
 	return CardState.new(id_, stats.max_hp, false, Card.TurnPhase.MoveOrAction, 0, 0)
 
 
-static func from_dict(d: Dictionary) -> CardState:
+# NOTE: no type because godot doesn't have a way to write nullable types
+static func from_dict(d) -> CardState:
 	if d == null:
 		return null
 
