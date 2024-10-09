@@ -7,9 +7,10 @@ class Reason:
 	const auth_user_banned := "auth_user_banned"
 	const protocol_too_old := "protocol_too_old"
 	const opponent_disconnect := "opponent_disconnect"
+	const game_over := "game_over"
 
-	static var allReasons: Array[String] = [
-		auth_invalid, auth_user_banned, protocol_too_old, opponent_disconnect
+	static var allReasons = [
+		auth_invalid, auth_user_banned, protocol_too_old, opponent_disconnect, game_over
 	]
 
 
