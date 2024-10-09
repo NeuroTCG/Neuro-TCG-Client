@@ -179,7 +179,10 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 		VerifyClientAction.switch.emit(
 			index_to_array(slot_no), get_slot_array(selected_slot.stored_card)
 		)
-		switch_cards(slot_no, get_slot_no(selected_slot.stored_card))
+
+		var selected_slot_no = get_slot_no(selected_slot.stored_card);
+
+		switch_cards(slot_no, selected_slot_no)
 
 	if MatchManager.current_action == MatchManager.Actions.ABILITY:
 		assert(selected_slot.stored_card, "No card selected.")
@@ -194,6 +197,7 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 				get_slot_array(card), get_slot_array(selected_slot.stored_card)
 			)
 			print("Hp afterwards: ", card.state.health)
+
 
 		elif selected_slot.stored_card.info.ability.effect == Ability.AbilityEffect.SHIELD:
 			VerifyClientAction.ability.emit(
@@ -220,17 +224,26 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 		# take_damage deletes the card if it dies
 		var can_counterattack := not slot_is_reachable(player_slot_no, enemy_card)
 
-		enemy_card.take_damage(player_card.info.base_atk)
+		enemy_card.take_damage(player_card.info.base_atk, player_card, DamageEventInfo.DamageSource.ATTACK)
 
 		#region Enemy counterattack
 		if can_counterattack:
 			return
 		else:
-			player_card.take_damage(max(enemy_card.info.base_atk - 1, 0))
+
+			var dmg_event_info = DamageEventInfo.new(
+				enemy_card, player_card, max(enemy_card.info.base_atk - 1, 0),
+				DamageEventInfo.DamageSource.COUNTER_ATTACK
+			)
+
+			player_card.take_damage(dmg_event_info.amount, dmg_event_info.attacker, dmg_event_info.source)
 
 		#endregion
 
 	elif MatchManager.current_action == MatchManager.Actions.ABILITY:
+
+		var ability_targets: Array[Card] = [];
+
 		# TODO: make independent of ability range
 		if (
 			player_card.info.ability.effect == Ability.AbilityEffect.ATTACK
@@ -238,7 +251,9 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 		):
 			var atk_value = player_card.info.ability.value
 
-			enemy_card.take_damage(atk_value)
+			ability_targets = [enemy_card]
+
+			enemy_card.take_damage(atk_value, player_card, DamageEventInfo.DamageSource.ABILITY)
 
 		elif (
 			player_card.info.ability.effect == Ability.AbilityEffect.ATTACK
@@ -255,7 +270,7 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 			for slot_no in row:
 				var slot = enemy_field.get_slot(slot_no)
 				if slot.stored_card:
-					slot.stored_card.take_damage(atk_value)
+					slot.stored_card.take_damage(atk_value, player_card, DamageEventInfo.DamageSource.ABILITY)
 
 		elif player_card.info.ability.effect == Ability.AbilityEffect.SEAL:
 			# Play seal animation when its made but rn
@@ -272,6 +287,7 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 
 
 func __on_destroy_card(_slot: int, card: Card) -> void:
+
 	cards.erase(card)
 	if selected_slot != null and selected_slot.stored_card == card:
 		selected_slot.stored_card = null

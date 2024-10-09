@@ -81,6 +81,9 @@ func _ready() -> void:
 	Global.mouse_input_functions.append(_on_mouse_clicked)
 	VerifyClientAction.player_finished.connect(_on_player_finished)
 	RenderOpponentAction.opponent_finished.connect(_on_opponent_finished)
+
+	PassiveEventManager.card_was_damaged.connect(_on_damage_event)
+	PassiveEventManager.card_dealt_final_blow.connect(_on_final_blow_event)
 	button_y_pos = buttons.position.y
 
 
@@ -244,8 +247,10 @@ func set_seal(num_turns: int) -> void:
 	seal_sprite.visible = num_turns > 0
 
 
-func take_damage(amount: int) -> void:
+func take_damage(amount: int, attacker: Card = null, source: DamageEventInfo.DamageSource = DamageEventInfo.DamageSource.NONE) -> void:
 	assert(amount >= 0)
+
+	var dmg_event_info = DamageEventInfo.new(attacker, self, amount, source)
 
 	if state.shield > 0:
 		state.shield -= 1
@@ -256,9 +261,58 @@ func take_damage(amount: int) -> void:
 
 	state.health -= amount
 	if state.health <= 0:
+		#Emit event
+		PassiveEventManager.card_dealt_final_blow.emit(dmg_event_info)
 		Global.player_field.destroy_card(current_slot.slot_no, self)
+	else:
+		PassiveEventManager.card_was_damaged.emit(dmg_event_info)
 
 	render_attack(state.health)
+
+func apply_ability_to(targets: Array[Card]):
+
+	match info.ability.effect:
+		Ability.AbilityEffect.ADD_HP:
+			for target in targets:
+				target.heal(target.health - target.state.health)
+		Ability.AbilityEffect.ATTACK when (
+			info.ability.range == Ability.AbilityRange.ENEMY_CARD
+		):
+			for target in targets:
+				target.take_damage(target.state.health - target.health)
+		Ability.AbilityEffect.ATTACK when (
+			info.ability.range == Ability.AbilityRange.ENEMY_ROW
+		):
+			var atk_value := info.ability.value
+			for target in targets:
+				target.take_damage(atk_value, self, DamageEventInfo.DamageSource.ABILITY)
+		Ability.AbilityEffect.SEAL:
+			print("APPLYING SEAL TO CARD")
+			for target in targets:
+				target.set_seal(info.ability.value)
+				print(target.state.sealed_turns_left)
+		Ability.AbilityEffect.SHIELD:
+			for target in targets:
+				target.set_shield(info.ability.value)
+				print(target.state.shield)
+
+func _on_damage_event(event_info: DamageEventInfo):
+	if (event_info.attacker == self):
+		if (event_info.was_counterattack()):
+			print("'I ain't going down without a fight, %s!' said %s" % [event_info.attacker, self])
+		else:
+			print("'%s I'm bored, I'm going to punch you!' said %s" % [event_info.victim, self])
+	elif (event_info.victim == self):
+		if (event_info.was_counterattack()):
+			print("'Stop fighting back!, %s!' said %s" % [event_info.attacker, self])
+		else:
+			print("'Ow that hurts, %s!' said %s" % [event_info.attacker, self])
+
+func _on_final_blow_event(event_info: DamageEventInfo):
+	if (event_info.attacker == self):
+		print("I, %s, AM THE %s SLAYER!" % [self, event_info.victim])
+	elif (event_info.victim == self):
+		print("I, %s, die, %s!" % [self, event_info.attacker])
 
 
 func heal(amount: int) -> void:
@@ -295,3 +349,7 @@ func _on_mouse_hover() -> void:
 
 func _on_mouse_exit() -> void:
 	mouse_over = false
+
+#Returns the name of the graphics file with the extension.
+func _to_string():
+	return "%s(#%s)" % [info.graphics.get_file().get_slice(".", 0), get_instance_id()];

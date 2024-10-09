@@ -25,6 +25,7 @@ RenderOpponentAction="*res://scripts/networking/actions/render_opponent_action.g
 VerifyClientAction="*res://scripts/networking/actions/verify_client_action.gd"
 MatchManager="*res://scripts/global/match_manager.gd"
 CardStatsManager="*res://scripts/global/card_stats_manager.gd"
+PassiveEventManager="*res://scripts/game/passive_event_manager.gd"
 
 [display]
 
