@@ -274,15 +274,8 @@ func apply_ability_to(targets: Array[Card]):
 	match info.ability.effect:
 		Ability.AbilityEffect.ADD_HP:
 			for target in targets:
-				target.heal(target.health - target.state.health)
-		Ability.AbilityEffect.ATTACK when (
-			info.ability.range == Ability.AbilityRange.ENEMY_CARD
-		):
-			for target in targets:
-				target.take_damage(target.state.health - target.health)
-		Ability.AbilityEffect.ATTACK when (
-			info.ability.range == Ability.AbilityRange.ENEMY_ROW
-		):
+				target.heal(info.ability.value)
+		Ability.AbilityEffect.ATTACK:
 			var atk_value := info.ability.value
 			for target in targets:
 				target.take_damage(atk_value, self, DamageEventInfo.DamageSource.ABILITY)
@@ -295,6 +288,7 @@ func apply_ability_to(targets: Array[Card]):
 			for target in targets:
 				target.set_shield(info.ability.value)
 				print(target.state.shield)
+
 
 func _on_damage_event(event_info: DamageEventInfo):
 	if (event_info.attacker == self):

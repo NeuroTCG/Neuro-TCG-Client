@@ -120,7 +120,7 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 			targets = [player_field.get_slot(target_slot_no).stored_card]
 		_: #Sheild and Heal abilities target allies.
 			var target_slot_no := Field.array_to_index(
-				packet.target_position.to_array(), Field.Side.Player
+				packet.target_position.to_array(), Field.Side.Enemy
 			)
 			targets = [player_field.get_slot(target_slot_no).stored_card]
 
