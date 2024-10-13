@@ -295,3 +295,7 @@ func _on_mouse_hover() -> void:
 
 func _on_mouse_exit() -> void:
 	mouse_over = false
+
+
+func _on_tree_exiting() -> void:
+	Global.mouse_input_functions.erase(_on_mouse_clicked)
