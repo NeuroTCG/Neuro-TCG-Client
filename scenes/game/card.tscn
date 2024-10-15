@@ -339,6 +339,7 @@ visible = false
 scale = Vector2(0.246, 0.246)
 texture = ExtResource("8_dc28p")
 
+[connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
 [connection signal="input_event" from="Area2D" to="." method="_on_input_event"]
 [connection signal="mouse_entered" from="Area2D" to="." method="_on_mouse_hover"]
 [connection signal="mouse_exited" from="Area2D" to="." method="_on_mouse_exit"]
