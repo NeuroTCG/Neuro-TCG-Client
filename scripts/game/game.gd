@@ -7,8 +7,10 @@ const PLAYER_LOST = "You lost :("
 
 var game_over_template = preload("res://scenes/ui/game_over.tscn")
 
+
 func _ready() -> void:
 	Global.network_manager.game_over.connect(_on_game_over)
+
 
 func _on_game_over(packet: GameOverPacket) -> void:
 	var game_over = game_over_template.instantiate()
