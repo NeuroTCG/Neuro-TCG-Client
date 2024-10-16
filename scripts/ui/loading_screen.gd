@@ -22,7 +22,7 @@ func _ready() -> void:
 	Global.network_manager.start_initial_packet_sequence()
 
 
-func __on_match_found(_packet: MatchFoundPacket) -> void:
+func __on_match_found(packet: MatchFoundPacket) -> void:
 	loading_text = "Match found"
 	var game = game_node.instantiate()
 	get_parent().add_child(game)
@@ -31,6 +31,7 @@ func __on_match_found(_packet: MatchFoundPacket) -> void:
 	Global.enemy_field = game.get_node("EnemyField")
 
 	Global.ram_manager = game.get_tree().get_first_node_in_group("ram_manager")
+	Global.ram_manager.reset_ram(packet.is_first_player)
 
 	queue_free()
 
