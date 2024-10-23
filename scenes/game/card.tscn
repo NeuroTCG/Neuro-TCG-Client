@@ -299,6 +299,12 @@ offset_right = 30.0
 offset_bottom = -3.0
 theme_override_constants/separation = 0
 
+[node name="Magic" parent="Buttons" instance=ExtResource("6_txvo4")]
+layout_mode = 2
+text = "Magic"
+button_action = 6
+shortcut_key = "m"
+
 [node name="Summon" parent="Buttons" instance=ExtResource("6_txvo4")]
 layout_mode = 2
 shortcut_key = "s"

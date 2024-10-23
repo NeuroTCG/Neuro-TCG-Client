@@ -33,10 +33,10 @@ func _on_pressed() -> void:
 			Global.notice.emit("Wait until cards have finished moving!")
 		return
 
-	if button_action == MatchManager.Actions.SUMMON:
+	if button_action == MatchManager.Actions.SUMMON || button_action == MatchManager.Actions.MAGIC:
 		var player_ram = Global.ram_manager.player_ram
 		if player_ram < (buttons.get_parent() as Card).info.cost:
-			Global.notice.emit("Insufficent Ram to summon this card!")
+			Global.notice.emit("Insufficent Ram to use this card!")
 			Global.hide_player_slots.emit()
 			return
 

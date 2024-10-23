@@ -1,3 +1,4 @@
+class_name PlayerHand
 extends Hand
 
 @export var game: Game
@@ -8,7 +9,9 @@ func _ready() -> void:
 	Global.hand_card_unselected.connect(_on_card_unselected)
 	Global.slot_chosen.connect(_on_slot_chosen)
 	MatchManager.action_summon.connect(_on_action_summon)
+	MatchManager.action_magic.connect(_on_action_magic)
 	Global.network_manager.draw_card.connect(_on_draw_card)
+	Global.player_hand = self
 
 	# Set hand positions
 	for i in range(5):
@@ -69,12 +72,25 @@ func summon(hand_pos: int, slot_no: int) -> void:
 	summon_card.move_and_reanchor(slot.global_position)
 	summon_card.set_card_visibility()
 
+## Magic that is casted immediately from the hand.
+## e.g. board wipes, copy & paste
+## ranges that is handled includes enemy field, player field, both fields, hands as target
+## TODO
+func _hand_magic() -> void:
+	# TODO: discard the card after being played
+	print("iaowjefowaijfeoi")
+	discard_hand_card(selected_card)
+	pass
+
 
 func _on_card_selected(card: Card) -> void:
 	selected_card = card
 	card.shift_card_y(-30)
 	card.select()
-	card.show_buttons([MatchManager.Actions.SUMMON, MatchManager.Actions.VIEW])
+	if card.info.card_type == CardStats.CardType.MAGIC:
+		card.show_buttons([MatchManager.Actions.MAGIC, MatchManager.Actions.VIEW])
+	else:
+		card.show_buttons([MatchManager.Actions.SUMMON, MatchManager.Actions.VIEW])
 	card.set_card_visibility(100)
 
 
@@ -100,6 +116,19 @@ func _on_action_summon() -> void:
 	Global.show_player_slots_for_summon.emit()
 
 
+func _on_action_magic() -> void:
+	assert(selected_card.info.card_type == CardStats.CardType.MAGIC, "card should be of type magic")
+
+	match selected_card.info.ability.range:
+		Ability.AbilityRange.ENEMY_CARD, Ability.AbilityRange.ENEMY_ROW:
+			Global.show_enemy_slots_for_magic.emit()
+		Ability.AbilityRange.ALLY_CARD:
+			Global.show_player_slots_for_magic.emit()
+		_:
+			VerifyClientAction.magic.emit(selected_card.state.id, null)
+			_hand_magic()
+
+
 func _on_slot_chosen(slot_no: int, _card: Card) -> void:
 	if selected_card:
 		var summoned_card: Card = selected_card
@@ -107,3 +136,10 @@ func _on_slot_chosen(slot_no: int, _card: Card) -> void:
 		_on_card_unselected(summoned_card)
 		VerifyClientAction.summon.emit(summoned_card.state.id, Field.index_to_array(slot_no))
 		summon(cards.find(summoned_card), slot_no)
+
+
+func discard_hand_card(card: Card) -> void:
+	var hand_pos = cards.find(card)
+	if hand_pos == -1:
+		return
+	cards.remove_at(hand_pos)

@@ -29,6 +29,9 @@ const DrawCard := "draw_card"
 const UseAbilityRequest := "use_ability_request"
 const UseAbility := "use_ability"
 
+const UseMagicCardRequest := "use_magic_card_request"
+const UseMagicCard := "use_magic_card"
+
 const GameOver: String = "game_over"
 
 const allTypes: Array[String] = [
@@ -54,5 +57,7 @@ const allTypes: Array[String] = [
 	DrawCard,
 	UseAbilityRequest,
 	UseAbility,
+	UseMagicCardRequest,
+	UseMagicCard,
 	GameOver,
 ]

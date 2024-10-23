@@ -1,3 +1,4 @@
+class_name EnemyHand
 extends Hand
 
 @export var game: Game
@@ -12,6 +13,7 @@ func _ready() -> void:
 	for i in range(5):
 		get_node("Pos" + str(i + 1)).position.x = 4 * CARD_LENGTH - i * CARD_LENGTH
 
+	Global.enemy_hand = self
 	await game.ready
 
 

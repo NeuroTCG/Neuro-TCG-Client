@@ -21,10 +21,12 @@ signal enemy_slot_chosen(slot_no: int, card: Card)
 
 # TO ENEMY FIELD
 signal show_enemy_slots_for_attack(card: Card)
+signal show_enemy_slots_for_magic
 signal hide_enemy_cards
 
 # TO PLAYER FIELD
 signal show_player_slots_for_summon
+signal show_player_slots_for_magic
 signal hide_player_slots
 
 # TO HUD
@@ -51,6 +53,8 @@ var network_manager: NetworkManager = null
 # TODO: merge these into one
 var player_field: PlayerField = null
 var enemy_field: EnemyField = null
+var player_hand: PlayerHand = null
+var enemy_hand: EnemyHand = null
 
 var ram_manager: RamManager = null
 
