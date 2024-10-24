@@ -213,6 +213,7 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 
 		selected_card.apply_ability_to(ability_targets);
 
+
 		VerifyClientAction.ability.emit(
 			get_slot_array(card), get_slot_array(selected_card)
 		)

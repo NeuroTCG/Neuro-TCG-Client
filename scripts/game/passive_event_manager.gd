@@ -7,7 +7,7 @@ signal card_was_damaged(event_info: DamageEventInfo)
 signal card_dealt_final_blow(event_info: DamageEventInfo)
 
 #Healing
-signal card_heal_event(event_info: HealEventInfo)
+signal card_was_healed(event_info: HealEventInfo)
 
 #Movement/Switching
 signal card_switched_with_another(event_info: SwitchEventInfo)

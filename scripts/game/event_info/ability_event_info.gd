@@ -5,11 +5,11 @@ class_name AbilityEventInfo
 var ability_card: Card
 
 #The cards that the ability was applied to.
-var ability_target: Card
+var ability_targets: Array[Card]
 
-func _init(_ability_card: Card, _ability_target: Card):
+func _init(_ability_card: Card, _ability_targets: Array[Card]):
 	ability_card = _ability_card
-	ability_target = _ability_target
+	ability_targets = _ability_targets
 
 func _to_string():
-	return "AbilityEvent: %s used an ability on %s!" % [ability_card, ability_target]
+	return "AbilityEvent: %s used an ability on %s!" % [ability_card, ability_targets]
