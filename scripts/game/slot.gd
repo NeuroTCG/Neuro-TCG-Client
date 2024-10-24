@@ -34,3 +34,7 @@ func _on_area_2d_mouse_entered() -> void:
 
 func _on_area_2d_mouse_exited() -> void:
 	mouse_over = false
+
+
+func _on_tree_exiting() -> void:
+	Global.mouse_input_functions.erase(_on_mouse_clicked)

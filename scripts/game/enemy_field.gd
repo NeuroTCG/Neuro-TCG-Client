@@ -4,6 +4,7 @@ class_name EnemyField
 ## Enemy cards only need to worry about Slots and
 ## Placement when moving them around.
 
+
 func _ready() -> void:
 	Global.show_enemy_slots_for_attack.connect(show_slots_for_attack)
 	Global.hide_enemy_cards.connect(hide_slots)
@@ -88,7 +89,9 @@ func _on_attack(packet: AttackPacket) -> void:
 
 func _on_ability(packet: UseAbilityPacket) -> void:
 	# Ability card will always be from the opponent
-	var ability_slot_no := Field.array_to_index(packet.ability_position.to_array(), Field.Side.Enemy)
+	var ability_slot_no := Field.array_to_index(
+		packet.ability_position.to_array(), Field.Side.Enemy
+	)
 	var ability_card := enemy_field.get_slot(ability_slot_no).stored_card
 
 	Global.use_enemy_ram.emit(ability_card.info.ability.cost)
