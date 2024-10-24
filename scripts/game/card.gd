@@ -82,6 +82,8 @@ func _ready() -> void:
 	VerifyClientAction.player_finished.connect(_on_player_finished)
 	RenderOpponentAction.opponent_finished.connect(_on_opponent_finished)
 
+	# TODO: Remove signals from the base Card class.
+	# Children will handle passives.
 	PassiveEventManager.card_was_damaged.connect(_on_damage_event)
 	PassiveEventManager.card_dealt_final_blow.connect(_on_final_blow_event)
 	button_y_pos = buttons.position.y
