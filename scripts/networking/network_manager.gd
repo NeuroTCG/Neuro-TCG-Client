@@ -145,6 +145,13 @@ func receive_command(msg: String) -> void:
 			else:
 				RenderOpponentAction.ability.emit(packet)
 
+		PacketType.UseMagicCard:
+			if packet.is_you:
+				if not packet.valid:
+					invalid_command.emit("Magic usage failed")
+			else:
+				RenderOpponentAction.magic.emit(packet)
+
 		PacketType.StartTurn:
 			start_turn.emit(packet)
 			RenderOpponentAction.opponent_finished.emit()

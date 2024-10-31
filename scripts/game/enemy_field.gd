@@ -7,10 +7,12 @@ class_name EnemyField
 
 func _ready() -> void:
 	Global.show_enemy_slots_for_attack.connect(show_slots_for_attack)
+	Global.show_enemy_slots_for_magic.connect(show_slots_for_direct_attack)
 	Global.hide_enemy_cards.connect(hide_slots)
 	RenderOpponentAction.attack.connect(_on_attack)
 	RenderOpponentAction.switch.connect(_on_switch)
 	RenderOpponentAction.ability.connect(_on_ability)
+	RenderOpponentAction.magic.connect(_on_magic)
 
 	for slot in get_children():
 		slot.visible = false
@@ -87,38 +89,28 @@ func _on_attack(packet: AttackPacket) -> void:
 		assert(atk_card.state.shield == packet.attacker_card.shield)
 
 
-func _on_ability(packet: UseAbilityPacket) -> void:
-	# Ability card will always be from the opponent
-	var ability_slot_no := Field.array_to_index(
-		packet.ability_position.to_array(), Field.Side.Enemy
-	)
-	var ability_card := enemy_field.get_slot(ability_slot_no).stored_card
+func _apply_ability(
+	ability: Ability, target_position: CardPosition, target_card_state: CardState
+) -> void:
+	Global.use_enemy_ram.emit(ability.cost)
 
-	Global.use_enemy_ram.emit(ability_card.info.ability.cost)
-
-	match ability_card.info.ability.effect:
+	match ability.effect:
 		Ability.AbilityEffect.ADD_HP:
-			var target_slot_no := Field.array_to_index(
-				packet.target_position.to_array(), Field.Side.Enemy
-			)
+			var target_slot_no := Field.array_to_index(target_position.to_array(), Field.Side.Enemy)
 			var target_card := enemy_field.get_slot(target_slot_no).stored_card
 
-			target_card.heal(packet.target_card.health - target_card.state.health)
-		Ability.AbilityEffect.ATTACK when (
-			ability_card.info.ability.range == Ability.AbilityRange.ENEMY_CARD
-		):
+			target_card.heal(target_card_state.health - target_card.state.health)
+		Ability.AbilityEffect.ATTACK when ability.range == Ability.AbilityRange.ENEMY_CARD:
 			var target_slot_no := Field.array_to_index(
-				packet.target_position.to_array(), Field.Side.Player
+				target_position.to_array(), Field.Side.Player
 			)
 			var target_card := player_field.get_slot(target_slot_no).stored_card
 
-			target_card.take_damage(target_card.state.health - packet.target_card.health)
-			assert(target_card.state.shield == packet.target_card.shield)
-		Ability.AbilityEffect.ATTACK when (
-			ability_card.info.ability.range == Ability.AbilityRange.ENEMY_ROW
-		):
+			target_card.take_damage(target_card.state.health - target_card_state.health)
+			assert(target_card.state.shield == target_card.state.shield)
+		Ability.AbilityEffect.ATTACK when ability.range == Ability.AbilityRange.ENEMY_ROW:
 			var target_slot_no := Field.array_to_index(
-				packet.target_position.to_array(), Field.Side.Player
+				target_position.to_array(), Field.Side.Player
 			)
 			var target_card := player_field.get_slot(target_slot_no).stored_card
 
@@ -137,20 +129,32 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 			print("APPLYING SEAL TO CARD")
 			# In this case the target card will always be the player's card
 			var target_slot_no := Field.array_to_index(
-				packet.target_position.to_array(), Field.Side.Player
+				target_position.to_array(), Field.Side.Player
 			)
 			var target_card := player_field.get_slot(target_slot_no).stored_card
-			target_card.set_seal(ability_card.info.ability.value)
+			target_card.set_seal(ability.value)
 			print(target_card.state.sealed_turns_left)
 		Ability.AbilityEffect.SHIELD:
 			print("APPLYING SHIELD TO CARD")
-			var target_slot_no := Field.array_to_index(
-				packet.target_position.to_array(), Field.Side.Enemy
-			)
+			var target_slot_no := Field.array_to_index(target_position.to_array(), Field.Side.Enemy)
 			var target_card := enemy_field.get_slot(target_slot_no).stored_card
 
-			target_card.set_shield(ability_card.info.ability.value)
-			assert(target_card.state.shield == packet.target_card.shield)
+			target_card.set_shield(ability.value)
+			assert(target_card.state.shield == target_card.shield)
 			print(target_card.state.shield)
+
+
+func _on_ability(packet: UseAbilityPacket) -> void:
+	# Ability card will always be from the opponent
+	var ability_slot_no := Field.array_to_index(
+		packet.ability_position.to_array(), Field.Side.Enemy
+	)
+	var ability_card := enemy_field.get_slot(ability_slot_no).stored_card
+	_apply_ability(ability_card.info.ability, packet.target_position, packet.target_card)
+
+
+func _on_magic(packet: UseMagicCardPacket) -> void:
+	_apply_ability(packet.ability, packet.target_position, packet.target_card)
+	Global.enemy_hand.discard_hand_card_by_hand_pos(packet.hand_pos)
 
 #endregion

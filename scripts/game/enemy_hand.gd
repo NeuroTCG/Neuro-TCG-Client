@@ -1,3 +1,4 @@
+class_name EnemyHand
 extends Hand
 
 @export var game: Game
@@ -12,7 +13,13 @@ func _ready() -> void:
 	for i in range(5):
 		get_node("Pos" + str(i + 1)).position.x = 4 * CARD_LENGTH - i * CARD_LENGTH
 
+	Global.enemy_hand = self
 	await game.ready
+
+
+func rearrange_enemy_hand():
+	for i in range(0, cards.size()):
+		cards[i].move_and_reanchor(card_positions[i].global_position)
 
 
 func _on_summon(packet: SummonPacket) -> void:
@@ -24,8 +31,7 @@ func _on_summon(packet: SummonPacket) -> void:
 	var summon_card: Card = cards.pop_at(hand_pos)
 
 	# Shift all cards right of summoned card
-	for i in range(hand_pos, cards.size()):
-		cards[i].move_and_reanchor(card_positions[i].global_position)
+	rearrange_enemy_hand()
 
 	assert(slot.stored_card == null)
 
@@ -63,3 +69,17 @@ func add_card(id: int) -> void:
 	new_card.move_and_reanchor(card_positions[cards.size() - 1].global_position)
 
 	new_card.owned_by_player = false
+
+
+func discard_hand_card_by_hand_pos(hand_pos: int) -> void:
+	assert(hand_pos >= 0, "Can't discard a card that doesn't exist")
+
+	var card = cards.pop_at(hand_pos)
+	get_parent().remove_child(card)
+	rearrange_enemy_hand()
+
+
+func discard_hand_card(card: Card) -> void:
+	var hand_pos = cards.find(card)
+	assert(hand_pos != -1, "Can't discard a card that doesn't exist")
+	discard_hand_card_by_hand_pos(hand_pos)
