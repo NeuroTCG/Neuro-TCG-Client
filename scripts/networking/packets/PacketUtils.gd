@@ -23,6 +23,8 @@ static var _type_to_class: Dictionary = {
 	PacketType.DrawCardRequest: DrawCardRequestPacket,
 	PacketType.UseAbility: UseAbilityPacket,
 	PacketType.UseAbilityRequest: UseAbilityRequestPacket,
+	PacketType.UseMagicCard: UseMagicCardPacket,
+	PacketType.UseMagicCardRequest: UseMagicCardRequestPacket,
 	PacketType.GameOver: GameOverPacket,
 }
 

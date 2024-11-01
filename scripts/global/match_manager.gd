@@ -5,6 +5,7 @@ signal action_summon
 signal action_switch
 signal action_attack
 signal action_ability
+signal action_magic
 ## View is handeled separately compared to any other other action
 signal action_view(card: Card)
 
@@ -15,6 +16,7 @@ enum Actions {
 	ABILITY,
 	VIEW,
 	IDLE,
+	MAGIC,
 }
 
 var input_paused := false
@@ -33,6 +35,8 @@ var current_action := Actions.IDLE:
 				action_attack.emit()
 			Actions.ABILITY:
 				action_ability.emit()
+			Actions.MAGIC:
+				action_magic.emit()
 var first_player := false
 
 

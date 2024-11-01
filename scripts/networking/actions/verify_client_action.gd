@@ -1,6 +1,7 @@
 extends Node
 
 signal summon(card_id: int, position: Array)
+signal magic(card_id: int, target_position: Array, hand_pos: int)
 signal attack(card_id: int, target_position: Array, attacker_position: Array)
 signal switch(pos1: Array, pos2: Array)
 signal ability(target_position: Array, ability_position: Array)
@@ -10,6 +11,7 @@ signal player_finished
 
 func _ready() -> void:
 	summon.connect(_on_summon)
+	magic.connect(_on_magic)
 	attack.connect(_on_attack)
 	player_finished.connect(_on_player_finished)
 	switch.connect(_on_switch)
@@ -20,6 +22,13 @@ func _on_summon(card_id: int, position: Array[int]) -> void:
 	print("Summon")
 	Global.network_manager.send_packet(
 		SummonRequestPacket.new(card_id, CardPosition.from_array(position))
+	)
+
+
+func _on_magic(card_id: int, target_position: Array[int], hand_pos: int) -> void:
+	print("Magic")
+	Global.network_manager.send_packet(
+		UseMagicCardRequestPacket.new(card_id, CardPosition.from_array(target_position), hand_pos)
 	)
 
 

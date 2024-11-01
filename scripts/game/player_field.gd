@@ -10,6 +10,7 @@ var selected_slot: CardSlot = null
 
 func _ready() -> void:
 	Global.show_player_slots_for_summon.connect(show_slots_for_summon)
+	Global.show_player_slots_for_magic.connect(show_all_ally_cards)
 	Global.hide_player_slots.connect(hide_slots)
 	Global.slot_chosen.connect(_on_slot_chosen)
 	Global.enemy_slot_chosen.connect(_on_enemy_slot_chosen)
@@ -164,6 +165,22 @@ func _on_action_ability() -> void:
 #region ON SLOT CHOSEN
 ## Slot chosen functions are always run
 ## before _on_card_selected/unselected functions
+func _verify_ability_or_magic(
+	action: MatchManager.Actions, source: Card, target_slot: Array[int]
+) -> void:
+	match action:
+		MatchManager.Actions.ABILITY:
+			VerifyClientAction.ability.emit(get_slot_array(source), target_slot)
+
+		MatchManager.Actions.MAGIC:
+			VerifyClientAction.magic.emit(
+				source.state.id,
+				null if target_slot == null else target_slot,
+				Global.player_hand.get_card_pos(source)
+			)
+			Global.player_hand.discard_hand_card(source)
+
+
 func _on_slot_chosen(slot_no: int, card: Card) -> void:
 	hide_slots()
 
@@ -188,7 +205,10 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 
 		switch_cards(slot_no, selected_slot_no)
 
-	if MatchManager.current_action == MatchManager.Actions.ABILITY:
+	if (
+		MatchManager.current_action == MatchManager.Actions.ABILITY
+		|| MatchManager.current_action == MatchManager.Actions.MAGIC
+	):
 		assert(selected_slot.stored_card, "No card selected.")
 
 		selected_card = selected_slot.stored_card;
@@ -220,16 +240,17 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 
 
 func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
-	assert(selected_slot.stored_card, "No card selected.")
-
-	var player_card := selected_slot.stored_card
-	var player_slot_no := get_slot_no(player_card)
+	var player_card := (
+		Global.player_hand.selected_card if selected_slot == null else selected_slot.stored_card
+	)
 
 	Global.hide_enemy_cards.emit()
 	player_card.state.phase = Card.TurnPhase.Done
 	enemy_card.dont_show_view = true
 
 	if MatchManager.current_action == MatchManager.Actions.ATTACK:
+		var player_slot_no := get_slot_no(player_card)
+
 		VerifyClientAction.attack.emit(
 			player_card.state.id, index_to_array(enemy_slot_no), index_to_array(player_slot_no)
 		)
@@ -276,8 +297,8 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 
 		player_card.apply_ability_to(ability_targets);
 
-		VerifyClientAction.ability.emit(
-			index_to_array(enemy_slot_no), index_to_array(player_slot_no)
+		_verify_ability_or_magic(
+			MatchManager.current_action, player_card, index_to_array(enemy_slot_no)
 		)
 
 

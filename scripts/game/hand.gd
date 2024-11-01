@@ -7,3 +7,7 @@ const CARD_LENGTH := 31 * 2 + 10
 var cards: Array[Card] = []
 
 var selected_card: Card = null
+
+
+func get_card_pos(card: Card) -> int:
+	return cards.find(card)

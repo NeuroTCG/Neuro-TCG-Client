@@ -197,6 +197,8 @@ func show_buttons(actions: Array) -> void:
 					shortcut_strings.append("E: Ability, ")
 				MatchManager.Actions.VIEW:
 					shortcut_strings.append("V: View, ")
+				MatchManager.Actions.MAGIC:
+					shortcut_strings.append("M: Magic, ")
 		else:
 			button.visible = false
 
