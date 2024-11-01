@@ -90,7 +90,7 @@ func _on_attack(packet: AttackPacket) -> void:
 
 
 func _apply_ability(
-	ability: Ability, target_position: CardPosition, target_card_state: CardState
+	ability_card: Card, ability: Ability, target_position: CardPosition, target_card_state: CardState
 ) -> void:
 	Global.use_enemy_ram.emit(ability.cost)
 
@@ -123,7 +123,7 @@ func _apply_ability(
 			targets[player_field.get_slot(target_slot_no).stored_card] = player_field.get_slot(target_slot_no).stored_card;
 		_: #Sheild and Heal abilities target allies.
 			var target_slot_no := Field.array_to_index(
-				packet.target_position.to_array(), Field.Side.Enemy
+				target_position.to_array(), Field.Side.Enemy
 			)
 			var target_card = player_field.get_slot(target_slot_no).stored_card;
 			targets[target_card] = target_card;
@@ -137,11 +137,12 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 		packet.ability_position.to_array(), Field.Side.Enemy
 	)
 	var ability_card := enemy_field.get_slot(ability_slot_no).stored_card
-	_apply_ability(ability_card.info.ability, packet.target_position, packet.target_card)
+	_apply_ability(ability_card, ability_card.info.ability, packet.target_position, packet.target_card)
 
 
 func _on_magic(packet: UseMagicCardPacket) -> void:
-	_apply_ability(packet.ability, packet.target_position, packet.target_card)
+	var magic_user: Card = enemy_field.get_slot(packet.hand_pos).stored_card;
+	_apply_ability(magic_user, packet.ability, packet.target_position, packet.target_card)
 	Global.enemy_hand.discard_hand_card_by_hand_pos(packet.hand_pos)
 
 #endregion

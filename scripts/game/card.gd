@@ -87,6 +87,7 @@ func _ready() -> void:
 	PassiveEventManager.card_was_damaged.connect(_on_damage_event)
 	PassiveEventManager.card_dealt_final_blow.connect(_on_final_blow_event)
 	PassiveEventManager.card_was_healed.connect(_on_heal_event)
+	PassiveEventManager.card_used_ability.connect(_on_ability_event)
 	button_y_pos = buttons.position.y
 
 
