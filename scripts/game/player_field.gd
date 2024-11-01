@@ -199,17 +199,17 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 		selected_card.state.ability_was_used = true
 
 		selected_card = selected_slot.stored_card;
-		var ability_targets: Array[Card]
+		var ability_targets: Dictionary
 
 		match selected_card.info.ability.range:
 			Ability.AbilityRange.ALLY_CARD:
-				ability_targets = [card]
+				ability_targets[card] = card;
 			Ability.AbilityRange.ALLY_FIELD:
 				for n in Global.PLAYER_ROWS:
 					var slot = player_field.get_slot(n)
 					if slot.stored_card:
 						#slot.stored_card.take_damage(atk_value, player_card, DamageEventInfo.DamageSource.ABILITY)
-						ability_targets.append(slot.stored_card)
+						ability_targets[slot.stored_card] = slot.stored_card
 
 		selected_card.apply_ability_to(ability_targets);
 
@@ -255,11 +255,11 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 
 	elif MatchManager.current_action == MatchManager.Actions.ABILITY:
 
-		var ability_targets: Array[Card] = [];
+		var ability_targets: Dictionary = {};
 
 		match player_card.info.ability.range:
 			Ability.AbilityRange.ENEMY_CARD:
-				ability_targets = [enemy_card];
+				ability_targets[enemy_card] = enemy_card;
 			Ability.AbilityRange.ENEMY_ROW:
 				var row: Array[int]
 
@@ -272,7 +272,7 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 					var slot = enemy_field.get_slot(slot_no)
 					if slot.stored_card:
 						#slot.stored_card.take_damage(atk_value, player_card, DamageEventInfo.DamageSource.ABILITY)
-						ability_targets.append(slot.stored_card)
+						ability_targets[slot.stored_card] = slot.stored_card;
 
 		player_card.apply_ability_to(ability_targets);
 

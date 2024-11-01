@@ -272,7 +272,7 @@ func take_damage(amount: int, attacker: Card = null, source: DamageEventInfo.Dam
 
 	render_attack(state.health)
 
-func apply_ability_to(targets: Array[Card]):
+func apply_ability_to(targets: Dictionary):
 
 	match info.ability.effect:
 		Ability.AbilityEffect.ADD_HP:
@@ -321,6 +321,12 @@ func _on_heal_event(event_info: HealEventInfo):
 		print("'I got you, %s!' said %s" % [event_info.healee, event_info.healer])
 	elif (event_info.healee == self):
 		print("'Thanks for the heals, %s!' said %s" % [event_info.healer, event_info.healee])
+
+func _on_ability_event(event_info: AbilityEventInfo):
+	if (event_info.ability_card == self):
+		print("I cast my power upon thee!' said %s" % [event_info.ability_card])
+	if (event_info.ability_targets.has(self)):
+		print("'Hey? what's happening to me?' said %s" % [event_info.ability_targets[self]]);
 
 #endregion
 

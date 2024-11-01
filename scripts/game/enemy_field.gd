@@ -96,7 +96,7 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 
 	Global.use_enemy_ram.emit(ability_card.info.ability.cost)
 
-	var targets: Array[Card] = [];
+	var targets: Dictionary = {};
 
 	match ability_card.info.ability.range:
 		Ability.AbilityRange.ENEMY_ROW:
@@ -115,17 +115,18 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 				for slot_no in row:
 					var slot = player_field.get_slot(slot_no)
 					if slot.stored_card:
-						targets.append(slot.stored_card)
+						targets[slot.stored_card] = slot.stored_card;
 		Ability.AbilityRange.ENEMY_CARD:
 			var target_slot_no := Field.array_to_index(
 				packet.target_position.to_array(), Field.Side.Player
 			)
-			targets = [player_field.get_slot(target_slot_no).stored_card]
+			targets[player_field.get_slot(target_slot_no).stored_card] = player_field.get_slot(target_slot_no).stored_card;
 		_: #Sheild and Heal abilities target allies.
 			var target_slot_no := Field.array_to_index(
 				packet.target_position.to_array(), Field.Side.Enemy
 			)
-			targets = [player_field.get_slot(target_slot_no).stored_card]
+			var target_card = player_field.get_slot(target_slot_no).stored_card;
+			targets[target_card] = target_card;
 
 	ability_card.apply_ability_to(targets);
 
