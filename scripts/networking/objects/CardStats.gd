@@ -13,6 +13,7 @@ enum CardType {
 	TOKEN,
 }
 
+var name: String
 var graphics: String
 var max_hp: int
 var base_atk: int
@@ -24,6 +25,7 @@ var has_summoning_sickness: bool
 
 
 func _init(
+	_name: String,
 	_graphics: String,
 	_hp: int,
 	_atk: int,
@@ -33,6 +35,7 @@ func _init(
 	_ability: Ability,
 	_has_summoning_sickness: bool,
 ) -> void:
+	name = _name
 	max_hp = _hp
 	base_atk = _atk
 	cost = _cost
@@ -45,6 +48,7 @@ func _init(
 
 func to_dict() -> Dictionary:
 	return {
+		"name": name,
 		"graphics": graphics,
 		"max_hp": max_hp,
 		"base_atk": base_atk,
@@ -58,6 +62,7 @@ func to_dict() -> Dictionary:
 
 static func from_dict(d: Dictionary) -> CardStats:
 	return CardStats.new(
+		d["name"],
 		d["graphics"],
 		d["max_hp"],
 		d["base_atk"],

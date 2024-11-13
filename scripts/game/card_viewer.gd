@@ -18,10 +18,14 @@ func _process(_delta: float) -> void:
 
 func _on_view(card: Card) -> void:
 	visible = true
-	sprite.texture = card.card_sprite.texture
+	if ResourceLoader.exists(card.info.graphics):
+		sprite.texture = card.card_sprite.texture
+	else:
+		sprite.texture = load("res://assets/game/cards/template.png")
+
 	description.text = (
-		"Card Name: \nHP: %d \nAtk: %d \nCost: %d"
-		% [card.state.health, card.info.base_atk, card.info.cost]
+		"Card Name: %s \nHP: %d \nAtk: %d \nCost: %d"
+		% [card.info.name, card.state.health, card.info.base_atk, card.info.cost]
 	)
 
 
