@@ -2,6 +2,7 @@ extends Node2D
 class_name Card
 
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var card_template_label := $CardBack/CardTemplateLabel
 @onready var card_hover_sprite := $CardBack/CardHover
 @onready var card_unhover_sprite := $CardBack/CardUnhover
 @onready var collision: CollisionShape2D = $Area2D/CollisionShape2D
@@ -72,7 +73,12 @@ static func create_card(parent_scene: Node2D, id: int) -> Card:
 
 	new_card.state = CardState.fromCardStats(id, card_info)
 	new_card.info = card_info
-	new_card.card_sprite.texture = load(card_info.graphics)
+	print(card_info.graphics, ResourceLoader.exists(card_info.graphics))
+
+	if ResourceLoader.exists(card_info.graphics):
+		new_card.card_sprite.texture = load(card_info.graphics)
+	else:
+		new_card.card_template_label.text = card_info.name
 
 	return new_card
 
