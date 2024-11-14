@@ -265,12 +265,12 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 			return
 		else:
 
-			var dmg_event_info = DamageEventInfo.new(
-				enemy_card, player_card, max(enemy_card.info.base_atk - 1, 0),
-				DamageEventInfo.DamageSource.COUNTER_ATTACK
-			)
+			#var dmg_event_info = DamageEventInfo.new(
+			#	enemy_card, player_card, max(enemy_card.info.base_atk - 1, 0),
+			#	DamageEventInfo.DamageSource.COUNTER_ATTACK
+			#)
 
-			player_card.take_damage(dmg_event_info.amount, dmg_event_info.attacker, dmg_event_info.source)
+			player_card.take_damage(max(enemy_card.info.base_atk - 1, 0), enemy_card, DamageEventInfo.DamageSource.COUNTER_ATTACK)
 
 		#endregion
 

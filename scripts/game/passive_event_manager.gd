@@ -2,6 +2,12 @@ extends Node
 
 ##Contains signals for specific situations to help facilitate card passives.
 
+#Constants
+const AbilityEvent = "ability"
+const AttackEvent = "attack"
+const CardMoveEvent = "card_move"
+const HealEvent = "heal"
+
 #Damage and Kills
 signal card_was_damaged(event_info: DamageEventInfo)
 signal card_dealt_final_blow(event_info: DamageEventInfo)

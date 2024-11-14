@@ -166,5 +166,8 @@ func receive_command(msg: String) -> void:
 			print("game is over!")
 			game_over.emit(packet)
 
+		PacketType.PassiveUpdate:
+			print("passive update recieved! But nothing's implemented yet!")
+
 		var type:
 			assert(false, "Received unhandled packet type '%s'" % type)

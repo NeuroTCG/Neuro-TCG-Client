@@ -1,7 +1,6 @@
-extends Node
-
 ##Contains all the information about PassiveEventManager's 'card_moved' event.
 class_name MoveEventInfo
+extends EventInfo
 
 #The card that is being moved.
 var card: Card

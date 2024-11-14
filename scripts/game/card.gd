@@ -82,12 +82,6 @@ func _ready() -> void:
 	VerifyClientAction.player_finished.connect(_on_player_finished)
 	RenderOpponentAction.opponent_finished.connect(_on_opponent_finished)
 
-	# TODO: Remove signals from the base Card class.
-	# Children will handle passives.
-	PassiveEventManager.card_was_damaged.connect(_on_damage_event)
-	PassiveEventManager.card_dealt_final_blow.connect(_on_final_blow_event)
-	PassiveEventManager.card_was_healed.connect(_on_heal_event)
-	PassiveEventManager.card_used_ability.connect(_on_ability_event)
 	button_y_pos = buttons.position.y
 
 
@@ -256,7 +250,7 @@ func set_seal(num_turns: int) -> void:
 func take_damage(amount: int, attacker: Card = null, source: DamageEventInfo.DamageSource = DamageEventInfo.DamageSource.NONE) -> void:
 	assert(amount >= 0)
 
-	var dmg_event_info = DamageEventInfo.new(attacker, self, amount, source)
+	#var dmg_event_info = DamageEventInfo.new(attacker, self, amount, source)
 
 	if state.shield > 0:
 		state.shield -= 1
@@ -268,10 +262,10 @@ func take_damage(amount: int, attacker: Card = null, source: DamageEventInfo.Dam
 	state.health -= amount
 	if state.health <= 0:
 		#Emit event
-		PassiveEventManager.card_dealt_final_blow.emit(dmg_event_info)
+		#PassiveEventManager.card_dealt_final_blow.emit(dmg_event_info)
 		Global.player_field.destroy_card(current_slot.slot_no, self)
-	else:
-		PassiveEventManager.card_was_damaged.emit(dmg_event_info)
+	#else:
+		#PassiveEventManager.card_was_damaged.emit(dmg_event_info)
 
 	render_attack(state.health)
 
@@ -295,9 +289,9 @@ func apply_ability_to(targets: Dictionary):
 				target.set_shield(info.ability.value)
 				print(target.state.shield)
 
-	PassiveEventManager.card_ability_used.emit(AbilityEventInfo.new(
-		self, targets
-	))
+	#PassiveEventManager.card_ability_used.emit(AbilityEventInfo.new(
+	#	self, targets
+	#))
 
 #region PASSIVE_EVENTS
 
@@ -331,15 +325,21 @@ func _on_ability_event(event_info: AbilityEventInfo):
 	if (event_info.ability_targets.has(self)):
 		print("'Hey? what's happening to me?' said %s" % [event_info.ability_targets[self]]);
 
+func _on_card_move_event(event_info: MoveEventInfo):
+	if (event_info.card == self):
+		print("'I went from %s to %! Said %s'" % [event_info.old_slot, event_info.new_slot, event_info.card]);
+		if (event_info.other_card):
+			print("'I swapped with %s!" % [event_info.other_card])
+
 #endregion
 
 
 func heal(amount: int, healer: Card, source: HealEventInfo.HealSource) -> void:
 	assert(amount > 0)
 	state.health += amount  # not capped by design
-	PassiveEventManager.card_was_healed.emit(HealEventInfo.new(
-		healer, self, info.ability.value, HealEventInfo.HealSource.ABILITY
-	))
+	#PassiveEventManager.card_was_healed.emit(HealEventInfo.new(
+	#	healer, self, info.ability.value, HealEventInfo.HealSource.ABILITY
+	#))
 
 
 ## By default sets z index to 0
