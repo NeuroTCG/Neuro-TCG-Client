@@ -26,6 +26,7 @@ VerifyClientAction="*res://scripts/networking/actions/verify_client_action.gd"
 MatchManager="*res://scripts/global/match_manager.gd"
 CardStatsManager="*res://scripts/global/card_stats_manager.gd"
 PassiveEventManager="*res://scripts/game/passive_event_manager.gd"
+PassiveManager="*res://scripts/game/passive_manager.gd"
 
 [display]
 

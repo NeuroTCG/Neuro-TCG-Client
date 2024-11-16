@@ -62,4 +62,5 @@ const allTypes: Array[String] = [
 	UseMagicCardRequest,
 	UseMagicCard,
 	GameOver,
+	PassiveUpdate,
 ]
