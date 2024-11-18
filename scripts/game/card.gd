@@ -247,7 +247,11 @@ func set_seal(num_turns: int) -> void:
 	seal_sprite.visible = num_turns > 0
 
 
-func take_damage(amount: int, attacker: Card = null, source: DamageEventInfo.DamageSource = DamageEventInfo.DamageSource.NONE) -> void:
+func take_damage(
+	amount: int,
+	attacker: Card = null,
+	source: DamageEventInfo.DamageSource = DamageEventInfo.DamageSource.NONE
+) -> void:
 	assert(amount >= 0)
 
 	#var dmg_event_info = DamageEventInfo.new(attacker, self, amount, source)

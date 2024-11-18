@@ -46,7 +46,7 @@ func switch_cards(slot_no1: int, slot_no2: int) -> void:
 		card2.set_slot(slot1)
 
 		card2.move_and_reanchor(slot1.global_position)
-		var other = card1 if card1 else null;
+		var other = card1 if card1 else null
 		#PassiveEventManager.card_was_moved.emit(MoveEventInfo.new(
 		#	card2, slot2, slot1, other
 		#))
@@ -56,7 +56,7 @@ func switch_cards(slot_no1: int, slot_no2: int) -> void:
 		card1.set_slot(slot2)
 
 		card1.move_and_reanchor(slot2.global_position)
-		var other = card2 if card2 else null;
+		var other = card2 if card2 else null
 		#PassiveEventManager.card_was_moved.emit(MoveEventInfo.new(
 		#	card2, slot1, slot2, other
 		#))

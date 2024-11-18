@@ -17,6 +17,7 @@ func _init(row_: int, column_: int) -> void:
 func to_array() -> Array[int]:
 	return [row, column]
 
+
 func _to_string():
 	return "CardPosition: [%d, %d]" % [row, column]
 

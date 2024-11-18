@@ -184,12 +184,12 @@ func _verify_ability_or_magic(
 func _on_slot_chosen(slot_no: int, card: Card) -> void:
 	hide_slots()
 
-	var selected_card: Card = null;
+	var selected_card: Card = null
 
 	if MatchManager.current_action == MatchManager.Actions.SWITCH:
 		assert(selected_slot.stored_card, "No card selected.")
 
-		selected_card = selected_slot.stored_card;
+		selected_card = selected_slot.stored_card
 
 		selected_card.state.phase = Card.TurnPhase.Action
 
@@ -197,11 +197,9 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 			card.state.phase = Card.TurnPhase.Action
 			card.unselect()
 
-		VerifyClientAction.switch.emit(
-			index_to_array(slot_no), get_slot_array(selected_card)
-		)
+		VerifyClientAction.switch.emit(index_to_array(slot_no), get_slot_array(selected_card))
 
-		var selected_slot_no = get_slot_no(selected_card);
+		var selected_slot_no = get_slot_no(selected_card)
 
 		switch_cards(slot_no, selected_slot_no)
 
@@ -211,19 +209,19 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 	):
 		assert(selected_slot.stored_card, "No card selected.")
 
-		selected_card = selected_slot.stored_card;
+		selected_card = selected_slot.stored_card
 
 		selected_card.state.phase = Card.TurnPhase.Done
 
 		# TODO: don't manually write to state
 		selected_card.state.ability_was_used = true
 
-		selected_card = selected_slot.stored_card;
+		selected_card = selected_slot.stored_card
 		var ability_targets: Dictionary
 
 		match selected_card.info.ability.range:
 			Ability.AbilityRange.ALLY_CARD:
-				ability_targets[card] = card;
+				ability_targets[card] = card
 			Ability.AbilityRange.ALLY_FIELD:
 				for n in Global.PLAYER_ROWS:
 					var slot = player_field.get_slot(n)
@@ -231,12 +229,9 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 						#slot.stored_card.take_damage(atk_value, player_card, DamageEventInfo.DamageSource.ABILITY)
 						ability_targets[slot.stored_card] = slot.stored_card
 
-		selected_card.apply_ability_to(ability_targets);
+		selected_card.apply_ability_to(ability_targets)
 
-
-		VerifyClientAction.ability.emit(
-			get_slot_array(card), get_slot_array(selected_card)
-		)
+		VerifyClientAction.ability.emit(get_slot_array(card), get_slot_array(selected_card))
 
 
 func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
@@ -258,29 +253,33 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 		# take_damage deletes the card if it dies
 		var can_counterattack := not slot_is_reachable(player_slot_no, enemy_card)
 
-		enemy_card.take_damage(player_card.info.base_atk, player_card, DamageEventInfo.DamageSource.ATTACK)
+		enemy_card.take_damage(
+			player_card.info.base_atk, player_card, DamageEventInfo.DamageSource.ATTACK
+		)
 
 		#region Enemy counterattack
 		if can_counterattack:
 			return
 		else:
-
 			#var dmg_event_info = DamageEventInfo.new(
 			#	enemy_card, player_card, max(enemy_card.info.base_atk - 1, 0),
 			#	DamageEventInfo.DamageSource.COUNTER_ATTACK
 			#)
 
-			player_card.take_damage(max(enemy_card.info.base_atk - 1, 0), enemy_card, DamageEventInfo.DamageSource.COUNTER_ATTACK)
+			player_card.take_damage(
+				max(enemy_card.info.base_atk - 1, 0),
+				enemy_card,
+				DamageEventInfo.DamageSource.COUNTER_ATTACK
+			)
 
 		#endregion
 
 	elif MatchManager.current_action == MatchManager.Actions.ABILITY:
-
-		var ability_targets: Dictionary = {};
+		var ability_targets: Dictionary = {}
 
 		match player_card.info.ability.range:
 			Ability.AbilityRange.ENEMY_CARD:
-				ability_targets[enemy_card] = enemy_card;
+				ability_targets[enemy_card] = enemy_card
 			Ability.AbilityRange.ENEMY_ROW:
 				var row: Array[int]
 
@@ -293,9 +292,9 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 					var slot = enemy_field.get_slot(slot_no)
 					if slot.stored_card:
 						#slot.stored_card.take_damage(atk_value, player_card, DamageEventInfo.DamageSource.ABILITY)
-						ability_targets[slot.stored_card] = slot.stored_card;
+						ability_targets[slot.stored_card] = slot.stored_card
 
-		player_card.apply_ability_to(ability_targets);
+		player_card.apply_ability_to(ability_targets)
 
 		_verify_ability_or_magic(
 			MatchManager.current_action, player_card, index_to_array(enemy_slot_no)
@@ -306,7 +305,6 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 
 
 func __on_destroy_card(_slot: int, card: Card) -> void:
-
 	cards.erase(card)
 	if selected_slot != null and selected_slot.stored_card == card:
 		selected_slot.stored_card = null
