@@ -265,8 +265,8 @@ func take_damage(amount: int, attacker: Card = null, source: DamageEventInfo.Dam
 
 	render_attack(state.health)
 
-func apply_ability_to(targets: Dictionary):
 
+func apply_ability_to(targets: Dictionary):
 	match info.ability.effect:
 		Ability.AbilityEffect.ADD_HP:
 			for target in targets:
@@ -284,6 +284,7 @@ func apply_ability_to(targets: Dictionary):
 			for target in targets:
 				target.set_shield(info.ability.value)
 				print(target.state.shield)
+
 
 func heal(amount: int, healer: Card, source: HealEventInfo.HealSource) -> void:
 	assert(amount > 0)
@@ -320,6 +321,7 @@ func _on_mouse_hover() -> void:
 func _on_mouse_exit() -> void:
 	mouse_over = false
 
+
 #Returns the name of the graphics file with the extension.
 func _to_string():
-	return "%s(#%s)" % [info.graphics.get_file().get_slice(".", 0), get_instance_id()];
+	return "%s(#%s)" % [info.graphics.get_file().get_slice(".", 0), get_instance_id()]

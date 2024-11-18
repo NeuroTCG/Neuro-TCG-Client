@@ -34,6 +34,10 @@ CardActionNames="*res://scripts/game/CardActionNames.gd"
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gdscript_formatter/plugin.cfg")
+
 [gui]
 
 theme/custom="res://assets/Themes/Default-UI.tres"
