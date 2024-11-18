@@ -6,10 +6,9 @@ var updates: Array[CardActionList]
 
 func _init(d: Dictionary):
 	super(PacketType.PassiveUpdate)
-	var update_array = d["updates"] as Array[Dictionary]
-	for u in update_array:
-		print(u)
-
+	updates = [];
+	for u in d["updates"]:
+		updates.append(CardActionList.from_dict(u));
 
 static func from_dict(d: Dictionary) -> PassiveUpdatePacket:
 	return PassiveUpdatePacket.new(d)

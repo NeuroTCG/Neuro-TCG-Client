@@ -168,7 +168,7 @@ func receive_command(msg: String) -> void:
 			game_over.emit(packet)
 
 		PacketType.PassiveUpdate:
-			print("passive update recieved! %s " % msg)
+
 			PassiveManager.update_passive.emit(packet)
 
 		var type:

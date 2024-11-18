@@ -27,6 +27,7 @@ MatchManager="*res://scripts/global/match_manager.gd"
 CardStatsManager="*res://scripts/global/card_stats_manager.gd"
 PassiveEventManager="*res://scripts/game/passive_event_manager.gd"
 PassiveManager="*res://scripts/game/passive_manager.gd"
+CardActionNames="*res://scripts/game/CardActionNames.gd"
 
 [display]
 
