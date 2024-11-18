@@ -250,7 +250,6 @@ func set_seal(num_turns: int) -> void:
 func take_damage(
 	amount: int,
 	attacker: Card = null,
-	source: DamageEventInfo.DamageSource = DamageEventInfo.DamageSource.NONE
 ) -> void:
 	assert(amount >= 0)
 
@@ -274,11 +273,11 @@ func apply_ability_to(targets: Dictionary):
 	match info.ability.effect:
 		Ability.AbilityEffect.ADD_HP:
 			for target in targets:
-				target.heal(info.ability.value, self, HealEventInfo.HealSource.ABILITY)
+				target.heal(info.ability.value, self)
 		Ability.AbilityEffect.ATTACK:
 			var atk_value := info.ability.value
 			for target in targets:
-				target.take_damage(atk_value, self, DamageEventInfo.DamageSource.ABILITY)
+				target.take_damage(atk_value, self)
 		Ability.AbilityEffect.SEAL:
 			print("APPLYING SEAL TO CARD")
 			for target in targets:
@@ -290,7 +289,7 @@ func apply_ability_to(targets: Dictionary):
 				print(target.state.shield)
 
 
-func heal(amount: int, healer: Card, source: HealEventInfo.HealSource) -> void:
+func heal(amount: int, healer: Card) -> void:
 	assert(amount > 0)
 	state.health += amount  # not capped by design
 
