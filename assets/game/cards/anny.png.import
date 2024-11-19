@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b8vpclg3nhv4q"
-path="res://.godot/imported/Rizzdal.png-1904784515b67aaaeab4dff3a1505c92.ctex"
+uid="uid://dqwwvp6q6y3jb"
+path="res://.godot/imported/anny.png-bae7870d4ddbc2c4b1ae780fe681d889.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/game/cards/Rizzdal.png"
-dest_files=["res://.godot/imported/Rizzdal.png-1904784515b67aaaeab4dff3a1505c92.ctex"]
+source_file="res://assets/game/cards/anny.png"
+dest_files=["res://.godot/imported/anny.png-bae7870d4ddbc2c4b1ae780fe681d889.ctex"]
 
 [params]
 
