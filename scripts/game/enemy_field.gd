@@ -80,12 +80,12 @@ func _on_attack(packet: AttackPacket) -> void:
 	# take_damage deletes the card if it dies so it may not exist after
 	var target_atk := target_card.info.base_atk
 
-	target_card.take_damage(atk_card.info.base_atk, atk_card, DamageEventInfo.DamageSource.ATTACK)
+	target_card.take_damage(atk_card.info.base_atk, atk_card)
 	if target_card.current_slot:  # it did't die
 		assert(target_card.state.shield == packet.target_card.shield)
 
 	atk_card.take_damage(
-		max(target_atk - 1, 0), target_card, DamageEventInfo.DamageSource.COUNTER_ATTACK
+		max(target_atk - 1, 0), target_card
 	)
 	if atk_card.current_slot:  # it did't die
 		assert(atk_card.state.shield == packet.attacker_card.shield)
