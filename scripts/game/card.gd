@@ -87,6 +87,7 @@ func _ready() -> void:
 	Global.mouse_input_functions.append(_on_mouse_clicked)
 	VerifyClientAction.player_finished.connect(_on_player_finished)
 	RenderOpponentAction.opponent_finished.connect(_on_opponent_finished)
+
 	button_y_pos = buttons.position.y
 
 
@@ -252,8 +253,13 @@ func set_seal(num_turns: int) -> void:
 	seal_sprite.visible = num_turns > 0
 
 
-func take_damage(amount: int) -> void:
+func take_damage(
+	amount: int,
+	attacker: Card = null,
+) -> void:
 	assert(amount >= 0)
+
+	#var dmg_event_info = DamageEventInfo.new(attacker, self, amount, source)
 
 	if state.shield > 0:
 		state.shield -= 1
@@ -269,7 +275,27 @@ func take_damage(amount: int) -> void:
 	render_attack(state.health)
 
 
-func heal(amount: int) -> void:
+func apply_ability_to(targets: Dictionary):
+	match info.ability.effect:
+		Ability.AbilityEffect.ADD_HP:
+			for target in targets:
+				target.heal(info.ability.value, self)
+		Ability.AbilityEffect.ATTACK:
+			var atk_value := info.ability.value
+			for target in targets:
+				target.take_damage(atk_value, self)
+		Ability.AbilityEffect.SEAL:
+			print("APPLYING SEAL TO CARD")
+			for target in targets:
+				target.set_seal(info.ability.value)
+				print(target.state.sealed_turns_left)
+		Ability.AbilityEffect.SHIELD:
+			for target in targets:
+				target.set_shield(info.ability.value)
+				print(target.state.shield)
+
+
+func heal(amount: int, healer: Card) -> void:
 	assert(amount > 0)
 	state.health += amount  # not capped by design
 
@@ -305,5 +331,6 @@ func _on_mouse_exit() -> void:
 	mouse_over = false
 
 
-func _on_tree_exiting() -> void:
-	Global.mouse_input_functions.erase(_on_mouse_clicked)
+#Returns the name of the graphics file with the extension.
+func _to_string():
+	return "%s(#%s)" % [info.graphics.get_file().get_slice(".", 0), get_instance_id()]
