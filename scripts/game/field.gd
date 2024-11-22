@@ -232,6 +232,7 @@ func __load_single_side(state: BoardState, side: int, positions: Array[int]) -> 
 		game_card.set_seal(card_state.sealed_turns_left)
 		game_card.set_shield(card_state.shield)
 		game_card.state.health = card_state.health
+		game_card.state.phase = card_state.phase
 
 		assert(game_card.state.equals(card_state))
 
