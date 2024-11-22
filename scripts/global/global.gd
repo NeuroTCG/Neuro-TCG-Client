@@ -1,12 +1,12 @@
 # Global stuffs for game functionality
 extends Node
 
-const PLAYER_FRONT_ROW := [1, 2, 3, 4]
-const PLAYER_BACK_ROW := [5, 6, 7]
-const PLAYER_ROWS := [1, 2, 3, 4, 5, 6, 7]
-const ENEMY_FRONT_ROW := [11, 12, 13, 14]
-const ENEMY_BACK_ROW := [8, 9, 10]
-const ENEMY_ROWS := [8, 9, 10, 11, 12, 13, 14]
+const PLAYER_FRONT_ROW: Array[int] = [1, 2, 3, 4]
+const PLAYER_BACK_ROW: Array[int] = [5, 6, 7]
+const PLAYER_ROWS: Array[int] = [1, 2, 3, 4, 5, 6, 7]
+const ENEMY_FRONT_ROW: Array[int] = [11, 12, 13, 14]
+const ENEMY_BACK_ROW: Array[int] = [8, 9, 10]
+const ENEMY_ROWS: Array[int] = [8, 9, 10, 11, 12, 13, 14]
 
 # FROM CARD
 
@@ -65,6 +65,12 @@ var ram_manager: RamManager = null
 ## proccessed in a controlled manner
 ## Current order is SLOTS -> CARDS
 var mouse_input_functions: Array[Callable] = []
+
+signal board_state_loaded
+
+func load_game_state(state: BoardState) -> void:
+	player_field.load_game_state(state)
+	board_state_loaded.emit()
 
 
 func _process(_delta: float) -> void:

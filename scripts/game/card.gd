@@ -73,6 +73,7 @@ static func create_card(parent_scene: Node2D, id: int) -> Card:
 
 	new_card.state = CardState.fromCardStats(id, card_info)
 	new_card.info = card_info
+	new_card.name = card_info.name
 	print(card_info.graphics, ResourceLoader.exists(card_info.graphics))
 
 	if ResourceLoader.exists(card_info.graphics):

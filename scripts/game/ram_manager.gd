@@ -14,6 +14,7 @@ func _ready() -> void:
 	VerifyClientAction.player_finished.connect(_refresh_player_ram)
 	Global.use_ram.connect(_on_use_ram)
 	Global.use_enemy_ram.connect(_on_use_enemy_ram)
+	Global.board_state_loaded.connect(_on_game_loaded)
 
 	player_ram = player_max_ram
 	Global.player_ram_changed.emit(player_ram)
@@ -32,6 +33,13 @@ func reset_ram(is_player_first: bool) -> void:
 		_refresh_opponent_ram()
 
 	_refresh_player_ram()
+
+
+func _on_game_loaded() -> void:
+	Global.update_max_ram.emit(player_max_ram)
+	Global.player_ram_changed.emit(player_ram)
+	Global.update_enemy_max_ram.emit(opponent_max_ram)
+	Global.enemy_ram_changed.emit(opponent_ram)
 
 
 func _refresh_player_ram() -> void:

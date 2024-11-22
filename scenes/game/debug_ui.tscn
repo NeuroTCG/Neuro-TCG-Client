@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://ccl73boe1rms2"]
+
+[ext_resource type="Script" path="res://scenes/ui/debug_ui.gd" id="1_cvp1q"]
+
+[node name="Event triggers" type="Panel"]
+custom_minimum_size = Vector2(50, 100)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -319.0
+offset_top = -51.0
+offset_right = -269.0
+offset_bottom = 49.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_cvp1q")

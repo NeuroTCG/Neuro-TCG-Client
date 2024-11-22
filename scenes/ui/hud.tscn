@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://b6dy802mg5uvg"]
+[gd_scene load_steps=3 format=3 uid="uid://b6dy802mg5uvg"]
 
 [ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1_7kgdp"]
+[ext_resource type="PackedScene" uid="uid://ccl73boe1rms2" path="res://scenes/game/debug_ui.tscn" id="2_pgxpw"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_7kgdp")
@@ -76,6 +77,13 @@ offset_top = 0.5
 offset_right = 374.0
 offset_bottom = 20.5
 text = "x"
+
+[node name="Debug Event triggers" parent="." instance=ExtResource("2_pgxpw")]
+offset_left = 415.0
+offset_top = -123.0
+offset_right = 465.0
+offset_bottom = -23.0
+mouse_filter = 2
 
 [connection signal="pressed" from="PauseScreen/QuitButton" to="." method="_on_quit_button_pressed"]
 [connection signal="pressed" from="Notice/CloseNoticeButton" to="." method="_on_close_notice_button_pressed"]

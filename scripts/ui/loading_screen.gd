@@ -19,11 +19,12 @@ func _ready() -> void:
 	Global.network_manager.disconnect.connect(__tmp_on_disconnect)
 	Global.network_manager.client_info_accept.connect(__on_client_info_accept)
 	Global.network_manager.authentication_valid.connect(__on_authentication_valid)
+	Global.network_manager.get_board_state_response.connect(__on_board_state)
 	Global.network_manager.start_initial_packet_sequence()
 
 
 func __on_match_found(packet: MatchFoundPacket) -> void:
-	loading_text = "Match found"
+	loading_text = "Match found\nloading game"
 	var game = game_node.instantiate()
 	get_parent().add_child(game)
 
@@ -33,7 +34,11 @@ func __on_match_found(packet: MatchFoundPacket) -> void:
 	Global.ram_manager = game.get_tree().get_first_node_in_group("ram_manager")
 	Global.ram_manager.reset_ram(packet.is_first_player)
 
+
+func __on_board_state(packet: GetBoardStateResponsePacket) -> void:
+	loading_text = "Game state loaded"
 	queue_free()
+	Global.load_game_state(packet.board)
 
 
 func __on_client_info_accept(_packet: ClientInfoAcceptPacket) -> void:

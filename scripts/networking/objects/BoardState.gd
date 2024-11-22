@@ -4,17 +4,24 @@ var cards: Array  # really Array[Array[Array[CardState|null]]], but godot doesn'
 var traps: Array
 var first_player_active: bool
 var hands: Array  # really Array[Array[int]]
-var ram: Array[int]
+var ram: Array # really Array[int]
+var max_ram: Array # really Array[int]
 
 
 func _init(
-	cards_: Array, traps_: Array, first_player_active_: bool, hands_: Array, ram_: Array[int]
+	cards_: Array,
+	traps_: Array,
+	first_player_active_: bool,
+	hands_: Array,
+	ram_: Array,
+	max_ram_: Array
 ) -> void:
 	cards = cards_
 	traps = traps_
 	first_player_active = first_player_active_
 	hands = hands_
 	ram = ram_
+	max_ram = max_ram_
 
 
 func to_dict() -> Dictionary:
@@ -33,6 +40,7 @@ func to_dict() -> Dictionary:
 		"first_player_active": first_player_active,
 		"hands": hands,
 		"ram": ram,
+		"max_ram": max_ram,
 	}
 
 
@@ -50,4 +58,6 @@ static func from_dict(d: Dictionary) -> BoardState:
 
 	assert(d["traps"] == [[null, null], [null, null]], "Traps aren't implemented yet.")
 
-	return BoardState.new(lcards, d["traps"], d["first_player_active"], d["hands"], d["ram"])
+	return BoardState.new(
+		lcards, d["traps"], d["first_player_active"], d["hands"], d["ram"], d["max_ram"]
+	)

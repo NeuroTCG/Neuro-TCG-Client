@@ -35,6 +35,17 @@ func to_dict() -> Dictionary:
 	}
 
 
+func equals(other: CardState) -> bool:
+	return (
+		id == other.id
+		&& health == other.health
+		&& ability_was_used == other.ability_was_used
+		&& phase == other.phase
+		&& shield == other.shield
+		&& sealed_turns_left == other.sealed_turns_left
+	)
+
+
 static func fromCardStats(id_: int, stats: CardStats) -> CardState:
 	return CardState.new(id_, stats.max_hp, false, Card.TurnPhase.MoveOrAction, 0, 0)
 

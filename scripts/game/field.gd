@@ -145,9 +145,12 @@ static func index_to_array(index: int) -> Array[int]:
 	return []
 
 
+## use slot -1 if card isn't in slot
 func destroy_card(slot: int, card: Card) -> void:
 	print("Card Destroyed!")
-	card.remove_from_slot()
+
+	if card.current_slot != null:
+		card.remove_from_slot()
 
 	card.placement = Card.Placement.DESTROYED
 
@@ -159,6 +162,84 @@ func destroy_card(slot: int, card: Card) -> void:
 
 	player_field.on_card_destroyed.emit(slot, card)
 	enemy_field.on_card_destroyed.emit(slot, card)
+
+
+func __delete_destroyed_cards() -> void:
+	for card in destroyed_cards:
+		card.queue_free()
+	destroyed_cards = []
+
+
+func load_game_state(state: BoardState) -> void:
+	var should_i_be_active = state.first_player_active if MatchManager.first_player else !state.first_player_active
+	if (should_i_be_active and MatchManager._opponent_turn):
+		RenderOpponentAction.opponent_finished.emit()
+	if (!should_i_be_active and !MatchManager._opponent_turn):
+		MatchManager._on_player_finished()
+	
+	assert(should_i_be_active == !MatchManager._opponent_turn)
+
+	for pos in Global.PLAYER_ROWS + Global.ENEMY_ROWS:
+		if get_slot(pos).stored_card != null:
+			destroy_card(pos, get_slot(pos).stored_card)
+
+	# TODO: maybe make "game" a global
+	var player_hand: PlayerHand = get_node("../PlayerHand")
+	var enemy_hand: EnemyHand = get_node("../EnemyHand")
+
+	for card in player_hand.cards + enemy_hand.cards:
+		destroy_card(-1, card)
+	player_hand.cards = []
+	enemy_hand.cards = []
+
+	__delete_destroyed_cards()
+
+	var this_player_index := int(!MatchManager.first_player)
+	var enemy_player_index := int(MatchManager.first_player)
+
+	__load_single_side(state, this_player_index, Global.PLAYER_ROWS)
+	__load_single_side(state, enemy_player_index, Global.ENEMY_ROWS)
+
+	Global.ram_manager.player_max_ram = state.max_ram[this_player_index]
+	Global.ram_manager.player_ram = state.ram[this_player_index]
+
+	Global.ram_manager.opponent_max_ram = state.max_ram[enemy_player_index]
+	Global.ram_manager.opponent_ram = state.ram[enemy_player_index]
+
+	assert(state.traps == [[null, null], [null, null]], "traps aren't implemented yet")
+
+	for id in state.hands[this_player_index]:
+		player_hand.add_card(id)
+
+	for id in state.hands[enemy_player_index]:
+		enemy_hand.add_card(id)
+
+
+func __load_single_side(state: BoardState, side: int, positions: Array[int]) -> void:
+	print("Loading side %d" % side)
+	for pos in positions:
+		var row := index_to_array(pos)[0]
+		var column := index_to_array(pos)[1]
+
+		var card_state: CardState = state.cards[side][row][column]
+
+		if card_state == null:
+			continue
+
+		# NOTE: get_parent() get_node("game") get_node("Game") (keywords for refactoring)
+		var game_card := Card.create_card(Global.player_field.get_parent(), card_state.id)
+
+		game_card.set_seal(card_state.sealed_turns_left)
+		game_card.set_shield(card_state.shield)
+		game_card.state.health = card_state.health
+
+		assert(game_card.state.equals(card_state))
+
+		game_card.placement = Card.Placement.PLAYMAT  # Update card
+		game_card.flip_card()
+		game_card.set_slot(get_slot(pos))
+		game_card.move_and_reanchor(get_slot(pos).global_position)
+		game_card.set_card_visibility()
 
 
 static func array_to_index(array: Array, side: Field.Side) -> int:

@@ -33,6 +33,7 @@ const UseMagicCardRequest := "use_magic_card_request"
 const UseMagicCard := "use_magic_card"
 
 const GameOver: String = "game_over"
+const DebugEvent: String = "debug_event"
 
 const allTypes: Array[String] = [
 	ClientInfo,
@@ -60,4 +61,5 @@ const allTypes: Array[String] = [
 	UseMagicCardRequest,
 	UseMagicCard,
 	GameOver,
+	DebugEvent,
 ]

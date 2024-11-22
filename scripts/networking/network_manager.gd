@@ -118,14 +118,14 @@ func receive_command(msg: String) -> void:
 		PacketType.Summon:
 			if packet.is_you:
 				if not packet.valid:
-					invalid_command.emit("Summon by connection failed!")
+					invalid_command.emit("Summon by client failed!")
 			else:
 				RenderOpponentAction.summon.emit(packet)
 		PacketType.Attack:
 			attack.emit(packet)
 			if packet.is_you:
 				if not packet.valid:
-					invalid_command.emit("Attack by connection failed!")
+					invalid_command.emit("Attack by client failed!")
 			else:
 				print("Attack Packet is received and IS FROM OPPONENT")
 				RenderOpponentAction.attack.emit(packet)
@@ -134,14 +134,14 @@ func receive_command(msg: String) -> void:
 			if packet.is_you:
 				switch_place.emit(packet)
 				if not packet.valid:
-					invalid_command.emit("Switch by connection failed!")
+					invalid_command.emit("Switch by client failed!")
 			else:
 				RenderOpponentAction.switch.emit(packet)
 		PacketType.UseAbility:
 			if packet.is_you:
 				use_ability.emit(packet)
 				if not packet.valid:
-					invalid_command.emit("Ability usage by connection failed!")
+					invalid_command.emit("Ability usage by client failed!")
 			else:
 				RenderOpponentAction.ability.emit(packet)
 

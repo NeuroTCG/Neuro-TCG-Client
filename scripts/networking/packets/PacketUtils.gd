@@ -26,6 +26,7 @@ static var _type_to_class: Dictionary = {
 	PacketType.UseMagicCard: UseMagicCardPacket,
 	PacketType.UseMagicCardRequest: UseMagicCardRequestPacket,
 	PacketType.GameOver: GameOverPacket,
+	PacketType.DebugEvent: DebugEventPacket,
 }
 
 

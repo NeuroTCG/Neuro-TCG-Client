@@ -7,4 +7,5 @@ signal draw_card(packet: DrawCardPacket)
 signal switch(packet: SwitchPlacePacket)
 signal ability(packet: UseAbilityPacket)
 
+# KEYWORD: end_turn
 signal opponent_finished
