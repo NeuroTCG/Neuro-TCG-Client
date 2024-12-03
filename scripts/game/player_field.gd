@@ -226,7 +226,6 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 				for n in Global.PLAYER_ROWS:
 					var slot = player_field.get_slot(n)
 					if slot.stored_card:
-						#slot.stored_card.take_damage(atk_value, player_card, DamageEventInfo.DamageSource.ABILITY)
 						ability_targets[slot.stored_card] = slot.stored_card
 
 		selected_card.apply_ability_to(ability_targets)
@@ -253,23 +252,13 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 		# take_damage deletes the card if it dies
 		var can_counterattack := not slot_is_reachable(player_slot_no, enemy_card)
 
-		enemy_card.take_damage(
-			player_card.info.base_atk, player_card
-		)
+		enemy_card.take_damage(player_card.info.base_atk, player_card)
 
 		#region Enemy counterattack
 		if can_counterattack:
 			return
 		else:
-			#var dmg_event_info = DamageEventInfo.new(
-			#	enemy_card, player_card, max(enemy_card.info.base_atk - 1, 0),
-			#	DamageEventInfo.DamageSource.COUNTER_ATTACK
-			#)
-
-			player_card.take_damage(
-				max(enemy_card.info.base_atk - 1, 0),
-				enemy_card
-			)
+			player_card.take_damage(max(enemy_card.info.base_atk - 1, 0), enemy_card)
 
 		#endregion
 
@@ -290,7 +279,6 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 				for slot_no in row:
 					var slot = enemy_field.get_slot(slot_no)
 					if slot.stored_card:
-						#slot.stored_card.take_damage(atk_value, player_card, DamageEventInfo.DamageSource.ABILITY)
 						ability_targets[slot.stored_card] = slot.stored_card
 
 		player_card.apply_ability_to(ability_targets)
