@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dc2uqxqvuorvy"
-path="res://.godot/imported/MothersLove.png-00a9f239a77a8989ac286771c7fc25df.ctex"
+uid="uid://hxdd1kwi7yty"
+path="res://.godot/imported/pirate_evil.png-7068b1020fabf3de053b528454323e55.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/game/cards/MothersLove.png"
-dest_files=["res://.godot/imported/MothersLove.png-00a9f239a77a8989ac286771c7fc25df.ctex"]
+source_file="res://assets/game/cards/pirate_evil.png"
+dest_files=["res://.godot/imported/pirate_evil.png-7068b1020fabf3de053b528454323e55.ctex"]
 
 [params]
 

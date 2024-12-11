@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://blvcnfjho4q66"
-path="res://.godot/imported/Gymbag.png-f0028c3b2f28f935bf441586b7d4727e.ctex"
+uid="uid://d2oy21x442kwd"
+path="res://.godot/imported/filian.png-39c9fe534d464fd2c254d7b190954414.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/game/cards/Gymbag.png"
-dest_files=["res://.godot/imported/Gymbag.png-f0028c3b2f28f935bf441586b7d4727e.ctex"]
+source_file="res://assets/game/cards/filian.png"
+dest_files=["res://.godot/imported/filian.png-39c9fe534d464fd2c254d7b190954414.ctex"]
 
 [params]
 

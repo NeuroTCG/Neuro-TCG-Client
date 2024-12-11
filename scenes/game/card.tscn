@@ -1,8 +1,9 @@
-[gd_scene load_steps=15 format=3 uid="uid://boe1h3a26dhro"]
+[gd_scene load_steps=16 format=3 uid="uid://boe1h3a26dhro"]
 
 [ext_resource type="Script" path="res://scripts/game/card.gd" id="1_5rey8"]
 [ext_resource type="Texture2D" uid="uid://b20ivgjyf57nr" path="res://assets/game/Back.png" id="2_u5h17"]
 [ext_resource type="Texture2D" uid="uid://c1a02v0qnntwq" path="res://assets/game/Hover.png" id="3_nlf2q"]
+[ext_resource type="Texture2D" uid="uid://uxfhbtqju3c8" path="res://assets/game/cards/template.png" id="3_peo1w"]
 [ext_resource type="Texture2D" uid="uid://ccm0rlsborp6l" path="res://assets/game/Unhover.png" id="4_5xk0m"]
 [ext_resource type="Texture2D" uid="uid://kdovff4ku5kb" path="res://assets/game/nuke_sheet.png" id="5_0v3kj"]
 [ext_resource type="PackedScene" uid="uid://b6jkjwqcsi6xw" path="res://scenes/ui/action_choice_button.tscn" id="6_txvo4"]
@@ -234,6 +235,21 @@ script = ExtResource("1_5rey8")
 rotation = 1.5708
 scale = Vector2(0.08, 0.08)
 texture = ExtResource("2_u5h17")
+
+[node name="CardTemplate" type="Sprite2D" parent="CardBack"]
+texture = ExtResource("3_peo1w")
+
+[node name="CardTemplateLabel" type="Label" parent="CardBack"]
+offset_left = -356.0
+offset_top = -506.0
+offset_right = 349.0
+offset_bottom = 506.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 128
+text = "Angel Neuro"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 1
 
 [node name="CardFront" type="Sprite2D" parent="CardBack"]
 z_index = -1

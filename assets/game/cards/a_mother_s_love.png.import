@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b5qdehu7qarqh"
-path="res://.godot/imported/the_streaming_site_she_uses.png-720bc2235deb00f9148797a95a994f70.ctex"
+uid="uid://dvgnlemhbipd4"
+path="res://.godot/imported/a_mother_s_love.png-395a15ef3fba8322d59b121f883c54f0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/game/cards/the_streaming_site_she_uses.png"
-dest_files=["res://.godot/imported/the_streaming_site_she_uses.png-720bc2235deb00f9148797a95a994f70.ctex"]
+source_file="res://assets/game/cards/a_mother_s_love.png"
+dest_files=["res://.godot/imported/a_mother_s_love.png-395a15ef3fba8322d59b121f883c54f0.ctex"]
 
 [params]
 

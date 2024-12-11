@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://iqk24agskcbu"
-path="res://.godot/imported/Astronaut Neuro.png-9a1830116b3dd3f8720541a1de1e82f7.ctex"
+uid="uid://08fg65gww0ox"
+path="res://.godot/imported/swarm.png-a659cdb6e7714e690f283fe403cc2817.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/game/cards/Astronaut Neuro.png"
-dest_files=["res://.godot/imported/Astronaut Neuro.png-9a1830116b3dd3f8720541a1de1e82f7.ctex"]
+source_file="res://assets/game/cards/swarm.png"
+dest_files=["res://.godot/imported/swarm.png-a659cdb6e7714e690f283fe403cc2817.ctex"]
 
 [params]
 
