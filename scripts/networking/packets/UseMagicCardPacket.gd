@@ -10,7 +10,12 @@ var target_card: CardState
 
 
 func _init(
-		is_you_: bool, valid_: bool, hand_pos_: int, ability_: Ability, target_position_: CardPosition, target_card_: CardState
+	is_you_: bool,
+	valid_: bool,
+	hand_pos_: int,
+	ability_: Ability,
+	target_position_: CardPosition,
+	target_card_: CardState
 ) -> void:
 	super(PacketType.UseMagicCard)
 	is_you = is_you_
