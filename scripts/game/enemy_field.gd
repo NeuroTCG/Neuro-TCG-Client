@@ -78,9 +78,9 @@ func _on_attack(packet: AttackPacket) -> void:
 	var atk_card := player_field.get_slot(atk_slot_no).stored_card
 
 	# take_damage deletes the card if it dies so it may not exist after
-	var target_atk := target_card.info.base_atk
+	var target_atk := target_card.info.base_atk + target_card.state.attack_bonus
 
-	target_card.take_damage(atk_card.info.base_atk, atk_card)
+	target_card.take_damage(atk_card.info.base_atk + atk_card.state.attack_bonus, atk_card)
 	if target_card.current_slot:  # it did't die
 		assert(target_card.state.shield == packet.target_card.shield)
 
@@ -99,7 +99,7 @@ func _apply_ability(
 
 	Global.use_enemy_ram.emit(ability_card.info.ability.cost)
 
-	var targets: Dictionary = {}
+	var targets: Array[Card] = []
 
 	match ability_card.info.ability.range:
 		Ability.AbilityRange.ENEMY_ROW:
@@ -118,18 +118,16 @@ func _apply_ability(
 				for slot_no in row:
 					var slot = player_field.get_slot(slot_no)
 					if slot.stored_card:
-						targets[slot.stored_card] = slot.stored_card
+						targets.append(slot.stored_card)
 		Ability.AbilityRange.ENEMY_CARD:
 			var target_slot_no := Field.array_to_index(
 				target_position.to_array(), Field.Side.Player
 			)
-			targets[player_field.get_slot(target_slot_no).stored_card] = (
-				player_field.get_slot(target_slot_no).stored_card
-			)
+			targets.append(player_field.get_slot(target_slot_no).stored_card)
 		_:  #Sheild and Heal abilities target allies.
 			var target_slot_no := Field.array_to_index(target_position.to_array(), Field.Side.Enemy)
 			var target_card = player_field.get_slot(target_slot_no).stored_card
-			targets[target_card] = target_card
+			targets.append(target_card)
 
 	ability_card.apply_ability_to(targets)
 

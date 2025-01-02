@@ -217,11 +217,11 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 		selected_card.state.ability_was_used = true
 
 		selected_card = selected_slot.stored_card
-		var ability_targets: Dictionary
+		var ability_targets: Array[Card]
 
 		match selected_card.info.ability.range:
 			Ability.AbilityRange.ALLY_CARD:
-				ability_targets[card] = card
+				ability_targets.append(card)
 			Ability.AbilityRange.ALLY_FIELD:
 				for n in Global.PLAYER_ROWS:
 					var slot = player_field.get_slot(n)
@@ -252,22 +252,26 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 		# take_damage deletes the card if it dies
 		var can_counterattack := not slot_is_reachable(player_slot_no, enemy_card)
 
-		enemy_card.take_damage(player_card.info.base_atk + player_card.state.attack_bonus, player_card)
+		enemy_card.take_damage(
+			player_card.info.base_atk + player_card.state.attack_bonus, player_card
+		)
 
 		#region Enemy counterattack
 		if can_counterattack:
 			return
 		else:
-			player_card.take_damage(max(enemy_card.info.base_atk + enemy_card.state.attack_bonus - 1, 0), enemy_card)
+			player_card.take_damage(
+				max(enemy_card.info.base_atk + enemy_card.state.attack_bonus - 1, 0), enemy_card
+			)
 
 		#endregion
 
 	elif MatchManager.current_action == MatchManager.Actions.ABILITY:
-		var ability_targets: Dictionary = {}
+		var ability_targets: Array[Card] = []
 
 		match player_card.info.ability.range:
 			Ability.AbilityRange.ENEMY_CARD:
-				ability_targets[enemy_card] = enemy_card
+				ability_targets.append(enemy_card)
 			Ability.AbilityRange.ENEMY_ROW:
 				var row: Array[int]
 

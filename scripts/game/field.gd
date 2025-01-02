@@ -41,25 +41,20 @@ func switch_cards(slot_no1: int, slot_no2: int) -> void:
 	var card1 := slot1.stored_card
 	var card2 := slot2.stored_card
 
-	if card2 != null:
-		card2.remove_from_slot()
-		card2.set_slot(slot1)
+	print("switch_cards: (%s, %s)" % [card1, card2])
 
+	if card1 != null and card2 == null:
+		move_card(slot_no1, slot_no2)
+	elif card1 == null and card2 != null:
+		move_card(slot_no2, slot_no1)
+	else:
+		slot1.stored_card = card2
+		card2.current_slot = slot1
 		card2.move_and_reanchor(slot1.global_position)
-		var other = card1 if card1 else null
-		#PassiveEventManager.card_was_moved.emit(MoveEventInfo.new(
-		#	card2, slot2, slot1, other
-		#))
 
-	if card1 != null:
-		card1.remove_from_slot()
-		card1.set_slot(slot2)
-
+		slot2.stored_card = card1
+		card1.current_slot = slot2
 		card1.move_and_reanchor(slot2.global_position)
-		var other = card2 if card2 else null
-		#PassiveEventManager.card_was_moved.emit(MoveEventInfo.new(
-		#	card2, slot1, slot2, other
-		#))
 
 
 func move_card(from: int, to: int) -> void:
@@ -76,9 +71,6 @@ func move_card(from: int, to: int) -> void:
 	card.set_slot(to_slot)
 
 	card.move_and_reanchor(to_slot.global_position)
-	#PassiveEventManager.card_was_moved.emit(MoveEventInfo.new(
-	#	card, from_slot, to_slot
-	#))
 
 
 func get_row_for_card_slot(slot_no: int) -> RowPositions:

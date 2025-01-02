@@ -14,7 +14,7 @@ func _on_passive_update(packet: PassiveUpdatePacket):
 		for action in u.actions:
 			match action.action_name:
 				CardActionNames.TEST:
-					print_not_implemented_string(CardActionNames.TEST, user, action.targets)
+					pass
 				CardActionNames.ADD_HP:
 					handle_add_hp_action(user, action)
 				CardActionNames.ADD_ATTACK:
@@ -34,6 +34,7 @@ func _on_passive_update(packet: PassiveUpdatePacket):
 				var name:
 					assert(false, "unknown action name was received from packet. %s" % [name])
 
+
 func get_hand(card_idx: int) -> Hand:
 	var my_index = MatchManager.player_index()
 	var hand: Hand = null
@@ -42,6 +43,7 @@ func get_hand(card_idx: int) -> Hand:
 	else:
 		hand = Global.enemy_hand
 	return hand
+
 
 func get_field(card_idx: int) -> Field:
 	var my_index = MatchManager.player_index()
@@ -52,23 +54,34 @@ func get_field(card_idx: int) -> Field:
 		field = Global.enemy_field
 	return field
 
+
 func get_side_of_field(field: Field):
-	if (field is EnemyField):
+	if field is EnemyField:
 		return Field.Side.Enemy
 	else:
 		return Field.Side.Player
 
+
 func get_card_from_data(card_data: CardData) -> Card:
 	var field = get_field(card_data.playerIdx)
 	var side = get_side_of_field(field)
-	var target_card = field.get_slot(field.array_to_index(card_data.position.to_array(), side)).stored_card
+	var target_card = (
+		field.get_slot(field.array_to_index(card_data.position.to_array(), side)).stored_card
+	)
 	return target_card
+
 
 func get_card_from_target(card_target: CardActionTarget) -> Card:
 	var field = get_field(card_target.playerIdx)
 	var side = get_side_of_field(field)
-	var target_card = field.get_slot(field.array_to_index(card_target.position.to_array(), side)).stored_card
-	return target_card
+	var target_slot := field.get_slot(field.array_to_index(card_target.position.to_array(), side))
+	assert(
+		target_slot.stored_card != null,
+		"No card stored at slot %s @ %s! (%s)" % [target_slot, card_target.position, side]
+	)
+
+	return target_slot.stored_card
+
 
 func handle_draw_card_action(user: CardData, action: CardAction):
 	var hand: Hand = get_hand(user.playerIdx)
@@ -77,11 +90,12 @@ func handle_draw_card_action(user: CardData, action: CardAction):
 	else:
 		hand.add_card(action.amount)
 
+
 func handle_add_hp_action(user: CardData, action: CardAction):
-	#print_not_implemented_string(action.action_name, user, action.targets)
 	for target: CardActionTarget in action.targets:
 		var target_card: Card = get_card_from_target(target)
 		target_card.add_hp(action.amount)
+
 
 func handle_add_attack_action(user: CardData, action: CardAction):
 	for target: CardActionTarget in action.targets:
@@ -90,21 +104,37 @@ func handle_add_attack_action(user: CardData, action: CardAction):
 
 
 func handle_sub_attack_action(user: CardData, action: CardAction):
-	print_not_implemented_string(action.action_name, user, action.targets)
+	for target: CardActionTarget in action.targets:
+		var target_card: Card = get_card_from_target(target)
+		target_card.sub_attack(action.amount)
+		print("set attack to: %s" % [target_card.state.attack_bonus])
+
 
 func handle_sub_hp_action(user: CardData, action: CardAction):
-	#print_not_implemented_string(action.action_name, user, action.targets)
 	var min_hp: int = 0
-	assert(action.other_args.size() <= 1, "Call for Card Action 'SUB HP' had more arguments than expected.")
+	assert(
+		action.other_args.size() <= 1,
+		"Call for Card Action 'SUB HP' had more arguments than expected."
+	)
+
+	if action.other_args.has("min_hp"):
+		print("setting min_hp to: %s" % [action.other_args["min_hp"]])
+		min_hp = int(action.other_args["min_hp"])
 
 	for target: CardActionTarget in action.targets:
 		var target_card: Card = get_card_from_target(target)
+		var current_hp = target_card.state.health
 		target_card.sub_hp(action.amount, min_hp)
+		print("set hp to: %s" % [target_card.state.health])
 
 
 func print_not_implemented_string(
 	action_name: String, user: CardData, targets: Array[CardActionTarget]
 ):
+	if user.playerIdx == MatchManager.player_index():
+		print("THIS IS THE PLAYER")
+	else:
+		print("THIS IS THE ENEMY")
 	print("%s called a %s action with %d target(s):" % [user, action_name, targets.size()])
 	for t in targets:
-		print(t)
+		print("%s: %s" % [get_card_from_target(t), t])

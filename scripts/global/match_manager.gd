@@ -54,6 +54,7 @@ func _process(_delta: float) -> void:
 			callable.call()
 		VerifyClientAction.player_finished.emit()
 
+
 func player_index():
 	if first_player:
 		return 0

@@ -160,7 +160,7 @@ func select() -> void:
 	unhover_tween = get_tree().create_tween()
 	unhover_tween.tween_property(card_unhover_sprite, "modulate:a", 0.0, 0.5)
 
-	atk_label.text = str(info.base_atk)
+	atk_label.text = str(info.base_atk + state.attack_bonus)
 	hp_label.text = str(state.health)
 
 
@@ -275,11 +275,11 @@ func take_damage(
 	render_attack(state.health)
 
 
-func apply_ability_to(targets: Dictionary):
+func apply_ability_to(targets: Array[Card]):
 	match info.ability.effect:
 		Ability.AbilityEffect.ADD_HP:
 			for target in targets:
-				target.heal(info.ability.value, self)
+				target.add_hp(info.ability.value)
 		Ability.AbilityEffect.ATTACK:
 			var atk_value := info.ability.value
 			for target in targets:
@@ -299,20 +299,24 @@ func add_hp(amount: int) -> void:
 	assert(amount > 0)
 	state.health += amount  # not capped by design
 
+
 ## Some situations require hp to be removed without it being explicitly an attack.
 func sub_hp(amount: int, min_hp: int = 0) -> void:
 	assert(amount > 0)
 	state.health -= amount
-	if (state.health < min_hp):
+	if state.health < min_hp:
 		state.health = min_hp
+
 
 func add_attack(amount: int) -> void:
 	assert(amount > 0)
 	state.attack_bonus += amount
 
+
 func sub_attack(amount: int) -> void:
 	assert(amount > 0)
 	state.attack_bonus -= amount
+
 
 ## By default sets z index to 0
 func set_card_visibility(index := 0) -> void:
