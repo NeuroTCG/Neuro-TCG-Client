@@ -28,7 +28,7 @@ func _on_view(card: Card) -> void:
 		% [
 			card.info.name,
 			card.state.health,
-			card.info.base_atk + card.state.attack_bonus,
+			card.current_attack_value,
 			card.info.cost
 		]
 	)

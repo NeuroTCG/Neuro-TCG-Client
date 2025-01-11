@@ -39,9 +39,9 @@ func to_dict() -> Dictionary:
 
 
 func _to_string() -> String:
-	var fields = [id, health, ability_was_used, phase, shield, sealed_turns_left]
+	var fields = [id, health, attack_bonus, ability_was_used, phase, shield, sealed_turns_left]
 	return (
-		"CardState: {id: %d, health: %d, ability_was_used: %s, phase: %s, shield: %s, sealed_turns_left: %d}"
+		"CardState: {id: %d, health: %d, attack_bonus: %d, ability_was_used: %s, phase: %s, shield: %s, sealed_turns_left: %d}"
 		% fields
 	)
 

@@ -37,6 +37,10 @@ var info: CardStats
 
 var current_slot: CardSlot
 
+var current_attack_value: int:
+	get:
+		return info.base_atk + state.attack_bonus
+
 #region STATUS
 var summon_sickness := false:
 	get:
@@ -160,7 +164,7 @@ func select() -> void:
 	unhover_tween = get_tree().create_tween()
 	unhover_tween.tween_property(card_unhover_sprite, "modulate:a", 0.0, 0.5)
 
-	atk_label.text = str(info.base_atk + state.attack_bonus)
+	atk_label.text = str(current_attack_value)
 	hp_label.text = str(state.health)
 
 
@@ -283,7 +287,7 @@ func apply_ability_to(targets: Array[Card]):
 		Ability.AbilityEffect.ATTACK:
 			var atk_value := info.ability.value
 			for target in targets:
-				target.take_damage(atk_value + state.attack_bonus, self)
+				target.take_damage(current_attack_value, self)
 		Ability.AbilityEffect.SEAL:
 			print("APPLYING SEAL TO CARD")
 			for target in targets:
@@ -293,6 +297,8 @@ func apply_ability_to(targets: Array[Card]):
 			for target in targets:
 				target.set_shield(info.ability.value)
 				print(target.state.shield)
+		_:
+			assert(false, "no action for AbilityEffect: %s" % [info.ability.effect])
 
 
 func add_hp(amount: int) -> void:
@@ -348,6 +354,8 @@ func _on_mouse_hover() -> void:
 func _on_mouse_exit() -> void:
 	mouse_over = false
 
+func _on_tree_exiting() -> void:
+	Global.mouse_input_functions.erase(_on_mouse_clicked)
 
 #Returns the name of the graphics file with the extension.
 func _to_string():

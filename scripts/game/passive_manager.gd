@@ -61,16 +61,6 @@ func get_side_of_field(field: Field):
 	else:
 		return Field.Side.Player
 
-
-func get_card_from_data(card_data: CardData) -> Card:
-	var field = get_field(card_data.playerIdx)
-	var side = get_side_of_field(field)
-	var target_card = (
-		field.get_slot(field.array_to_index(card_data.position.to_array(), side)).stored_card
-	)
-	return target_card
-
-
 func get_card_from_target(card_target: CardActionTarget) -> Card:
 	var field = get_field(card_target.playerIdx)
 	var side = get_side_of_field(field)
@@ -107,7 +97,7 @@ func handle_sub_attack_action(user: CardData, action: CardAction):
 	for target: CardActionTarget in action.targets:
 		var target_card: Card = get_card_from_target(target)
 		target_card.sub_attack(action.amount)
-		print("set attack to: %s" % [target_card.state.attack_bonus])
+		print("set attack to: %s" % [target_card.current_attack_value])
 
 
 func handle_sub_hp_action(user: CardData, action: CardAction):

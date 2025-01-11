@@ -253,7 +253,7 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 		var can_counterattack := not slot_is_reachable(player_slot_no, enemy_card)
 
 		enemy_card.take_damage(
-			player_card.info.base_atk + player_card.state.attack_bonus, player_card
+			player_card.current_attack_value, player_card
 		)
 
 		#region Enemy counterattack
@@ -261,7 +261,7 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 			return
 		else:
 			player_card.take_damage(
-				max(enemy_card.info.base_atk + enemy_card.state.attack_bonus - 1, 0), enemy_card
+				max(enemy_card.current_attack_value - 1, 0), enemy_card
 			)
 
 		#endregion
