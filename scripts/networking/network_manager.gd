@@ -14,6 +14,7 @@ signal use_ability(packet: UseAbilityPacket)
 signal start_turn(packet: StartTurnPacket)
 signal draw_card(packet: DrawCardPacket)
 signal game_over(packet: GameOverPacket)
+signal passive_update(packet: PassiveUpdatePacket)
 
 signal attack(packet: AttackPacket)
 #endregion
@@ -158,6 +159,9 @@ func receive_command(msg: String) -> void:
 		PacketType.GameOver:
 			print("game is over!")
 			game_over.emit(packet)
+
+		PacketType.PassiveUpdate:
+			PassiveManager.update_passive.emit(packet)
 
 		var type:
 			assert(false, "Received unhandled packet type '%s'" % type)

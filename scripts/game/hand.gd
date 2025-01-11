@@ -11,3 +11,8 @@ var selected_card: Card = null
 
 func get_card_pos(card: Card) -> int:
 	return cards.find(card)
+
+
+# TODO: Abstract function: implement add_card() when extending.
+func add_card(id: int):
+	pass

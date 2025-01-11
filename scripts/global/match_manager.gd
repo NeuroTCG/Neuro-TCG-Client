@@ -55,6 +55,13 @@ func _process(_delta: float) -> void:
 		VerifyClientAction.player_finished.emit()
 
 
+func player_index():
+	if first_player:
+		return 0
+	else:
+		return 1
+
+
 func _on_match_found(packet: MatchFoundPacket) -> void:
 	if packet.is_first_player:
 		print("THIS PLAYER WILL GO FIRST")

@@ -78,37 +78,31 @@ func _on_attack(packet: AttackPacket) -> void:
 	var atk_card := player_field.get_slot(atk_slot_no).stored_card
 
 	# take_damage deletes the card if it dies so it may not exist after
-	var target_atk := target_card.info.base_atk
+	var target_atk := target_card.current_attack_value
 
-	target_card.take_damage(atk_card.info.base_atk)
+	target_card.take_damage(atk_card.current_attack_value, atk_card)
 	if target_card.current_slot:  # it did't die
 		assert(target_card.state.shield == packet.target_card.shield)
 
-	atk_card.take_damage(max(target_atk - 1, 0))
+	atk_card.take_damage(max(target_atk - 1, 0), target_card)
 	if atk_card.current_slot:  # it did't die
 		assert(atk_card.state.shield == packet.attacker_card.shield)
 
 
 func _apply_ability(
-	ability: Ability, target_position: CardPosition, target_card_state: CardState
+	ability_card: Card,
+	ability: Ability,
+	target_position: CardPosition,
+	target_card_state: CardState
 ) -> void:
 	Global.use_enemy_ram.emit(ability.cost)
 
-	match ability.effect:
-		Ability.AbilityEffect.ADD_HP:
-			var target_slot_no := Field.array_to_index(target_position.to_array(), Field.Side.Enemy)
-			var target_card := enemy_field.get_slot(target_slot_no).stored_card
+	Global.use_enemy_ram.emit(ability_card.info.ability.cost)
 
-			target_card.heal(target_card_state.health - target_card.state.health)
-		Ability.AbilityEffect.ATTACK when ability.range == Ability.AbilityRange.ENEMY_CARD:
-			var target_slot_no := Field.array_to_index(
-				target_position.to_array(), Field.Side.Player
-			)
-			var target_card := player_field.get_slot(target_slot_no).stored_card
+	var targets: Array[Card] = []
 
-			target_card.take_damage(target_card.state.health - target_card_state.health)
-			assert(target_card.state.shield == target_card.state.shield)
-		Ability.AbilityEffect.ATTACK when ability.range == Ability.AbilityRange.ENEMY_ROW:
+	match ability_card.info.ability.range:
+		Ability.AbilityRange.ENEMY_ROW:
 			var target_slot_no := Field.array_to_index(
 				target_position.to_array(), Field.Side.Player
 			)
@@ -124,24 +118,18 @@ func _apply_ability(
 				for slot_no in row:
 					var slot = player_field.get_slot(slot_no)
 					if slot.stored_card:
-						slot.stored_card.take_damage(atk_value)
-		Ability.AbilityEffect.SEAL:
-			print("APPLYING SEAL TO CARD")
-			# In this case the target card will always be the player's card
+						targets.append(slot.stored_card)
+		Ability.AbilityRange.ENEMY_CARD:
 			var target_slot_no := Field.array_to_index(
 				target_position.to_array(), Field.Side.Player
 			)
-			var target_card := player_field.get_slot(target_slot_no).stored_card
-			target_card.set_seal(ability.value)
-			print(target_card.state.sealed_turns_left)
-		Ability.AbilityEffect.SHIELD:
-			print("APPLYING SHIELD TO CARD")
+			targets.append(player_field.get_slot(target_slot_no).stored_card)
+		_:  #Sheild and Heal abilities target allies.
 			var target_slot_no := Field.array_to_index(target_position.to_array(), Field.Side.Enemy)
-			var target_card := enemy_field.get_slot(target_slot_no).stored_card
+			var target_card = player_field.get_slot(target_slot_no).stored_card
+			targets.append(target_card)
 
-			target_card.set_shield(ability.value)
-			assert(target_card.state.shield == target_card.shield)
-			print(target_card.state.shield)
+	ability_card.apply_ability_to(targets)
 
 
 func _on_ability(packet: UseAbilityPacket) -> void:
@@ -150,11 +138,14 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 		packet.ability_position.to_array(), Field.Side.Enemy
 	)
 	var ability_card := enemy_field.get_slot(ability_slot_no).stored_card
-	_apply_ability(ability_card.info.ability, packet.target_position, packet.target_card)
+	_apply_ability(
+		ability_card, ability_card.info.ability, packet.target_position, packet.target_card
+	)
 
 
 func _on_magic(packet: UseMagicCardPacket) -> void:
-	_apply_ability(packet.ability, packet.target_position, packet.target_card)
+	var magic_user: Card = enemy_field.get_slot(packet.hand_pos).stored_card
+	_apply_ability(magic_user, packet.ability, packet.target_position, packet.target_card)
 	Global.enemy_hand.discard_hand_card_by_hand_pos(packet.hand_pos)
 
 #endregion

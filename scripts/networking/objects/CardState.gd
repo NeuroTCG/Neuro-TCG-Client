@@ -6,6 +6,7 @@ var ability_was_used: bool
 var phase: Card.TurnPhase
 var shield: int
 var sealed_turns_left: int
+var attack_bonus: int
 
 
 func _init(
@@ -22,6 +23,7 @@ func _init(
 	phase = phase_ as Card.TurnPhase
 	shield = shield_
 	sealed_turns_left = sealed_turns_left_
+	attack_bonus = 0
 
 
 func to_dict() -> Dictionary:
@@ -32,7 +34,16 @@ func to_dict() -> Dictionary:
 		"phase": phase,
 		"shield": shield,
 		"sealed_turns_left": sealed_turns_left,
+		"attack_bonus": attack_bonus
 	}
+
+
+func _to_string() -> String:
+	var fields = [id, health, attack_bonus, ability_was_used, phase, shield, sealed_turns_left]
+	return (
+		"CardState: {id: %d, health: %d, attack_bonus: %d, ability_was_used: %s, phase: %s, shield: %s, sealed_turns_left: %d}"
+		% fields
+	)
 
 
 static func fromCardStats(id_: int, stats: CardStats) -> CardState:

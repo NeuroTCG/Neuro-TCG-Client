@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://dh5lnd7qcyrg1"]
+[gd_scene load_steps=14 format=3 uid="uid://dh5lnd7qcyrg1"]
 
 [ext_resource type="Script" path="res://scripts/game/game.gd" id="1_kfv8y"]
 [ext_resource type="PackedScene" uid="uid://b6dy802mg5uvg" path="res://scenes/ui/hud.tscn" id="2_846mn"]
@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://qbv47xh325e6" path="res://scenes/game/turn_indicator.tscn" id="11_dhnsn"]
 [ext_resource type="PackedScene" uid="uid://c74u03d47ybfw" path="res://scenes/ui/ram.tscn" id="11_jogws"]
 [ext_resource type="Script" path="res://scripts/game/ram_manager.gd" id="12_ft7rt"]
+[ext_resource type="Script" path="res://scripts/game/passive_manager.gd" id="13_wjgx5"]
 
 [node name="Game" type="Node2D" groups=["game"]]
 script = ExtResource("1_kfv8y")
@@ -106,6 +107,9 @@ enemy = true
 
 [node name="RamManager" type="Node2D" parent="."]
 script = ExtResource("12_ft7rt")
+
+[node name="PassiveManager" type="Node2D" parent="."]
+script = ExtResource("13_wjgx5")
 
 [editable path="PlayerField"]
 [editable path="EnemyField"]

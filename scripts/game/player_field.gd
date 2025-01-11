@@ -184,42 +184,53 @@ func _verify_ability_or_magic(
 func _on_slot_chosen(slot_no: int, card: Card) -> void:
 	hide_slots()
 
+	var selected_card: Card = null
+
 	if MatchManager.current_action == MatchManager.Actions.SWITCH:
 		assert(selected_slot.stored_card, "No card selected.")
 
-		selected_slot.stored_card.state.phase = Card.TurnPhase.Action
+		selected_card = selected_slot.stored_card
+
+		selected_card.state.phase = Card.TurnPhase.Action
 
 		if card:
 			card.state.phase = Card.TurnPhase.Action
 			card.unselect()
 
-		VerifyClientAction.switch.emit(
-			index_to_array(slot_no), get_slot_array(selected_slot.stored_card)
-		)
-		switch_cards(slot_no, get_slot_no(selected_slot.stored_card))
+		VerifyClientAction.switch.emit(index_to_array(slot_no), get_slot_array(selected_card))
+
+		var selected_slot_no = get_slot_no(selected_card)
+
+		switch_cards(slot_no, selected_slot_no)
 
 	if (
 		MatchManager.current_action == MatchManager.Actions.ABILITY
 		|| MatchManager.current_action == MatchManager.Actions.MAGIC
 	):
 		assert(selected_slot.stored_card, "No card selected.")
-		selected_slot.stored_card.state.phase = Card.TurnPhase.Done
+
+		selected_card = selected_slot.stored_card
+
+		selected_card.state.phase = Card.TurnPhase.Done
+
 		# TODO: don't manually write to state
-		selected_slot.stored_card.state.ability_was_used = true
+		selected_card.state.ability_was_used = true
 
-		if selected_slot.stored_card.info.ability.effect == Ability.AbilityEffect.ADD_HP:
-			print("Card ability in effect. HP before: ", card.state.health)
-			card.heal(selected_slot.stored_card.info.ability.value)
-			_verify_ability_or_magic(
-				MatchManager.current_action, card, get_slot_array(selected_slot.stored_card)
-			)
-			print("Hp afterwards: ", card.state.health)
+		selected_card = selected_slot.stored_card
+		var ability_targets: Array[Card]
 
-		elif selected_slot.stored_card.info.ability.effect == Ability.AbilityEffect.SHIELD:
-			_verify_ability_or_magic(
-				MatchManager.current_action, card, get_slot_array(selected_slot.stored_card)
-			)
-			card.set_shield(selected_slot.stored_card.info.ability.value)
+		match selected_card.info.ability.range:
+			Ability.AbilityRange.ALLY_CARD:
+				ability_targets.append(card)
+			Ability.AbilityRange.ALLY_FIELD:
+				for n in Global.PLAYER_ROWS:
+					var slot = player_field.get_slot(n)
+					if slot.stored_card:
+						ability_targets[slot.stored_card] = slot.stored_card
+
+		selected_card.apply_ability_to(ability_targets)
+
+		VerifyClientAction.ability.emit(get_slot_array(card), get_slot_array(selected_card))
 
 
 func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
@@ -241,51 +252,36 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 		# take_damage deletes the card if it dies
 		var can_counterattack := not slot_is_reachable(player_slot_no, enemy_card)
 
-		enemy_card.take_damage(player_card.info.base_atk)
+		enemy_card.take_damage(player_card.current_attack_value, player_card)
 
 		#region Enemy counterattack
 		if can_counterattack:
 			return
 		else:
-			player_card.take_damage(max(enemy_card.info.base_atk - 1, 0))
+			player_card.take_damage(max(enemy_card.current_attack_value - 1, 0), enemy_card)
 
 		#endregion
 
-	elif (
-		MatchManager.current_action == MatchManager.Actions.ABILITY
-		|| MatchManager.current_action == MatchManager.Actions.MAGIC
-	):
-		# TODO: make independent of ability range
-		if (
-			player_card.info.ability.effect == Ability.AbilityEffect.ATTACK
-			and player_card.info.ability.range == Ability.AbilityRange.ENEMY_CARD
-		):
-			var atk_value = player_card.info.ability.value
+	elif MatchManager.current_action == MatchManager.Actions.ABILITY:
+		var ability_targets: Array[Card] = []
 
-			enemy_card.take_damage(atk_value)
+		match player_card.info.ability.range:
+			Ability.AbilityRange.ENEMY_CARD:
+				ability_targets.append(enemy_card)
+			Ability.AbilityRange.ENEMY_ROW:
+				var row: Array[int]
 
-		elif (
-			player_card.info.ability.effect == Ability.AbilityEffect.ATTACK
-			and player_card.info.ability.range == Ability.AbilityRange.ENEMY_ROW
-		):
-			var atk_value := player_card.info.ability.value
-			var row: Array[int]
+				if enemy_slot_no in Global.ENEMY_BACK_ROW:
+					row = Global.ENEMY_BACK_ROW
+				elif enemy_slot_no in Global.ENEMY_FRONT_ROW:
+					row = Global.ENEMY_FRONT_ROW
 
-			if enemy_slot_no in Global.ENEMY_BACK_ROW:
-				row = Global.ENEMY_BACK_ROW
-			elif enemy_slot_no in Global.ENEMY_FRONT_ROW:
-				row = Global.ENEMY_FRONT_ROW
+				for slot_no in row:
+					var slot = enemy_field.get_slot(slot_no)
+					if slot.stored_card:
+						ability_targets[slot.stored_card] = slot.stored_card
 
-			for slot_no in row:
-				var slot = enemy_field.get_slot(slot_no)
-				if slot.stored_card:
-					slot.stored_card.take_damage(atk_value)
-
-		elif player_card.info.ability.effect == Ability.AbilityEffect.SEAL:
-			# Play seal animation when its made but rn
-			# all that needs to be done is verify client action which is
-			# done for any ability.
-			enemy_card.set_seal(player_card.info.ability.value)
+		player_card.apply_ability_to(ability_targets)
 
 		_verify_ability_or_magic(
 			MatchManager.current_action, player_card, index_to_array(enemy_slot_no)
