@@ -252,17 +252,13 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 		# take_damage deletes the card if it dies
 		var can_counterattack := not slot_is_reachable(player_slot_no, enemy_card)
 
-		enemy_card.take_damage(
-			player_card.current_attack_value, player_card
-		)
+		enemy_card.take_damage(player_card.current_attack_value, player_card)
 
 		#region Enemy counterattack
 		if can_counterattack:
 			return
 		else:
-			player_card.take_damage(
-				max(enemy_card.current_attack_value - 1, 0), enemy_card
-			)
+			player_card.take_damage(max(enemy_card.current_attack_value - 1, 0), enemy_card)
 
 		#endregion
 

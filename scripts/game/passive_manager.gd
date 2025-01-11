@@ -61,6 +61,16 @@ func get_side_of_field(field: Field):
 	else:
 		return Field.Side.Player
 
+
+func get_card_from_data(card_data: CardData) -> Card:
+	var field = get_field(card_data.playerIdx)
+	var side = get_side_of_field(field)
+	var target_card = (
+		field.get_slot(field.array_to_index(card_data.position.to_array(), side)).stored_card
+	)
+	return target_card
+
+
 func get_card_from_target(card_target: CardActionTarget) -> Card:
 	var field = get_field(card_target.playerIdx)
 	var side = get_side_of_field(field)
