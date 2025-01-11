@@ -56,11 +56,19 @@ layout_mode = 2
 theme_override_constants/separation = 21
 alignment = 1
 
-[node name="Profile-Button" type="Button" parent="MainMenu/VBoxContainer2/BottomRow"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="MainMenu/VBoxContainer2/BottomRow"]
+layout_mode = 2
+
+[node name="Profile-Button" type="Button" parent="MainMenu/VBoxContainer2/BottomRow/VBoxContainer2"]
 custom_minimum_size = Vector2(311, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 90
+theme_override_font_sizes/font_size = 80
 text = "profile"
+
+[node name="Logout-Button" type="Button" parent="MainMenu/VBoxContainer2/BottomRow/VBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 80
+text = "Logout"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MainMenu/VBoxContainer2/BottomRow"]
 custom_minimum_size = Vector2(311, 0)
@@ -109,7 +117,8 @@ custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_vertical = 10
 
-[connection signal="pressed" from="MainMenu/VBoxContainer2/BottomRow/Profile-Button" to="MainMenu" method="_on_profile_button_pressed"]
+[connection signal="pressed" from="MainMenu/VBoxContainer2/BottomRow/VBoxContainer2/Profile-Button" to="MainMenu" method="_on_profile_button_pressed"]
+[connection signal="pressed" from="MainMenu/VBoxContainer2/BottomRow/VBoxContainer2/Logout-Button" to="MainMenu" method="_on_logout_button_pressed"]
 [connection signal="pressed" from="MainMenu/VBoxContainer2/BottomRow/VBoxContainer/Play-Button" to="MainMenu" method="_on_play_button_pressed"]
 [connection signal="pressed" from="MainMenu/VBoxContainer2/BottomRow/VBoxContainer/Settings-Button" to="MainMenu" method="_on_settings_button_pressed"]
 [connection signal="pressed" from="MainMenu/VBoxContainer2/BottomRow/VBoxContainer/Quit-Button" to="MainMenu" method="_on_quit_button_pressed"]

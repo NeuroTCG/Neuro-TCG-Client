@@ -2,6 +2,7 @@ extends Control
 
 var settings := load("res://scenes/ui/settings.tscn")
 var loading_screen := load("res://scenes/ui/loading_screen.tscn")
+var login_screen := load("res://scenes/ui/login.tscn")
 
 
 func _on_play_button_pressed() -> void:
@@ -23,3 +24,9 @@ func _on_quit_button_pressed() -> void:
 
 func _on_profile_button_pressed() -> void:
 	print("Viewing profile is not implemented")
+
+
+func _on_logout_button_pressed() -> void:
+	Auth.delete_token()
+	get_parent().add_child(login_screen.instantiate())
+	queue_free()

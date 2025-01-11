@@ -1,0 +1,80 @@
+[gd_scene load_steps=3 format=3 uid="uid://q51vge1mhcw5"]
+
+[ext_resource type="Texture2D" uid="uid://ctucsna1mt6yp" path="res://assets/login/discord-mark-blue.svg" id="1_als3a"]
+[ext_resource type="Script" path="res://scripts/login.gd" id="1_j0fkf"]
+
+[node name="Login" type="CanvasLayer"]
+script = ExtResource("1_j0fkf")
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -441.0
+offset_right = 441.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="StatusLabel" type="Label" parent="Control/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+text = "Loading..."
+horizontal_alignment = 1
+
+[node name="AuthMethodsContainer" type="HBoxContainer" parent="Control/VBoxContainer"]
+visible = false
+layout_mode = 2
+alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="DiscordButton" type="TextureButton" parent="Control/VBoxContainer/AuthMethodsContainer"]
+layout_mode = 2
+tooltip_text = "Login with Discord"
+texture_normal = ExtResource("1_als3a")
+
+[node name="URL" type="TextEdit" parent="Control/VBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 42
+placeholder_text = "URL"
+editable = false
+
+[node name="Authenticating" type="HBoxContainer" parent="Control/VBoxContainer"]
+visible = false
+layout_mode = 2
+alignment = 1
+
+[node name="Back" type="Button" parent="Control/VBoxContainer/Authenticating"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 42
+text = "Back"
+
+[node name="Copy" type="Button" parent="Control/VBoxContainer/Authenticating"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 42
+text = "Copy to Clipboard"
+
+[node name="Open in Browser" type="Button" parent="Control/VBoxContainer/Authenticating"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 42
+text = "Open in Browser"
+
+[node name="AfterCopyTimer" type="Timer" parent="."]
+
+[connection signal="pressed" from="Control/VBoxContainer/AuthMethodsContainer/DiscordButton" to="." method="_on_discord_button_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/Authenticating/Back" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/Authenticating/Copy" to="." method="_on_copy_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/Authenticating/Open in Browser" to="." method="_on_open_pressed"]
