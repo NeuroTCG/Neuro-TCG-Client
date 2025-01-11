@@ -81,13 +81,6 @@ func __on_match_found(packet: MatchFoundPacket) -> void:
 	else:
 		print("We are second")
 
-	client_info_accept.disconnect(__on_client_info_answer)
-	authentication_valid.disconnect(__on_authenticate_answer)
-	disconnect.disconnect(__on_disconnect)
-	rule_info.disconnect(__on_rules_packet)
-	match_found.disconnect(__on_match_found)
-
-
 func send_packet(packet: Packet) -> void:
 	var data := PacketUtils.serialize(packet)
 	connection.ws.send_text(data)
