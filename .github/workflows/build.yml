@@ -106,6 +106,7 @@ jobs:
         run: |
           apt-get update && apt-get install -y rsync
       - name: Deploy to GitHub Pages 🚀
+        if: (github.head_ref || github.ref_name) == "main"
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
           branch: gh-pages # The branch the action should deploy to.
