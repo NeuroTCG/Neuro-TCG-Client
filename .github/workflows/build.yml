@@ -28,18 +28,12 @@ jobs:
           path: binaries
           pattern: release-*
           merge-multiple: false
-      - name: Zip directories
-        run: |
-          for i in binaries/*/; do
-            zip -r "${i%/}.zip" "$i"
-            echo "Zipped '$i'"
-          done
       - name: Create the Release
         uses: softprops/action-gh-release@v2
         with:
           prerelease: false
           files: |
-            ${{ github.workspace }}/binaries/*.zip
+            ${{ github.workspace }}/binaries/
 
   export-windows:
     name: Windows Export
