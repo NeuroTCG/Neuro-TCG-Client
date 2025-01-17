@@ -26,14 +26,20 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: binaries
-          pattern: release-linux
-          merge-multiple: true
-      - name: Create the Prerelease
+          pattern: release-*
+          merge-multiple: false
+      - name: Zip directories
+        run: |
+          for i in binaries/*/; do
+            zip -r "${i%/}.zip" "$i"
+            echo "Zipped '$i'"
+          done
+      - name: Create the prerelease
         uses: softprops/action-gh-release@v2
         with:
           prerelease: true
           files: |
-            ${{ github.workspace }}/binaries/*
+            ${{ github.workspace }}/binaries/*.zip
 
   export-windows:
     name: Windows Export
