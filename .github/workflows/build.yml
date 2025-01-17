@@ -15,19 +15,21 @@ env:
 
 jobs:
   make-prerelease:
+    runs-on: ubuntu-24.04
     if: ${{ (github.head_ref || github.ref_name) == 'main' }}
     name: Make Prerelease
-    - name: Download artifacts
-      uses: actions/download-artifact@v4
-      with:
-        path: binaries
-        pattern: release-*
-        merge-multiple: true
-    - name: Create the Prerelease
-      uses: softprops/action-gh-release@v2
-      with:
-        files: |
-          ${{ github.workspace }}/binaries/*
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: binaries
+          pattern: release-*
+          merge-multiple: true
+      - name: Create the Prerelease
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ${{ github.workspace }}/binaries/*
 
   export-windows:
     name: Windows Export
