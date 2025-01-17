@@ -24,12 +24,13 @@ signal invalid_command(error: String)
 
 signal on_packet_received(packet: Packet)
 
-var connection := Connection.new()
+var connection: Connection
 
 const PROTOCOL_VERSION := 1
 
 
 func _ready() -> void:
+	connection = Connection.new()
 	add_child(connection)
 
 
@@ -59,7 +60,7 @@ func __on_disconnect(packet: DisconnectPacket) -> void:
 
 func __on_client_info_answer(_packet: ClientInfoAcceptPacket) -> void:
 	print("Connected to server (protocol v%d)" % PROTOCOL_VERSION)
-	send_packet(AuthenticatePacket.new("Neuro"))
+	send_packet(AuthenticatePacket.new("Robotino"))
 
 
 func __on_authenticate_answer(packet: Packet) -> void:
@@ -81,6 +82,7 @@ func __on_match_found(packet: MatchFoundPacket) -> void:
 		print("We are first")
 	else:
 		print("We are second")
+
 
 func send_packet(packet: Packet) -> void:
 	var data := PacketUtils.serialize(packet)

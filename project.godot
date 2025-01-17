@@ -17,9 +17,8 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-NetworkManager="res://scripts/networking/network_manager.gd"
-Global="*res://scripts/global/global.gd"
 AudioSystem="*res://scripts/global/audio_system.gd"
+Global="*res://scripts/global/global.gd"
 SavedSettings="*res://scripts/global/saved_settings.gd"
 RenderOpponentAction="*res://scripts/networking/actions/render_opponent_action.gd"
 VerifyClientAction="*res://scripts/networking/actions/verify_client_action.gd"

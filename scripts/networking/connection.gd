@@ -1,20 +1,25 @@
 extends Node
 class_name Connection
 
-var url := "wss://robotino.ch/neurotcg/game"
-var local_url := "ws://127.0.0.1:9933/game"
+var main_url := "ws://127.0.0.1:9933/game"
+var fallback_url := "wss://robotino.ch/neurotcg/game"
+var current_url := ""
 var ws := WebSocketPeer.new()
+
+
+func try_connect(url: String) -> bool:
+	var error := ws.connect_to_url(url)
+	current_url = url
+	if error != OK:
+		print("WARNING: couldn't connect to '%s'" % url)
+		return false
+	return true
 
 
 # Called when the node enters the scene tree for the first time.
 func _init() -> void:
-	var error := ws.connect_to_url(url)
-	if error != OK:
-		print("WARNING: Cannot connect to server! trying localhost")
-		url = local_url
-		error = ws.connect_to_url(url)
-		if error != OK:
-			print("ERROR: Cannot connect to server or localhost!")
+	if !(try_connect(main_url) || try_connect(fallback_url)):
+		print("ERROR: all connection attempts failed (including fallback)")
 
 
 func wait_until_connection_opened() -> void:
@@ -42,12 +47,11 @@ func _process(_delta: float) -> void:
 		var code := ws.get_close_code()
 		var reason := ws.get_close_reason()
 		print("WebSocket closed with code: %d, reason %s. Clean: %s" % [code, reason, code != -1])
-		if url != local_url:
-			print("Server connection failed, trying localhost")
-			url = local_url
-			var error = ws.connect_to_url(url)
-			if error != OK:
-				print("ERROR: Cannot connect to server or localhost!")
+		if current_url == main_url:
+			print("Server connection failed, trying fallback")
+			if !try_connect(fallback_url):
+				print("Server connection failed (fallback)")
+				set_process(false)  # Stop processing.
 		else:
 			set_process(false)  # Stop processing.
 
