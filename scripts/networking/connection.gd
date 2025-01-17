@@ -1,7 +1,8 @@
 extends Node
 class_name Connection
 
-var url := "ws://127.0.0.1:9933/game"
+var url := "wss://robotino.ch/neurotcg/game"
+var local_url := "ws://127.0.0.1:9933/game"
 var ws := WebSocketPeer.new()
 
 
@@ -9,7 +10,11 @@ var ws := WebSocketPeer.new()
 func _init() -> void:
 	var error := ws.connect_to_url(url)
 	if error != OK:
-		print("ERROR: Cannot connect to url!")
+		print("WARNING: Cannot connect to server! trying localhost")
+		url = local_url
+		error = ws.connect_to_url(url)
+		if error != OK:
+			print("ERROR: Cannot connect to server or localhost!")
 
 
 func wait_until_connection_opened() -> void:
@@ -37,7 +42,14 @@ func _process(_delta: float) -> void:
 		var code := ws.get_close_code()
 		var reason := ws.get_close_reason()
 		print("WebSocket closed with code: %d, reason %s. Clean: %s" % [code, reason, code != -1])
-		set_process(false)  # Stop processing.
+		if url != local_url:
+			print("Server connection failed, trying localhost")
+			url = local_url
+			var error = ws.connect_to_url(url)
+			if error != OK:
+				print("ERROR: Cannot connect to server or localhost!")
+		else:
+			set_process(false)  # Stop processing.
 
 
 func parse_msg() -> bool:
