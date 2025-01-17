@@ -1,9 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://qbv47xh325e6"]
-
-[ext_resource type="Script" path="res://scripts/game/turn_indicator.gd" id="1_ym83c"]
-
-[node name="TurnIndicator" type="Label"]
-theme_override_colors/font_color = Color(0.956863, 0.6, 0.6, 1)
-theme_override_font_sizes/font_size = 20
-text = "Opponent's Turn"
-script = ExtResource("1_ym83c")
