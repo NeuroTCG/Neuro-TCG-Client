@@ -43,6 +43,12 @@ func start_initial_packet_sequence() -> void:
 	match_found.connect(__on_match_found, CONNECT_ONE_SHOT)
 	await connection.wait_until_connection_opened()
 	send_packet(ClientInfoPacket.new("Official Client", "0.0.1", PROTOCOL_VERSION))
+	send_keepalive()
+
+
+func send_keepalive() -> void:
+	send_packet(KeepalivePacket.new())
+	get_tree().create_timer(20).timeout.connect(send_keepalive)
 
 
 func __on_invalid_command(error: String) -> void:

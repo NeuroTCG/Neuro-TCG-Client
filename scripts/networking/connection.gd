@@ -20,6 +20,7 @@ func try_connect(url: String) -> bool:
 func _init() -> void:
 	if !(try_connect(main_url) || try_connect(fallback_url)):
 		print("ERROR: all connection attempts failed (including fallback)")
+		set_process(false)
 
 
 func wait_until_connection_opened() -> void:

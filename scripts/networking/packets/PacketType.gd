@@ -36,6 +36,8 @@ const GameOver: String = "game_over"
 
 const PassiveUpdate: String = "passive_update"
 
+const Keepalive := "keepalive"
+
 const allTypes: Array[String] = [
 	ClientInfo,
 	ClientInfoAccept,
@@ -63,4 +65,5 @@ const allTypes: Array[String] = [
 	UseMagicCard,
 	GameOver,
 	PassiveUpdate,
+	Keepalive,
 ]
