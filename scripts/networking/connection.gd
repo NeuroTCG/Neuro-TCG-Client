@@ -8,6 +8,7 @@ var ws := WebSocketPeer.new()
 
 
 func try_connect(url: String) -> bool:
+	print("Connecting to '%s'" % url)
 	var error := ws.connect_to_url(url)
 	current_url = url
 	if error != OK:
