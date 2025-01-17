@@ -28,6 +28,7 @@ jobs:
       - name: Create the Prerelease
         uses: softprops/action-gh-release@v2
         with:
+          prerelease: true
           files: |
             ${{ github.workspace }}/binaries/*
 
