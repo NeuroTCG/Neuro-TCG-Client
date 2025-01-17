@@ -16,7 +16,7 @@ env:
 jobs:
   make-prerelease:
     runs-on: ubuntu-24.04
-    if: ${{ (github.head_ref || github.ref_name) == 'main' }}
+    if: startsWith(github.ref, 'refs/tags/v')
     name: Make Prerelease
     steps:
       - name: Download artifacts
