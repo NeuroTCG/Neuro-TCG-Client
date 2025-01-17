@@ -20,7 +20,10 @@ func try_connect(url: String) -> bool:
 # Called when the node enters the scene tree for the first time.
 func _init() -> void:
 	# set by the export template
-	if OS.has_feature("web_release"):
+	if (
+		OS.has_feature("web")
+		and JavaScriptBridge.eval("new URL(window.location.href).searchParams.get('debug')") == null
+	):
 		if !try_connect(main_url):
 			print(
 				"ERROR: all connection attempts failed (not including fallback because of web release)"
