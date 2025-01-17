@@ -33,7 +33,7 @@ jobs:
         with:
           prerelease: false
           files: |
-            ${{ github.workspace }}/binaries/
+            ${{ github.workspace }}/binaries/*
 
   export-windows:
     name: Windows Export
