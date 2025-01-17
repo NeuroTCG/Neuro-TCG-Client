@@ -15,9 +15,12 @@ env:
 
 jobs:
   make-prerelease:
+    name: Make Prerelease
     runs-on: ubuntu-24.04
     if: startsWith(github.ref, 'refs/tags/v')
-    name: Make Prerelease
+    needs:
+      - export-windows
+      - export-linux
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v4
