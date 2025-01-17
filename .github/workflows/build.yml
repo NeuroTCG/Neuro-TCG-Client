@@ -27,13 +27,13 @@ jobs:
         with:
           path: binaries
           pattern: release-*
-          merge-multiple: false
+          merge-multiple: true
       - name: Create the Release
         uses: softprops/action-gh-release@v2
         with:
           prerelease: false
           files: |
-            ${{ github.workspace }}/binaries/*
+            ${{ github.workspace }}/binaries/**/*
 
   export-windows:
     name: Windows Export
