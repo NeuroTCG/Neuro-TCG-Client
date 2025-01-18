@@ -11,6 +11,8 @@ const UnknownPacket := "unknown_packet"
 const GetBoardState := "get_board_state"
 const GetBoardStateResponse := "get_board_state_response"
 
+const DeckMasterInit = "deck_master_init"
+
 const Summon := "summon"
 const SummonRequest := "summon_request"
 
@@ -66,4 +68,5 @@ const allTypes: Array[String] = [
 	GameOver,
 	PassiveUpdate,
 	Keepalive,
+	DeckMasterInit,
 ]
