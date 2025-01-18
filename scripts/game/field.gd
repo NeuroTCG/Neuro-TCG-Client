@@ -91,7 +91,7 @@ func slot_is_reachable(target_slot_no: int, atk_card: Card) -> bool:
 	var is_player_front_empty := slots_empty(Global.PLAYER_FRONT_ROW)
 	var is_opponent_front_empty := slots_empty(Global.ENEMY_FRONT_ROW)
 
-	var attacker_reach := atk_card.info.attack_range
+	var attacker_has_reach := atk_card.info.tactics.has(CardStats.Tactic.REACH)
 
 	var atk_row := get_row_for_card_slot(atk_slot_no)
 	var target_row := get_row_for_card_slot(target_slot_no)
@@ -100,11 +100,11 @@ func slot_is_reachable(target_slot_no: int, atk_card: Card) -> bool:
 		[RowPositions.FRONT, RowPositions.FRONT]:
 			return true
 		[RowPositions.FRONT, RowPositions.BACK]:
-			return is_opponent_front_empty || attacker_reach == CardStats.AttackRange.REACH
+			return is_opponent_front_empty || attacker_has_reach
 		[RowPositions.BACK, RowPositions.FRONT]:
-			return is_player_front_empty || attacker_reach == CardStats.AttackRange.REACH
+			return is_player_front_empty || attacker_has_reach
 		[RowPositions.BACK, RowPositions.BACK]:
-			return attacker_reach == CardStats.AttackRange.REACH
+			return attacker_has_reach
 		_:
 			assert(false, "something was invalid when calling slot_is_reachable")
 			return false

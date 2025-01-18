@@ -1,8 +1,8 @@
 class_name CardStats
 
-enum AttackRange {
-	STANDARD,
+enum Tactic {
 	REACH,
+	NIMBLE,
 }
 
 enum CardType {
@@ -18,7 +18,7 @@ var graphics: String
 var max_hp: int
 var base_atk: int
 var cost: int
-var attack_range: AttackRange
+var tactics: Array[Tactic]
 var card_type: CardType
 var ability: Ability
 var has_summoning_sickness: bool
@@ -30,7 +30,7 @@ func _init(
 	_hp: int,
 	_atk: int,
 	_cost: int,
-	_atk_range: AttackRange,
+	_tactics: Array[Tactic],
 	_card_type: CardType,
 	_ability: Ability,
 	_has_summoning_sickness: bool,
@@ -40,7 +40,7 @@ func _init(
 	base_atk = _atk
 	cost = _cost
 	graphics = _graphics
-	attack_range = _atk_range
+	tactics = _tactics
 	card_type = _card_type
 	ability = _ability
 	has_summoning_sickness = _has_summoning_sickness
@@ -53,12 +53,11 @@ func to_dict() -> Dictionary:
 		"max_hp": max_hp,
 		"base_atk": base_atk,
 		"summoning_cost": cost,
-		"attack_range": attack_range,
+		"tactics": tactics,
 		"card_type": card_type,
 		"ability": ability.to_dict(),
 		"has_summoning_sickness": has_summoning_sickness,
 	}
-
 
 static func from_dict(d: Dictionary) -> CardStats:
 	return CardStats.new(
@@ -67,8 +66,16 @@ static func from_dict(d: Dictionary) -> CardStats:
 		d["max_hp"],
 		d["base_atk"],
 		d["summoning_cost"],
-		CardStats.AttackRange.get(d["attack_range"]),
+		CardStats.convert_tactics_to_enum(d["tactics"]),
 		CardStats.CardType.get(d["card_type"]),
 		Ability.from_dict(d["ability"]),
 		d["has_summoning_sickness"]
 	)
+
+static func convert_tactics_to_enum(tactics: Array) -> Array[Tactic]:
+
+	var new_array: Array[Tactic]
+	for str_tactic in tactics:
+		new_array.append(CardStats.Tactic.get(str_tactic))
+
+	return new_array
