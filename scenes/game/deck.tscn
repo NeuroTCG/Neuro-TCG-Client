@@ -6,5 +6,5 @@
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 rotation = 1.5708
-scale = Vector2(0.08, 0.08)
+scale = Vector2(0.25, 0.25)
 texture = ExtResource("1_s3wyn")
