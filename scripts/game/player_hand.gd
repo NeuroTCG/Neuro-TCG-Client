@@ -58,12 +58,16 @@ func summon(hand_pos: int, slot_no: int) -> void:
 	assert(cards.size() > 0, "Cards should exist at hand when summoning")
 
 	var slot := Global.player_field.get_slot(slot_no)
-	var summon_card: Card = cards.pop_at(hand_pos)
+	var summon_card: Card = cards.pop_at(hand_pos) as Card
 
 	Global.player_field.cards.append(summon_card)
 
 	summon_card.placement = Card.Placement.PLAYMAT  # Update card
-	summon_card.summon_sickness = true
+
+	if summon_card.info.tactics.has(CardStats.Tactic.NIMBLE):
+		summon_card.summon_sickness = false
+	else:
+		summon_card.summon_sickness = true
 
 	# Shift all cards right of summoned card
 	rearrange_player_hand()
