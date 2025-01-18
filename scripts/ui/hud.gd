@@ -6,6 +6,7 @@ extends CanvasLayer
 @onready var notice := $Notice
 @onready var notice_text: Label = %NoticeText
 @onready var close_notice_button: Button = %CloseNoticeButton
+@onready var end_turn_button: Button = $EndTurnButton
 
 var main_menu := preload("res://scenes/ui/main_menu.tscn")
 
@@ -14,8 +15,14 @@ func _ready() -> void:
 	Global.show_shortcuts.connect(_on_show_shortcuts)
 	Global.hide_shortcuts.connect(_on_hide_shortcuts)
 	Global.notice.connect(_on_notice)
+	RenderOpponentAction.opponent_finished.connect(show_end_turn_button)
+	VerifyClientAction.player_finished.connect(hide_end_turn_button)
 	shortcuts_label.text = "   "
 
+	if MatchManager.first_player:
+		show_end_turn_button()
+	else:
+		hide_end_turn_button()
 
 func _on_show_shortcuts(shortcuts: PackedStringArray) -> void:
 	for shortcut in shortcuts:
@@ -53,3 +60,12 @@ func _on_notice(msg: String) -> void:
 
 func _on_close_notice_button_pressed() -> void:
 	notice.visible = false
+
+func hide_end_turn_button() -> void:
+	end_turn_button.visible = false
+
+func show_end_turn_button() -> void:
+	end_turn_button.visible = true
+
+func _on_end_turn_button_pressed() -> void:
+	MatchManager.request_end_turn.emit()
