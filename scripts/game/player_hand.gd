@@ -11,6 +11,7 @@ func _ready() -> void:
 	MatchManager.action_summon.connect(_on_action_summon)
 	MatchManager.action_magic.connect(_on_action_magic)
 	Global.network_manager.draw_card.connect(_on_draw_card)
+	Global.network_manager.deck_master_init.connect(_on_deck_master_init)
 	Global.player_hand = self
 
 	# Set hand positions
@@ -53,6 +54,22 @@ func rearrange_player_hand():
 	for i in range(0, cards.size()):
 		cards[i].move_and_reanchor(card_positions[i].global_position)
 
+func _on_deck_master_init(packet: DeckMasterInitPacket):
+
+	var slot_no := Field.array_to_index(packet.position.to_array(), Field.Side.Player)
+	var slot := Global.player_field.get_slot(slot_no)
+
+	# Create new card
+	var deck_master := Card.create_card(game, packet.new_card.id)
+	deck_master.global_position = game.get_node("PlayerDeck").global_position
+	deck_master.flip_card()
+	deck_master.set_slot(slot)
+	deck_master.move_and_reanchor(slot.global_position)
+	deck_master.set_card_visibility()
+
+	Global.player_field.cards.append(deck_master)
+
+	deck_master.placement = Card.Placement.PLAYMAT  # Update card
 
 func summon(hand_pos: int, slot_no: int) -> void:
 	assert(cards.size() > 0, "Cards should exist at hand when summoning")

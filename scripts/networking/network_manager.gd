@@ -11,6 +11,7 @@ signal match_found(packet: MatchFoundPacket)
 signal unknown_packet(packet: UnknownPacketPacket)
 signal switch_place(packet: SwitchPlacePacket)
 signal use_ability(packet: UseAbilityPacket)
+signal deck_master_init(packet: DeckMasterInitPacket)
 signal start_turn(packet: StartTurnPacket)
 signal draw_card(packet: DrawCardPacket)
 signal game_over(packet: GameOverPacket)
@@ -117,6 +118,11 @@ func receive_command(msg: String) -> void:
 			unknown_packet.emit(packet)
 		PacketType.GetBoardStateResponse:
 			get_board_state_response.emit(packet)
+		PacketType.DeckMasterInit:
+			if packet.is_you:
+				deck_master_init.emit(packet)
+			else:
+				RenderOpponentAction.deck_master_init.emit(packet)
 		PacketType.Summon:
 			if packet.is_you:
 				if not packet.valid:

@@ -8,6 +8,7 @@ extends Hand
 func _ready() -> void:
 	RenderOpponentAction.summon.connect(_on_summon)
 	RenderOpponentAction.draw_card.connect(_on_draw_card)
+	RenderOpponentAction.deck_master_init.connect(_on_deck_master_init)
 
 	# Set hand positions
 	for i in range(5):
@@ -44,6 +45,20 @@ func _on_summon(packet: SummonPacket) -> void:
 func _on_draw_card(packet: DrawCardPacket) -> void:
 	assert(packet.card_id >= 0, "The server sent an invalid opponent action")
 	add_card(packet.card_id)
+
+func _on_deck_master_init(packet: DeckMasterInitPacket) -> void:
+	var slot_no := Field.array_to_index(packet.position.to_array(), Field.Side.Enemy)
+	var slot := Global.enemy_field.get_slot(slot_no)
+
+	# Create new card
+	var deck_master := Card.create_card(game, packet.new_card.id)
+	deck_master.global_position = game.get_node("EnemyDeck").global_position
+	deck_master.flip_card(true)
+	deck_master.set_slot(slot)
+	deck_master.move_and_reanchor(slot.global_position)
+	deck_master.set_card_visibility()
+
+	deck_master.owned_by_player = false
 
 
 func get_hand_pos_from_id(id: int) -> int:
