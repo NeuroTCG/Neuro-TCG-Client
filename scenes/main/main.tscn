@@ -1,6 +1,52 @@
-[gd_scene load_steps=2 format=3 uid="uid://clmgo8ks4p6nq"]
+[gd_scene load_steps=3 format=3 uid="uid://clmgo8ks4p6nq"]
 
 [ext_resource type="Script" path="res://scripts/main/main.gd" id="1_gki4g"]
+[ext_resource type="Script" path="res://scripts/main/updater.gd" id="2_agjuv"]
 
-[node name="Main" type="Node"]
+[node name="Main" type="Node2D"]
 script = ExtResource("1_gki4g")
+
+[node name="GameUpdater" type="CanvasLayer" parent="."]
+script = ExtResource("2_agjuv")
+
+[node name="Control" type="Control" parent="GameUpdater"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GameUpdater/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Padding2" type="Control" parent="GameUpdater/Control/HBoxContainer"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameUpdater/Control/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="UpdateStatusLabel" type="Label" parent="GameUpdater/Control/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 1
+
+[node name="DownladProgressBar" type="ProgressBar" parent="GameUpdater/Control/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Padding" type="Control" parent="GameUpdater/Control/HBoxContainer"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+
+[node name="HTTPRequest" type="HTTPRequest" parent="GameUpdater"]
