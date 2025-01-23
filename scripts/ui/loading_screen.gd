@@ -1,7 +1,7 @@
 extends Control
 class_name LoadingScreen
 
-var game_node := load("res://scenes/game/game.tscn")
+var dm_select_node := load("res://scenes/game/deck_master_select.tscn")
 
 var loading_text: String = "Loading...":
 	set(new_text):
@@ -24,14 +24,8 @@ func _ready() -> void:
 
 func __on_match_found(packet: MatchFoundPacket) -> void:
 	loading_text = "Match found"
-	var game = game_node.instantiate()
-	get_parent().add_child(game)
-
-	Global.player_field = game.get_node("PlayerField")
-	Global.enemy_field = game.get_node("EnemyField")
-
-	Global.ram_manager = game.get_tree().get_first_node_in_group("ram_manager")
-	Global.ram_manager.reset_ram(packet.is_first_player)
+	var dm_select = dm_select_node.instantiate()
+	get_parent().add_child(dm_select)
 
 	queue_free()
 

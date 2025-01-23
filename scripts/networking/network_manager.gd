@@ -15,6 +15,8 @@ signal deck_master_init(packet: DeckMasterInitPacket)
 signal start_turn(packet: StartTurnPacket)
 signal draw_card(packet: DrawCardPacket)
 signal game_over(packet: GameOverPacket)
+signal game_start(packet: GameStartPacket)
+signal deck_master_selected(packet: DeckMasterSelectedPacket)
 signal passive_update(packet: PassiveUpdatePacket)
 
 signal attack(packet: AttackPacket)
@@ -77,6 +79,10 @@ func __on_authenticate_answer(packet: Packet) -> void:
 	else:
 		print("Waiting for matchmaking")
 
+func __on_game_start(packet: Packet) -> void:
+	print("Game is starting...")
+	game_start.emit(packet)
+
 
 func __on_rules_packet(packet: Packet) -> void:
 	print("Rules received")
@@ -120,9 +126,12 @@ func receive_command(msg: String) -> void:
 			get_board_state_response.emit(packet)
 		PacketType.DeckMasterInit:
 			if packet.is_you:
-				deck_master_init.emit(packet)
+				if not packet.valid:
+					deck_master_init.emit(packet)
 			else:
 				RenderOpponentAction.deck_master_init.emit(packet)
+		PacketType.DeckMasterSelected:
+			deck_master_selected.emit(packet)
 		PacketType.Summon:
 			if packet.is_you:
 				if not packet.valid:

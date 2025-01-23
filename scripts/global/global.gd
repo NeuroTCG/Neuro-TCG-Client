@@ -47,6 +47,9 @@ signal use_enemy_ram(value: int)
 # TO CARD VIEWER
 signal close_view
 
+# TO DECK MASTER SELECT
+signal card_info_received
+
 signal network_manager_ready
 var network_manager: NetworkManager = null
 

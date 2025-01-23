@@ -23,3 +23,6 @@ func _on_quit_button_pressed() -> void:
 
 func _on_profile_button_pressed() -> void:
 	print("Viewing profile is not implemented")
+
+func _on_dm_select_button_pressed() -> void:
+	print("DM Select hasn't been implemented yet.")

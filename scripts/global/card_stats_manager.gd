@@ -12,3 +12,13 @@ func _ready() -> void:
 
 func _on_rule_info(packet: RuleInfoPacket) -> void:
 	card_info_dict = packet.card_id_mapping
+	Global.card_info_received.emit()
+
+
+func get_deck_master_ids() -> Array[int]:
+	var ret: Array[int] = []
+	for c: int in card_info_dict.keys():
+		print(card_info_dict[c])
+		if (card_info_dict[c].card_type == CardStats.CardType.DECK_MASTER):
+			ret.append(c)
+	return ret

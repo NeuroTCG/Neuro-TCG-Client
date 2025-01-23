@@ -10,8 +10,11 @@ const MatchFound := "match_found"
 const UnknownPacket := "unknown_packet"
 const GetBoardState := "get_board_state"
 const GetBoardStateResponse := "get_board_state_response"
+const GameStart := "game_start"
 
-const DeckMasterInit = "deck_master_init"
+const DeckMasterInit := "deck_master_init"
+const DeckMasterRequest := "deck_master_request"
+const DeckMasterSelected := "deck_master_selected"
 
 const Summon := "summon"
 const SummonRequest := "summon_request"
@@ -69,4 +72,7 @@ const allTypes: Array[String] = [
 	PassiveUpdate,
 	Keepalive,
 	DeckMasterInit,
+	DeckMasterRequest,
+	DeckMasterSelected,
+	GameStart,
 ]

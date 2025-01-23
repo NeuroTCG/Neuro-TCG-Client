@@ -16,6 +16,7 @@ func _init(_is_you: bool, _valid: bool, _position: CardPosition, _new_card: Card
 
 func to_dict() -> Dictionary:
 	return {
+		"type":type,
 		"is_you":is_you,
 		"valid": valid,
 		"position": position.to_array(),
