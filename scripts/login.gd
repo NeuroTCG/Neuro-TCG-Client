@@ -89,7 +89,7 @@ func _toggle_authentication_methods(enabled: bool):
 		StatusLabel.text = AUTHENTICATING_LABEL
 
 
-func _on_discord_button_pressed() -> void:
+func _on_login_button_pressed() -> void:
 	_contact_server()
 	_toggle_authentication_methods(false)
 
