@@ -27,6 +27,6 @@ func _on_profile_button_pressed() -> void:
 
 
 func _on_logout_button_pressed() -> void:
-	Auth.delete_token()
+	Auth.delete_user_info()
 	get_parent().add_child(login_screen.instantiate())
 	queue_free()

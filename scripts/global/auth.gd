@@ -1,26 +1,55 @@
-class_name Auth
+extends Node
 
-static var token := "Token not loaded"
+var token := ""
+var user_info: UserInfo = null
+
+const TOKEN_FILE := "user://token.txt"
+const HOST := "http://localhost:9933"
+
+var request = HTTPRequest.new()
 
 
-static func save_token(new_token: String):
-	var file = FileAccess.open("user://token.txt", FileAccess.WRITE)
-	file.store_string(new_token)
-	file.close()
+func _ready() -> void:
+	add_child(request)
+
+
+func _refresh_user_info() -> bool:
+	request.request(HOST + "/users/@me", ["Authorization: Bearer " + token], HTTPClient.METHOD_GET)
+	var result = await request.request_completed
+	if result[1] != 200:
+		print("ERROR: failed to get user info for token")
+		return false
+
+	var body = JSON.parse_string(result[3].get_string_from_utf8())
+
+	user_info = UserInfo.from_dict(body)
+	print("Refreshed user info: %s" % [JSON.stringify(user_info.to_dict())])
+	return true
+
+
+func set_token_and_save(new_token: String):
 	token = new_token
+	if await _refresh_user_info():
+		var file = FileAccess.open(TOKEN_FILE, FileAccess.WRITE)
+		file.store_string(token)
+		file.close()
+	else:
+		delete_user_info()
 
 
-static func load_token() -> String:
-	var file = FileAccess.open("user://token.txt", FileAccess.READ)
+func load_token() -> void:
+	var file = FileAccess.open(TOKEN_FILE, FileAccess.READ)
 	if file:
 		token = file.get_as_text()
 		file.close()
-		return token
-	return ""
+
+	if !await _refresh_user_info():
+		delete_user_info()
 
 
-static func delete_token():
-	if FileAccess.file_exists("user://token.txt"):
-		var dir = DirAccess.open("user://")
-		if dir:
-			dir.remove("token.txt")
+func delete_user_info():
+	if FileAccess.file_exists(TOKEN_FILE):
+		DirAccess.remove_absolute(TOKEN_FILE)
+
+	token = ""
+	user_info = null

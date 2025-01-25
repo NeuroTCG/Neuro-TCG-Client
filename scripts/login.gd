@@ -11,11 +11,10 @@ var main_menu_template := preload("res://scenes/ui/main_menu.tscn")
 @onready var request := $HTTPRequest
 @onready var AuthenticatingGroup = $Control/VBoxContainer/Authenticating
 @onready var AfterCopyTimer = $AfterCopyTimer
-@onready var host := "http://localhost:9933"
 
 
 func _save_token_and_load_main_menu(token: String):
-	Auth.save_token(token)
+	Auth.set_token_and_save(token)
 	get_parent().add_child(main_menu_template.instantiate())
 	queue_free()
 
@@ -40,7 +39,7 @@ func _auth_info_request_completed(_result, response_code, _headers, body):
 		request.request(poll_url, [], HTTPClient.METHOD_GET)
 		var response = await request.request_completed
 		var r_code: int = response[1]
-		var r_body: String = response[3].get_string_from_utf8()
+		var r_body = response[3].get_string_from_utf8()
 		if r_code == 200:
 			print("Authenticated with token: ", r_body)
 			_save_token_and_load_main_menu(r_body)
@@ -53,25 +52,19 @@ func _auth_info_request_completed(_result, response_code, _headers, body):
 			return null
 
 
-func _check_token_valid(token: String) -> bool:
-	request.request(host + "/users/@me", ["Authorization: Bearer " + token], HTTPClient.METHOD_GET)
-	# NOTE: awaiting because we need this to be blocking
-	var result = await request.request_completed
-	return result[1] == 200
-
 
 func _contact_server():
 	request.request_completed.connect(_auth_info_request_completed)
-	var error = request.request(host + "/auth/begin", [], HTTPClient.METHOD_POST)
+	var error = request.request(Auth.HOST + "/auth/begin", [], HTTPClient.METHOD_POST)
 	if error != OK:
 		print("Error contacting server")
 		return null
 
 
 func _ready():
-	var token = Auth.load_token()
-	if token != "" && await _check_token_valid(token):
-		_save_token_and_load_main_menu(token)
+	Auth.load_token()
+	if Auth.token != "":
+		_save_token_and_load_main_menu(Auth.token)
 		return
 
 	_toggle_authentication_methods(true)

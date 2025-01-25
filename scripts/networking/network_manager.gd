@@ -66,7 +66,7 @@ func __on_disconnect(packet: DisconnectPacket) -> void:
 
 func __on_client_info_answer(_packet: ClientInfoAcceptPacket) -> void:
 	print("Connected to server (protocol v%d)" % PROTOCOL_VERSION)
-	send_packet(AuthenticatePacket.new("Neuro"))
+	send_packet(AuthenticatePacket.new(Auth.token))
 
 
 func __on_authenticate_answer(packet: Packet) -> void:
