@@ -10,7 +10,11 @@ var game_over_template = preload("res://scenes/ui/game_over.tscn")
 
 func _ready() -> void:
 	Global.network_manager.game_over.connect(_on_game_over)
+	Global.network_manager.opponent_ready.connect(_on_opponent_ready)
+	Global.network_manager.send_packet(PlayerReadyPacket.new())
 
+func _on_opponent_ready(packet: OpponentReadyPacket) -> void:
+	Global.network_manager.send_packet(OpponentReadyPacket.new())
 
 func _on_game_over(packet: GameOverPacket) -> void:
 	var game_over = game_over_template.instantiate()
