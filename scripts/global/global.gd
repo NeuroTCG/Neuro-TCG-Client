@@ -69,6 +69,8 @@ var ram_manager: RamManager = null
 ## Current order is SLOTS -> CARDS
 var mouse_input_functions: Array[Callable] = []
 
+var token: String = ""
+
 
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("click"):

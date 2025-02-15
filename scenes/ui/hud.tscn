@@ -77,5 +77,20 @@ offset_right = 374.0
 offset_bottom = 20.5
 text = "x"
 
+[node name="EndTurnButton" type="Button" parent="."]
+custom_minimum_size = Vector2(100, 0)
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -50.0
+offset_top = -38.0
+offset_right = 50.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "End Turn"
+
 [connection signal="pressed" from="PauseScreen/QuitButton" to="." method="_on_quit_button_pressed"]
 [connection signal="pressed" from="Notice/CloseNoticeButton" to="." method="_on_close_notice_button_pressed"]
+[connection signal="pressed" from="EndTurnButton" to="." method="_on_end_turn_button_pressed"]

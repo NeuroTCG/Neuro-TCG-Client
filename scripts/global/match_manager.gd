@@ -9,6 +9,9 @@ signal action_magic
 ## View is handeled separately compared to any other other action
 signal action_view(card: Card)
 
+# From HUD
+signal request_end_turn
+
 enum Actions {
 	SUMMON,
 	SWITCH,
@@ -45,15 +48,20 @@ func _ready() -> void:
 	VerifyClientAction.player_finished.connect(_on_player_finished)
 	await Global.network_manager_ready
 	Global.network_manager.match_found.connect(_on_match_found)
-
+	request_end_turn.connect(end_turn)
 
 func _process(_delta: float) -> void:
-	if Input.is_action_just_pressed("end_turn") and not _opponent_turn:
-		print("Ending player turn")
-		for callable in Global.mouse_input_functions:
-			callable.call()
-		VerifyClientAction.player_finished.emit()
+	if Input.is_action_just_pressed("end_turn"):
+		end_turn()
 
+func end_turn() -> void:
+	if _opponent_turn:  # Can't end turn when its the opponent's turn ofc
+		return
+
+	print("Ending player turn")
+	for callable in Global.mouse_input_functions:
+		callable.call()
+	VerifyClientAction.player_finished.emit()
 
 func player_index():
 	if first_player:
