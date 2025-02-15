@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://c581pna3bj8m2"]
+[gd_scene load_steps=3 format=3 uid="uid://c581pna3bj8m2"]
 
 [ext_resource type="Script" path="res://scripts/login.gd" id="1_j0fkf"]
+[ext_resource type="PackedScene" uid="uid://ceinetm3w4e8m" path="res://scenes/ui/connection_retry_button.tscn" id="2_b853c"]
 
 [node name="Login" type="CanvasLayer"]
 script = ExtResource("1_j0fkf")
@@ -32,6 +33,11 @@ theme_override_font_sizes/font_size = 64
 text = "Loading..."
 horizontal_alignment = 1
 autowrap_mode = 3
+
+[node name="RetryConnectionButton" parent="Control/VBoxContainer" instance=ExtResource("2_b853c")]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
 
 [node name="AuthMethodsContainer" type="HBoxContainer" parent="Control/VBoxContainer"]
 layout_mode = 2

@@ -4,8 +4,8 @@ var settings := load("res://scenes/ui/settings.tscn")
 var loading_screen := load("res://scenes/ui/loading_screen.tscn")
 var login_screen := load("res://scenes/ui/login.tscn")
 
-@onready var status_label: Label = get_node("VBoxContainer2/BottomPanel/StatusLabel")
-@onready var play_button: Button = get_node("VBoxContainer2/BottomRow/VBoxContainer/Play-Button")
+@onready var status_label: Label = $VBoxContainer2/BottomPanel/HBoxContainer/StatusLabel
+@onready var play_button: Button = $"VBoxContainer2/BottomRow/VBoxContainer/Play-Button"
 
 
 func _ready() -> void:
