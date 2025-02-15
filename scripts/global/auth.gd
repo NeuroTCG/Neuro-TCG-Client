@@ -4,7 +4,6 @@ var token := ""
 var user_info: UserInfo = null
 
 const TOKEN_FILE := "user://token.txt"
-const HOST := "http://localhost:9933"
 
 var request = HTTPRequest.new()
 
@@ -14,7 +13,8 @@ func _ready() -> void:
 
 
 func _refresh_user_info() -> bool:
-	request.request(HOST + "/users/@me", ["Authorization: Bearer " + token], HTTPClient.METHOD_GET)
+	await Config.wait_for_server_reachable()
+	request.request(Config.http_server_base + "/users/@me", ["Authorization: Bearer " + token], HTTPClient.METHOD_GET)
 	var result = await request.request_completed
 	if result[1] != 200:
 		print("ERROR: failed to get user info for token")

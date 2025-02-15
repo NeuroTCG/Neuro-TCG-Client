@@ -52,16 +52,18 @@ func _auth_info_request_completed(_result, response_code, _headers, body):
 			return null
 
 
-
 func _contact_server():
+	await Config.wait_for_server_reachable()
 	request.request_completed.connect(_auth_info_request_completed)
-	var error = request.request(Auth.HOST + "/auth/begin", [], HTTPClient.METHOD_POST)
+	var error = request.request(Config.http_server_base + "/auth/begin", [], HTTPClient.METHOD_POST)
 	if error != OK:
 		print("Error contacting server")
 		return null
 
 
 func _ready():
+	Config.server_status_changed.connect(_on_server_status_changed)
+	Config.refresh_server_status()
 	Auth.load_token()
 	if Auth.token != "":
 		_save_token_and_load_main_menu(Auth.token)
@@ -69,6 +71,22 @@ func _ready():
 
 	_toggle_authentication_methods(true)
 	AfterCopyTimer.timeout.connect(_reset_status_label_after_copy)
+
+
+func _on_server_status_changed(status: Config.ServerStatus) -> void:
+	match status:
+		Config.ServerStatus.Unreachable:
+			StatusLabel.text = "The server is not reachable. Check you network settings."
+			AuthMethodsContainer.visible = false
+		Config.ServerStatus.Checking:
+			StatusLabel.text = "Checking for server connection..."
+			AuthMethodsContainer.visible = false
+		Config.ServerStatus.NotChecked:
+			Config.refresh_server_status()
+			AuthMethodsContainer.visible = false
+		Config.ServerStatus.Reachable:
+			StatusLabel.text = "Login to Neuro TCG"
+			AuthMethodsContainer.visible = true
 
 
 func _toggle_authentication_methods(enabled: bool):
@@ -83,7 +101,7 @@ func _toggle_authentication_methods(enabled: bool):
 
 
 func _on_login_button_pressed() -> void:
-	_contact_server()
+	await _contact_server()
 	_toggle_authentication_methods(false)
 
 

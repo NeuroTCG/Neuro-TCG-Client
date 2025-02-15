@@ -31,6 +31,7 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 64
 text = "Loading..."
 horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="AuthMethodsContainer" type="HBoxContainer" parent="Control/VBoxContainer"]
 layout_mode = 2
@@ -40,6 +41,7 @@ metadata/_edit_use_anchors_ = true
 [node name="LoginButton" type="Button" parent="Control/VBoxContainer/AuthMethodsContainer"]
 layout_mode = 2
 tooltip_text = "Login with Discord"
+theme_override_font_sizes/font_size = 32
 text = "Sign in"
 
 [node name="URL" type="TextEdit" parent="Control/VBoxContainer"]

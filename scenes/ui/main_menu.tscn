@@ -117,6 +117,16 @@ custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_vertical = 10
 
+[node name="StatusLabel" type="Label" parent="MainMenu/VBoxContainer2/BottomPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 32
+text = "Checking for server connection..."
+
 [connection signal="pressed" from="MainMenu/VBoxContainer2/BottomRow/VBoxContainer2/Profile-Button" to="MainMenu" method="_on_profile_button_pressed"]
 [connection signal="pressed" from="MainMenu/VBoxContainer2/BottomRow/VBoxContainer2/Logout-Button" to="MainMenu" method="_on_logout_button_pressed"]
 [connection signal="pressed" from="MainMenu/VBoxContainer2/BottomRow/VBoxContainer/Play-Button" to="MainMenu" method="_on_play_button_pressed"]
