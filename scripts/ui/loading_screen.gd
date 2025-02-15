@@ -19,6 +19,7 @@ func _ready() -> void:
 	Global.network_manager.disconnect.connect(__tmp_on_disconnect)
 	Global.network_manager.client_info_accept.connect(__on_client_info_accept)
 	Global.network_manager.authentication_valid.connect(__on_authentication_valid)
+	Global.network_manager.connection.connection_failed.connect(__on_connection_failed)
 	Global.network_manager.start_initial_packet_sequence()
 
 
@@ -42,6 +43,10 @@ func __on_client_info_accept(_packet: ClientInfoAcceptPacket) -> void:
 
 func __on_authentication_valid(_packet: AuthenticationValidPacket) -> void:
 	loading_text = "Waiting for opponent..."
+
+
+func __on_connection_failed(url: String, error: String) -> void:
+	loading_text = "Connecting to %s failed: %s" % [url, error]
 
 
 func __tmp_on_disconnect(packet: DisconnectPacket) -> void:

@@ -31,3 +31,4 @@ theme_override_font_sizes/font_size = 42
 text = "Loading ... "
 horizontal_alignment = 1
 vertical_alignment = 1
+autowrap_mode = 3

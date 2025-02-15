@@ -33,6 +33,10 @@ Auth="*res://scripts/global/auth.gd"
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
+[editor]
+
+run/main_run_args="--server-url ws://localhost:9933/game"
+
 [gui]
 
 theme/custom="res://assets/Themes/Default-UI.tres"
