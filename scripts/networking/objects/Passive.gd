@@ -7,23 +7,22 @@ enum PassiveEffectType {
 }
 
 var effect: PassiveEffectType
-var valueX: int
-var valueY: int
+var values: Array
+var values_size: int
 
-
-func _init(_effect: PassiveEffectType, _valueX: int, _valueY: int) -> void:
+func _init(_effect: PassiveEffectType, _values: Array, _values_size: int) -> void:
 	effect = _effect
-	valueX = _valueX
-	valueY = _valueY
+	values = _values
+	values_size = _values_size
 
 func to_dict() -> Dictionary:
 	return {
 		"effect": effect,
-		"valueX": valueX,
-		"valueY": valueY,
+		"values": values,
+		"values_size": values_size,
 	}
 
 static func from_dict(d: Dictionary) -> Passive:
 	return Passive.new(
-		PassiveEffectType.get(d["effect"]), d["valueX"], d["valueY"]
+		PassiveEffectType.get(d["effect"]), d["values"], d["values_size"]
 	)
