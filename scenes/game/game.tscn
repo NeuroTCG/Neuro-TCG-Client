@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dh5lnd7qcyrg1"]
+[gd_scene load_steps=15 format=3 uid="uid://dh5lnd7qcyrg1"]
 
 [ext_resource type="Script" path="res://scripts/game/game.gd" id="1_kfv8y"]
 [ext_resource type="PackedScene" uid="uid://b6dy802mg5uvg" path="res://scenes/ui/hud.tscn" id="2_846mn"]
@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://c74u03d47ybfw" path="res://scenes/ui/ram.tscn" id="11_jogws"]
 [ext_resource type="Script" path="res://scripts/game/ram_manager.gd" id="12_ft7rt"]
 [ext_resource type="Script" path="res://scripts/game/passive_manager.gd" id="13_wjgx5"]
+[ext_resource type="PackedScene" uid="uid://df7lo2dcr8b4q" path="res://scenes/game/profile_display.tscn" id="14_nahk5"]
 
 [node name="Game" type="Node2D" groups=["game"]]
 script = ExtResource("1_kfv8y")
@@ -110,6 +111,32 @@ script = ExtResource("12_ft7rt")
 
 [node name="PassiveManager" type="Node2D" parent="."]
 script = ExtResource("13_wjgx5")
+
+[node name="OpponentProfileDisplay" parent="." instance=ExtResource("14_nahk5")]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_left = 960.0
+offset_top = 48.0
+offset_right = 1130.0
+offset_bottom = 148.0
+grow_horizontal = 0
+grow_vertical = 1
+
+[node name="PlayerProfileDisplay" parent="." instance=ExtResource("14_nahk5")]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_left = 16.0
+offset_top = 496.0
+offset_right = 186.0
+offset_bottom = 596.0
+grow_horizontal = 0
+grow_vertical = 1
 
 [editable path="PlayerField"]
 [editable path="EnemyField"]

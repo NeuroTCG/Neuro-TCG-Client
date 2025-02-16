@@ -10,6 +10,8 @@ var loading_text: String = "Loading...":
 
 var duration := 2.0
 
+var player_user_info: UserInfo
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -35,6 +37,9 @@ func __on_match_found(packet: MatchFoundPacket) -> void:
 	Global.ram_manager = game.get_tree().get_first_node_in_group("ram_manager")
 	Global.ram_manager.reset_ram(packet.is_first_player)
 
+	(game.get_node("OpponentProfileDisplay") as ProfileDisplay).user_info = packet.opponent
+	(game.get_node("PlayerProfileDisplay") as ProfileDisplay).user_info = player_user_info
+
 	queue_free()
 
 
@@ -42,8 +47,9 @@ func __on_client_info_accept(_packet: ClientInfoAcceptPacket) -> void:
 	loading_text = "Authenticating..."
 
 
-func __on_authentication_valid(_packet: AuthenticationValidPacket) -> void:
+func __on_authentication_valid(packet: AuthenticationValidPacket) -> void:
 	loading_text = "Waiting for opponent..."
+	player_user_info = packet.you
 
 
 func __on_connection_failed(url: String, error: String) -> void:
