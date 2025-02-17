@@ -2,7 +2,7 @@ extends Control
 
 var game_node := load("res://scenes/game/game.tscn")
 
-@onready var confirm_button = $ColorRect/VBoxContainer/BottomRow/SelectButton
+@onready var confirm_button = $Window/UI/BottomRow/SelectButton
 @onready var selected_id_text = $Window/UI/MiddleRow/CardDisplay/IDText
 @onready var card_info_name = $Window/UI/MiddleRow/CardInfo/CardName
 @onready var card_info_desc = $Window/UI/MiddleRow/CardInfo/CardDescription
