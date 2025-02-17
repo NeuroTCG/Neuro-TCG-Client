@@ -37,7 +37,6 @@ func to_dict() -> Dictionary:
 		"attack_bonus": attack_bonus
 	}
 
-
 func _to_string() -> String:
 	var fields = [id, health, attack_bonus, ability_was_used, phase, shield, sealed_turns_left]
 	return (
