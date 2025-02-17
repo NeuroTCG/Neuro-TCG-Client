@@ -24,5 +24,5 @@ func to_dict() -> Dictionary:
 
 static func from_dict(d: Dictionary) -> Passive:
 	return Passive.new(
-		PassiveEffectType.get(d["effect"]), d["values"], d["values_size"]
+		PassiveEffectType.get(d["effect"]), d["values"], d["valuesSize"]
 	)
