@@ -8,6 +8,8 @@ var _development_token := ""
 const TOKEN_FILE := "user://token.txt"
 
 const DEFAULT_REQUEST_TIMEOUT = 5
+const POLL_REQUEST_TIMEOUT = 20
+const MAX_POLL_TIME = 5 * 60
 
 var request = HTTPRequest.new()
 
@@ -52,23 +54,29 @@ func get_login_and_poll_url():
 
 
 func poll_for_token(poll_url: String, headers: Array = []):
-	request.timeout = 20
+	request.timeout = POLL_REQUEST_TIMEOUT
 	var new_token = null
 	print("Auth polling on %s" % poll_url)
+	var poll_timeout := get_tree().create_timer(MAX_POLL_TIME)
 	while true:
 		request.request(poll_url, headers, HTTPClient.METHOD_GET)
 		var response = await request.request_completed
 		var r_code: int = response[1]
+		var r_result = response[0] as HTTPRequest.Result
 		var r_body = response[3].get_string_from_utf8()
 		if r_code == 200:
 			print("INFO: Auth polling finished")
 			new_token = r_body
 			break
-		elif r_code == 408 || r_code == 504:
+		elif r_code == 408 || r_code == 504 || r_result == HTTPRequest.RESULT_TIMEOUT:
 			print("INFO: Timeout while attempting to authenticate")
-			continue
+			if poll_timeout.time_left <= 0:
+				print("ERROR: Stopped polling after after %d seconds" % MAX_POLL_TIME)
+				break
+			else:
+				continue
 		else:
-			print("ERROR: Auth polling returned code %d" % r_code)
+			print("ERROR: Auth polling returned code %d, result %d" % [r_code, r_result])
 			new_token = null
 			break
 
