@@ -2,15 +2,22 @@ extends Packet
 class_name DisconnectPacket
 
 
+# TODO: convert to enum
 class Reason:
 	const auth_invalid := "auth_invalid"
 	const auth_user_banned := "auth_user_banned"
 	const protocol_too_old := "protocol_too_old"
 	const opponent_disconnect := "opponent_disconnect"
 	const game_over := "game_over"
+	const double_login := "double_login"
 
 	static var allReasons = [
-		auth_invalid, auth_user_banned, protocol_too_old, opponent_disconnect, game_over
+		auth_invalid,
+		auth_user_banned,
+		protocol_too_old,
+		opponent_disconnect,
+		game_over,
+		double_login
 	]
 
 

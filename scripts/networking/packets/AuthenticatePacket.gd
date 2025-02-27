@@ -1,20 +1,20 @@
 extends Packet
 class_name AuthenticatePacket
 
-var username: String
+var token: String
 
 
-func _init(username_: String) -> void:
+func _init(token_: String) -> void:
 	super(PacketType.Authenticate)
-	username = username_
+	token = token_
 
 
 func to_dict() -> Dictionary:
 	return {
 		"type": type,
-		"username": username,
+		"token": token,
 	}
 
 
 static func from_dict(d: Dictionary) -> AuthenticatePacket:
-	return AuthenticatePacket.new(d["username"])
+	return AuthenticatePacket.new(d["token"])

@@ -61,12 +61,12 @@ func __on_unknown_packet(packet: UnknownPacketPacket) -> void:
 
 
 func __on_disconnect(packet: DisconnectPacket) -> void:
-	print("Client info was invalid: '%s' (%s)" % [packet.message, packet.reason])
+	print("Disconnect packet: '%s' (%s)" % [packet.message, packet.reason])
 
 
 func __on_client_info_answer(_packet: ClientInfoAcceptPacket) -> void:
 	print("Connected to server (protocol v%d)" % PROTOCOL_VERSION)
-	send_packet(AuthenticatePacket.new("Neuro"))
+	send_packet(AuthenticatePacket.new(Auth.token))
 
 
 func __on_authenticate_answer(packet: Packet) -> void:
