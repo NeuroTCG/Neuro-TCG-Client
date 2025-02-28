@@ -1,12 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://q51vge1mhcw5"]
+[gd_scene load_steps=3 format=3 uid="uid://c581pna3bj8m2"]
 
-[ext_resource type="Texture2D" uid="uid://ctucsna1mt6yp" path="res://assets/login/discord-mark-blue.svg" id="1_als3a"]
 [ext_resource type="Script" path="res://scripts/login.gd" id="1_j0fkf"]
+[ext_resource type="PackedScene" uid="uid://ceinetm3w4e8m" path="res://scenes/ui/connection_retry_button.tscn" id="2_b853c"]
 
 [node name="Login" type="CanvasLayer"]
 script = ExtResource("1_j0fkf")
-
-[node name="HTTPRequest" type="HTTPRequest" parent="."]
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -32,17 +30,23 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 64
 text = "Loading..."
 horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="RetryConnectionButton" parent="Control/VBoxContainer" instance=ExtResource("2_b853c")]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
 
 [node name="AuthMethodsContainer" type="HBoxContainer" parent="Control/VBoxContainer"]
-visible = false
 layout_mode = 2
 alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="DiscordButton" type="TextureButton" parent="Control/VBoxContainer/AuthMethodsContainer"]
+[node name="LoginButton" type="Button" parent="Control/VBoxContainer/AuthMethodsContainer"]
 layout_mode = 2
 tooltip_text = "Login with Discord"
-texture_normal = ExtResource("1_als3a")
+theme_override_font_sizes/font_size = 32
+text = "Sign in"
 
 [node name="URL" type="TextEdit" parent="Control/VBoxContainer"]
 visible = false
@@ -72,9 +76,7 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 42
 text = "Open in Browser"
 
-[node name="AfterCopyTimer" type="Timer" parent="."]
-
-[connection signal="pressed" from="Control/VBoxContainer/AuthMethodsContainer/DiscordButton" to="." method="_on_discord_button_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/AuthMethodsContainer/LoginButton" to="." method="_on_login_button_pressed"]
 [connection signal="pressed" from="Control/VBoxContainer/Authenticating/Back" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="Control/VBoxContainer/Authenticating/Copy" to="." method="_on_copy_pressed"]
 [connection signal="pressed" from="Control/VBoxContainer/Authenticating/Open in Browser" to="." method="_on_open_pressed"]

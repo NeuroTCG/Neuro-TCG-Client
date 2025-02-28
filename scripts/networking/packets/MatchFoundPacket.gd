@@ -2,12 +2,12 @@ extends Packet
 class_name MatchFoundPacket
 
 var opponent: UserInfo
-var game_id: int
+var game_id: String
 var is_reconnect: bool
 var is_first_player: bool
 
 
-func _init(opponent_: UserInfo, game_id_: int, is_reconnect_: bool, is_first_player_: bool) -> void:
+func _init(opponent_: UserInfo, game_id_: String, is_reconnect_: bool, is_first_player_: bool) -> void:
 	super(PacketType.MatchFound)
 	opponent = opponent_
 	game_id = game_id_

@@ -26,11 +26,17 @@ MatchManager="*res://scripts/global/match_manager.gd"
 CardStatsManager="*res://scripts/global/card_stats_manager.gd"
 PassiveManager="*res://scripts/game/passive_manager.gd"
 CardActionNames="*res://scripts/game/CardActionNames.gd"
+Auth="*res://scripts/global/auth.gd"
+Config="*res://scripts/global/config.gd"
 
 [display]
 
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+
+[editor]
+
+run/main_run_args="--server-url localhost:9933"
 
 [gui]
 

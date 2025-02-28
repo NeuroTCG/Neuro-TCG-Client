@@ -53,7 +53,6 @@ signal card_info_received
 signal network_manager_ready
 var network_manager: NetworkManager = null
 
-# TODO: merge these into one
 var player_field: PlayerField = null
 var enemy_field: EnemyField = null
 var player_hand: PlayerHand = null
@@ -68,9 +67,6 @@ var ram_manager: RamManager = null
 ## proccessed in a controlled manner
 ## Current order is SLOTS -> CARDS
 var mouse_input_functions: Array[Callable] = []
-
-var token: String = ""
-
 
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("click"):
