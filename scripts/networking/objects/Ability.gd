@@ -6,6 +6,7 @@ enum AbilityEffect {
 	SEAL,
 	ATTACK,
 	SHIELD,
+	DRAW_CARD,
 }
 
 # TODO: Maybe rename the range constants to be more clear.

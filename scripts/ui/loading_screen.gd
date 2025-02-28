@@ -11,6 +11,7 @@ var duration := 2.0
 
 var player_user_info: UserInfo
 
+var game_over_template = preload("res://scenes/ui/game_over.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -30,8 +31,8 @@ func __on_match_found(packet: MatchFoundPacket) -> void:
 	var dm_select = dm_select_node.instantiate()
 	get_parent().add_child(dm_select)
 
-	(game.get_node("OpponentProfileDisplay") as ProfileDisplay).user_info = packet.opponent
-	(game.get_node("PlayerProfileDisplay") as ProfileDisplay).user_info = player_user_info
+	dm_select.player_user_info = player_user_info
+	dm_select.opponent_user_info = packet.opponent
 
 	queue_free()
 

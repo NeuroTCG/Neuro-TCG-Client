@@ -2,6 +2,9 @@ extends Control
 
 var game_node := load("res://scenes/game/game.tscn")
 
+var player_user_info: UserInfo
+var opponent_user_info: UserInfo
+
 @onready var confirm_button = $Window/UI/BottomRow/SelectButton
 @onready var selected_id_text = $Window/UI/MiddleRow/CardDisplay/IDText
 @onready var card_info_name = $Window/UI/MiddleRow/CardInfo/CardName
@@ -18,6 +21,10 @@ func _ready() -> void:
 	Global.network_manager.opponent_ready.connect(_on_opponent_ready)
 	card_ids = CardStatsManager.get_deck_master_ids()
 	selected_id = 0
+
+
+
+
 	update_card_display()
 
 
@@ -59,6 +66,9 @@ func _on_game_start(packet: GameStartPacket) -> void:
 
 	Global.player_field = game.get_node("PlayerField")
 	Global.enemy_field = game.get_node("EnemyField")
+
+	(game.get_node("OpponentProfileDisplay") as ProfileDisplay).user_info = opponent_user_info
+	(game.get_node("PlayerProfileDisplay") as ProfileDisplay).user_info = player_user_info
 
 	Global.ram_manager = game.get_tree().get_first_node_in_group("ram_manager")
 	Global.ram_manager.reset_ram(Global.network_manager.is_first_player)

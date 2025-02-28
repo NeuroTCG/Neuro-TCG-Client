@@ -83,9 +83,16 @@ func hide_slots() -> void:
 
 #region SELECT
 func _on_card_selected(card: Card) -> void:
+
+	print("field select")
+
 	if MatchManager.current_action == MatchManager.Actions.SWITCH:
 		MatchManager.current_action = MatchManager.Actions.IDLE
 	else:
+
+		if (Global.card_select_locked):
+			return
+
 		var buttons := [
 			MatchManager.Actions.SWITCH, MatchManager.Actions.ATTACK, MatchManager.Actions.VIEW
 		]
@@ -105,6 +112,7 @@ func _on_card_selected(card: Card) -> void:
 		elif card.state.phase == Card.TurnPhase.Action:
 			buttons.erase(MatchManager.Actions.SWITCH)
 
+		Global.selected_card = card
 		card.show_buttons(buttons)
 		selected_slot = card.current_slot
 		selected_slot.stored_card = card
@@ -115,11 +123,14 @@ func _on_card_unselected(card: Card) -> void:
 	card.hide_buttons()
 	card.unselect()
 
+
+
 	# If another card has been selected,
 	# Update these values from the _on_card_selected
 	# that will run from that card being clicked on
 	if not another_card_selected(card):
 		MatchManager.current_action = MatchManager.Actions.IDLE
+		Global.card_select_locked = false
 
 
 func another_card_selected(card: Card) -> bool:
@@ -147,8 +158,7 @@ func _on_action_ability() -> void:
 	var player_ram := Global.ram_manager.player_ram
 	if selected_slot.stored_card.info.ability.cost > player_ram:
 		Global.notice.emit("Insufficent Ram to use this ability!")
-	else:
-		Global.use_ram.emit(selected_slot.stored_card.info.ability.cost)
+		return
 
 	if selected_slot.stored_card.info.ability.range == Ability.AbilityRange.ALLY_CARD:
 		show_all_ally_cards()
@@ -157,9 +167,34 @@ func _on_action_ability() -> void:
 		or selected_slot.stored_card.info.ability.range == Ability.AbilityRange.ENEMY_ROW
 	):
 		enemy_field.show_slots_for_direct_attack()
+	elif (
+		selected_slot.stored_card.info.ability.range == Ability.AbilityRange.PLAYER_DECK
+	):
+		if (selected_slot.stored_card.info.ability.effect == Ability.AbilityEffect.DRAW_CARD):
+			#Draw card doesn't need to worry about selecting slots, so just handle the ability right here.
+			handle_draw_card_ability()
+
 
 
 #endregion
+
+
+func handle_draw_card_ability() -> void:
+	#Check if the player can draw
+	print("%d, %d" % [Global.player_hand.cards.size(), Hand.MAX_HAND_SIZE])
+	if (Global.player_hand.cards.size() >= Hand.MAX_HAND_SIZE):
+		Global.notice.emit("Can't draw! Your hand is full!")
+		return
+
+	#var selected_card = selected_slot.stored_card
+	var selected_card = Global.selected_card
+
+	var card_as_array := get_slot_array(selected_card)
+	selected_card.state.phase = Card.TurnPhase.Done
+	selected_card.state.ability_was_used = true
+	selected_card.apply_ability_to([]);
+
+	VerifyClientAction.ability.emit(card_as_array, card_as_array)
 
 
 #region ON SLOT CHOSEN
@@ -262,7 +297,11 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 
 		#endregion
 
-	elif MatchManager.current_action == MatchManager.Actions.ABILITY:
+	elif (
+			MatchManager.current_action == MatchManager.Actions.ABILITY ||
+			MatchManager.current_action == MatchManager.Actions.MAGIC
+		):
+
 		var ability_targets: Array[Card] = []
 
 		match player_card.info.ability.range:
@@ -279,7 +318,7 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 				for slot_no in row:
 					var slot = enemy_field.get_slot(slot_no)
 					if slot.stored_card:
-						ability_targets[slot.stored_card] = slot.stored_card
+						ability_targets.append(slot.stored_card)
 
 		player_card.apply_ability_to(ability_targets)
 

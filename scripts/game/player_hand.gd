@@ -107,7 +107,17 @@ func _hand_magic() -> void:
 
 
 func _on_card_selected(card: Card) -> void:
-	selected_card = card
+
+	#Here to keep the player from selecting another card mid action.
+	if (Global.card_select_locked):
+		return
+	else:
+		Global.card_select_locked = true
+
+	print("hand select")
+
+	Global.selected_card = card
+
 	card.shift_card_y(-30)
 	card.select()
 	if card.info.card_type == CardStats.CardType.MAGIC:
@@ -124,7 +134,8 @@ func _on_card_unselected(card: Card) -> void:
 	card.unselect()
 
 	if not another_card_selected(card):
-		selected_card = null
+		Global.selected_card = null
+		Global.card_select_locked = false
 
 
 func another_card_selected(card: Card) -> bool:

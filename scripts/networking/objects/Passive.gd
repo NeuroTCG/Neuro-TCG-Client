@@ -4,6 +4,7 @@ enum PassiveEffectType {
 	NONE,
 	DRAW_ON_DESTRUCTION,
 	BUFF_ADJACENT,
+	CARD_DISCOUNT,
 }
 
 var effect: PassiveEffectType

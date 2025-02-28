@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/ui/loading_screen.gd" id="1_cluu0"]
 
-[node name="LoadingScreen" type="Control"]
+[node name="LoadingScreen2" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

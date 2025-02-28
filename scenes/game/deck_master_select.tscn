@@ -101,19 +101,19 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 3
 theme_override_constants/line_spacing = 0
-text = "Summon Cost:
-Attack:
-Ability Cost:
-Max HP: 
+theme_override_font_sizes/font_size = 24
+text = "Summon Cost :
+Attack :
+Ability Cost :
+Max HP : 
 fdsafeaf
-fdsa
-fda
-fdafdsaf
-fdafdsafds
-ffdsafdsa
+fdsa: 
+fda : 
+fdafdsaf : 
+fdafdsafds : 
+ffdsafdsa : 
 fdafdsafdsa
 "
-horizontal_alignment = 1
 autowrap_mode = 3
 justification_flags = 161
 max_lines_visible = 12
