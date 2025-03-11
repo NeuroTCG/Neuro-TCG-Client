@@ -46,21 +46,8 @@ func refresh_server_status():
 
 	server_status = ServerStatus.Checking
 
-	var args = OS.get_cmdline_args()
-	for i in range(len(args)):
-		if args[i] == "--server-url":
-			_server_template = args[i + 1]
-			print("INFO: server url was overridden by commandline argument: %s" % _server_template)
-			break
-
-	# set by the export template
-	if OS.has_feature("web"):
-		var query_param = JavaScriptBridge.eval(
-			"new URL(window.location.href).searchParams.get('server-url')"
-		)
-		if query_param != null:
-			_server_template = query_param
-			print("INFO: server url was overridden by query parameter: %s" % _server_template)
+	if RuntimeParameters.parameters.has("server-url"):
+		_server_template = RuntimeParameters.parameters["server-url"]
 
 	request.request("https://" + _server_template + "/fire")
 	var result = await request.request_completed
