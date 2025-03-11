@@ -17,6 +17,9 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+RuntimeParameters="*res://scripts/global/runtime_parameters.gd"
+Config="*res://scripts/global/config.gd"
+Auth="*res://scripts/global/auth.gd"
 AudioSystem="*res://scripts/global/audio_system.gd"
 Global="*res://scripts/global/global.gd"
 SavedSettings="*res://scripts/global/saved_settings.gd"
@@ -26,8 +29,6 @@ MatchManager="*res://scripts/global/match_manager.gd"
 CardStatsManager="*res://scripts/global/card_stats_manager.gd"
 PassiveManager="*res://scripts/game/passive_manager.gd"
 CardActionNames="*res://scripts/game/CardActionNames.gd"
-Auth="*res://scripts/global/auth.gd"
-Config="*res://scripts/global/config.gd"
 
 [display]
 

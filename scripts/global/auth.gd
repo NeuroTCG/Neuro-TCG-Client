@@ -20,12 +20,8 @@ func _ready() -> void:
 	request.timeout = DEFAULT_REQUEST_TIMEOUT
 	add_child(request)
 
-	var args = OS.get_cmdline_args()
-	for i in range(len(args)):
-		if args[i] == "--dev-username":
-			dev_username = args[i + 1]
-			print("INFO: development username was set by commandline: %s" % dev_username)
-			break
+	if RuntimeParameters.parameters.has("dev-username"):
+		dev_username = RuntimeParameters.parameters["dev-username"]
 
 
 ## returns (user_login_url, poll_url) or null on error
