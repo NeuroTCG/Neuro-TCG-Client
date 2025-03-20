@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cu02rxao1axbe"]
 
-[ext_resource type="Script" path="res://scripts/game/card_viewer.gd" id="1_5ijfm"]
+[ext_resource type="Script" uid="uid://by27pn8ixo01j" path="res://scripts/game/card_viewer.gd" id="1_5ijfm"]
 [ext_resource type="Texture2D" uid="uid://c6d2nkbr2rrol" path="res://assets/game/cards/angel_neuro.png" id="2_6ud8s"]
 
 [node name="CardViewer" type="Node2D"]

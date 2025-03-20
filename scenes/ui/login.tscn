@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://c581pna3bj8m2"]
 
-[ext_resource type="Script" path="res://scripts/login.gd" id="1_j0fkf"]
+[ext_resource type="Script" uid="uid://ckbc580bict2c" path="res://scripts/login.gd" id="1_j0fkf"]
 [ext_resource type="PackedScene" uid="uid://ceinetm3w4e8m" path="res://scenes/ui/connection_retry_button.tscn" id="2_b853c"]
 
 [node name="Login" type="CanvasLayer"]
