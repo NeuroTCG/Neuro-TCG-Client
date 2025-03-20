@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://c8hyuvt7sklqp"]
 
 [ext_resource type="Theme" uid="uid://bc2o2wqjkqbbe" path="res://assets/Themes/Default-UI.tres" id="1_4sm8r"]
-[ext_resource type="Script" path="res://scripts/ui/settings.gd" id="1_vjma1"]
-[ext_resource type="Script" path="res://scripts/ui/windows_mode_button.gd" id="3_jj6wt"]
+[ext_resource type="Script" uid="uid://4pvehvirok7v" path="res://scripts/ui/settings.gd" id="1_vjma1"]
+[ext_resource type="Script" uid="uid://t1r06e5vwey6" path="res://scripts/ui/windows_mode_button.gd" id="3_jj6wt"]
 [ext_resource type="PackedScene" uid="uid://cnf8r80mqe73u" path="res://scenes/ui/music_slider.tscn" id="4_tlbqu"]
 
 [node name="Settings" type="Control"]
