@@ -137,7 +137,7 @@ func _on_card_unselected(card: Card) -> void:
 
 	if not another_card_selected(card):
 		Global.selected_card = null
-	Global.card_select_locked = false
+		Global.card_select_locked = false
 
 
 func another_card_selected(card: Card) -> bool:

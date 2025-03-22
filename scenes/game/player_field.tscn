@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://7p238k7khnvn"]
 
-[ext_resource type="Script" uid="uid://c074304h6eej5" path="res://scripts/game/player_field.gd" id="1_jqklv"]
+[ext_resource type="Script" uid="uid://yt5du3gprsjq" path="res://scripts/game/player_field.gd" id="1_jqklv"]
 [ext_resource type="PackedScene" uid="uid://cajh3bao81ymy" path="res://scenes/game/slot.tscn" id="2_tpyu5"]
 
 [node name="PlayerField" type="Node2D" groups=["card_slots"]]

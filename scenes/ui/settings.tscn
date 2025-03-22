@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://c8hyuvt7sklqp"]
 
 [ext_resource type="Theme" uid="uid://bc2o2wqjkqbbe" path="res://assets/Themes/Default-UI.tres" id="1_4sm8r"]
-[ext_resource type="Script" uid="uid://4pvehvirok7v" path="res://scripts/ui/settings.gd" id="1_vjma1"]
-[ext_resource type="Script" uid="uid://t1r06e5vwey6" path="res://scripts/ui/windows_mode_button.gd" id="3_jj6wt"]
+[ext_resource type="Script" uid="uid://c1nevn6p28s7f" path="res://scripts/ui/settings.gd" id="1_vjma1"]
+[ext_resource type="Script" uid="uid://dkwkt1hhra0ko" path="res://scripts/ui/windows_mode_button.gd" id="3_jj6wt"]
 [ext_resource type="PackedScene" uid="uid://cnf8r80mqe73u" path="res://scenes/ui/music_slider.tscn" id="4_tlbqu"]
 
 [node name="Settings" type="Control"]
@@ -67,6 +67,7 @@ alignment = 1
 selected = 0
 item_count = 5
 popup/item_0/text = "Full Screen"
+popup/item_0/id = 0
 popup/item_1/text = "Windowed"
 popup/item_1/id = 1
 popup/item_2/text = "Borderless Window"

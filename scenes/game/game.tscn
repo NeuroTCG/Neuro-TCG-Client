@@ -1,6 +1,6 @@
 [gd_scene load_steps=15 format=3 uid="uid://dh5lnd7qcyrg1"]
 
-[ext_resource type="Script" uid="uid://bihtwdta5g771" path="res://scripts/game/game.gd" id="1_kfv8y"]
+[ext_resource type="Script" uid="uid://6sg64mhfa52u" path="res://scripts/game/game.gd" id="1_kfv8y"]
 [ext_resource type="PackedScene" uid="uid://b6dy802mg5uvg" path="res://scenes/ui/hud.tscn" id="2_846mn"]
 [ext_resource type="Texture2D" uid="uid://cmfje43hqra1p" path="res://assets/game/FullBoardLayoutV2-5-GrayOut.png" id="2_rdgcq"]
 [ext_resource type="PackedScene" uid="uid://bopel3gld2b6o" path="res://scenes/game/hand.tscn" id="3_tjohb"]
@@ -11,8 +11,8 @@
 [ext_resource type="PackedScene" uid="uid://cu02rxao1axbe" path="res://scenes/game/card_viewer.tscn" id="10_4vhfg"]
 [ext_resource type="PackedScene" uid="uid://qbv47xh325e6" path="res://scenes/game/turn_indicator.tscn" id="11_dhnsn"]
 [ext_resource type="PackedScene" uid="uid://c74u03d47ybfw" path="res://scenes/ui/ram.tscn" id="11_jogws"]
-[ext_resource type="Script" uid="uid://dhj6qxgeyfuww" path="res://scripts/game/ram_manager.gd" id="12_ft7rt"]
-[ext_resource type="Script" uid="uid://dv7g5k5lkfs4r" path="res://scripts/game/passive_manager.gd" id="13_wjgx5"]
+[ext_resource type="Script" uid="uid://bs1rql55tb7rv" path="res://scripts/game/ram_manager.gd" id="12_ft7rt"]
+[ext_resource type="Script" uid="uid://clui7hc60nr21" path="res://scripts/game/passive_manager.gd" id="13_wjgx5"]
 [ext_resource type="PackedScene" uid="uid://df7lo2dcr8b4q" path="res://scenes/game/profile_display.tscn" id="14_nahk5"]
 
 [node name="Game" type="Node2D" groups=["game"]]
