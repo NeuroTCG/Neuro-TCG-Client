@@ -79,6 +79,9 @@ static func create_card(parent_scene: Node2D, id: int) -> Card:
 
 	parent_scene.add_child(new_card)
 
+	#Bring
+	parent_scene.move_child(new_card, -1)
+
 	new_card.state = CardState.fromCardStats(id, card_info)
 	new_card.info = card_info
 	print(card_info.graphics, ResourceLoader.exists(card_info.graphics))
@@ -110,6 +113,7 @@ func reset_variables() -> void:
 
 
 func _on_mouse_clicked() -> void:
+
 	for button in buttons.get_children():
 		if button.mouse_over:
 			return

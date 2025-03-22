@@ -46,6 +46,9 @@ func add_card(id: int) -> void:
 	cards.append(new_card)
 	new_card.move_and_reanchor(card_positions[cards.size() - 1].global_position)
 
+	#Move the card up to the front of the game tree
+	game.move_child(new_card, -1)
+
 	# Make Hand command available (Summon)
 	new_card.placement = Card.Placement.HAND
 
@@ -111,11 +114,10 @@ func _on_card_selected(card: Card) -> void:
 	#Here to keep the player from selecting another card mid action.
 	if (Global.card_select_locked):
 		return
-	else:
-		Global.card_select_locked = true
 
 	print("hand select")
 
+	Global.card_select_locked = true
 	Global.selected_card = card
 
 	card.shift_card_y(-30)
@@ -135,7 +137,7 @@ func _on_card_unselected(card: Card) -> void:
 
 	if not another_card_selected(card):
 		Global.selected_card = null
-		Global.card_select_locked = false
+	Global.card_select_locked = false
 
 
 func another_card_selected(card: Card) -> bool:
@@ -151,23 +153,23 @@ func _on_action_summon() -> void:
 
 
 func _on_action_magic() -> void:
-	assert(selected_card.info.card_type == CardStats.CardType.MAGIC, "card should be of type magic")
+	assert(Global.selected_card.info.card_type == CardStats.CardType.MAGIC, "card should be of type magic")
 
-	match selected_card.info.ability.range:
+	match Global.selected_card.info.ability.range:
 		Ability.AbilityRange.ENEMY_CARD, Ability.AbilityRange.ENEMY_ROW:
 			Global.show_enemy_slots_for_magic.emit()
 		Ability.AbilityRange.ALLY_CARD:
 			Global.show_player_slots_for_magic.emit()
 		_:
 			VerifyClientAction.magic.emit(
-				selected_card.state.id, null, Global.player_hand.get_card_pos(selected_card)
+				Global.selected_card.state.id, null, Global.player_hand.get_card_pos(selected_card)
 			)
 			_hand_magic()
 
 
 func _on_slot_chosen(slot_no: int, _card: Card) -> void:
-	if selected_card:
-		var summoned_card: Card = selected_card
+	if Global.selected_card:
+		var summoned_card: Card = Global.selected_card
 
 		_on_card_unselected(summoned_card)
 		VerifyClientAction.summon.emit(summoned_card.state.id, Field.index_to_array(slot_no))

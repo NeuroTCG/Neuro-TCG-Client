@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://w2wsx24s4ir4"]
 
-[ext_resource type="Script" path="res://scenes/game/deck_master_select.gd" id="1_8jv4s"]
+[ext_resource type="Script" uid="uid://bhtxqhre4osaf" path="res://scenes/game/deck_master_select.gd" id="1_8jv4s"]
 [ext_resource type="Texture2D" uid="uid://uxfhbtqju3c8" path="res://assets/game/cards/template.png" id="1_adjqn"]
 
 [node name="DeckMasterSelect" type="Control"]

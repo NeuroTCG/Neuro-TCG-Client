@@ -5,7 +5,10 @@ var ws_server_base: String
 
 var request := HTTPRequest.new()
 
-var _server_template := "robotino.ch/neurotcg"
+#url to robotino's server
+#var _server_template := "robotino.ch/neurotcg"
+
+var _server_template := "127.0.0.1:9933"
 
 enum ServerStatus {
 	Checking,

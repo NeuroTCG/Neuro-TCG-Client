@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cnf8r80mqe73u"]
 
-[ext_resource type="Script" path="res://scripts/ui/music_slider.gd" id="1_eijqd"]
+[ext_resource type="Script" uid="uid://bkphuystmcimc" path="res://scripts/ui/music_slider.gd" id="1_eijqd"]
 
 [node name="MusicSlider" type="HSlider"]
 custom_minimum_size = Vector2(350, 0)

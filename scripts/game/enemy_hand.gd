@@ -90,11 +90,23 @@ func discard_hand_card_by_hand_pos(hand_pos: int) -> void:
 	assert(hand_pos >= 0, "Can't discard a card that doesn't exist")
 
 	var card = cards.pop_at(hand_pos)
+
+	#Make sure to unlock card select
+	if (Global.selected_card == card):
+		Global.selected_card = null
+		Global.card_select_locked = false
+
 	get_parent().remove_child(card)
 	rearrange_enemy_hand()
 
 
 func discard_hand_card(card: Card) -> void:
+
+	#Make sure to unlock card select
+	if (Global.selected_card == card):
+		Global.selected_card = null
+		Global.card_select_locked = false
+
 	var hand_pos = cards.find(card)
 	assert(hand_pos != -1, "Can't discard a card that doesn't exist")
 	discard_hand_card_by_hand_pos(hand_pos)

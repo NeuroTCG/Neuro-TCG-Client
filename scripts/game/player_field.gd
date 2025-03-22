@@ -112,6 +112,7 @@ func _on_card_selected(card: Card) -> void:
 		elif card.state.phase == Card.TurnPhase.Action:
 			buttons.erase(MatchManager.Actions.SWITCH)
 
+		Global.card_select_locked = true
 		Global.selected_card = card
 		card.show_buttons(buttons)
 		selected_slot = card.current_slot
@@ -122,7 +123,7 @@ func _on_card_selected(card: Card) -> void:
 func _on_card_unselected(card: Card) -> void:
 	card.hide_buttons()
 	card.unselect()
-
+	Global.card_select_locked = false
 
 
 	# If another card has been selected,
@@ -130,7 +131,7 @@ func _on_card_unselected(card: Card) -> void:
 	# that will run from that card being clicked on
 	if not another_card_selected(card):
 		MatchManager.current_action = MatchManager.Actions.IDLE
-		Global.card_select_locked = false
+
 
 
 func another_card_selected(card: Card) -> bool:
@@ -269,9 +270,7 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 
 
 func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
-	var player_card := (
-		Global.player_hand.selected_card if selected_slot == null else selected_slot.stored_card
-	)
+	var player_card := Global.selected_card
 
 	Global.hide_enemy_cards.emit()
 	player_card.state.phase = Card.TurnPhase.Done
