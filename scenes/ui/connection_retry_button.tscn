@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://ceinetm3w4e8m"]
 
-[ext_resource type="Script" path="res://scripts/ui/retry_connection_button.gd" id="1_0obkh"]
+[ext_resource type="Script" uid="uid://cdpdvs6p88a2l" path="res://scripts/ui/retry_connection_button.gd" id="1_0obkh"]
 
 [node name="RetryConnectionButton" type="Button"]
 offset_right = 40.0

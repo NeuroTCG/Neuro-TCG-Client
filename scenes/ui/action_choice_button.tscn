@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b6jkjwqcsi6xw"]
 
-[ext_resource type="Script" uid="uid://jndjuqbr2hf1" path="res://scripts/ui/action_choice_button.gd" id="1_6joo3"]
+[ext_resource type="Script" uid="uid://bf1egbrdcgm08" path="res://scripts/ui/action_choice_button.gd" id="1_6joo3"]
 
 [node name="ActionChoiceButton" type="Button"]
 custom_minimum_size = Vector2(60, 13)

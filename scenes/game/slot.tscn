@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://cajh3bao81ymy"]
 
-[ext_resource type="Script" uid="uid://bhq4oldlo3t6r" path="res://scripts/game/slot.gd" id="1_wey8m"]
+[ext_resource type="Script" uid="uid://qhsvgjy8ode7" path="res://scripts/game/slot.gd" id="1_wey8m"]
 [ext_resource type="Texture2D" uid="uid://bjqh15hjcpew1" path="res://assets/game/CardSlotHighlight.png" id="2_5ipoa"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ecfpc"]
