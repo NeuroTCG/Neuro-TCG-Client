@@ -123,7 +123,7 @@ func _on_card_selected(card: Card) -> void:
 func _on_card_unselected(card: Card) -> void:
 	card.hide_buttons()
 	card.unselect()
-	Global.card_select_locked = false
+
 
 
 	# If another card has been selected,
@@ -131,6 +131,8 @@ func _on_card_unselected(card: Card) -> void:
 	# that will run from that card being clicked on
 	if not another_card_selected(card):
 		MatchManager.current_action = MatchManager.Actions.IDLE
+
+	Global.card_select_locked = false
 
 
 

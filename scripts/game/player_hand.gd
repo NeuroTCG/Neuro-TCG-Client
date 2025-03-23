@@ -106,7 +106,9 @@ func summon(hand_pos: int, slot_no: int) -> void:
 ## ranges that is handled includes enemy field, player field, both fields, hands as target
 func _hand_magic() -> void:
 	# TODO: to implement in the future
-	discard_hand_card(selected_card)
+	discard_hand_card(Global.selected_card)
+	Global.selected_card = null
+	Global.card_select_locked = false
 
 
 func _on_card_selected(card: Card) -> void:
@@ -137,7 +139,7 @@ func _on_card_unselected(card: Card) -> void:
 
 	if not another_card_selected(card):
 		Global.selected_card = null
-		Global.card_select_locked = false
+	Global.card_select_locked = false
 
 
 func another_card_selected(card: Card) -> bool:
@@ -180,6 +182,10 @@ func discard_hand_card(card: Card) -> void:
 	var hand_pos = cards.find(card)
 	assert(hand_pos != -1, "Can't discard a card that doesn't exist")
 	cards.remove_at(hand_pos)
+
+	if (Global.selected_card == card):
+		Global.selected_card = null
+		Global.card_select_locked = false
 
 	get_parent().remove_child(card)
 	rearrange_player_hand()
