@@ -2,6 +2,7 @@ class_name Ability
 
 enum AbilityEffect {
 	NONE,
+	NOT_IMPLEMENTED,
 	ADD_HP,
 	SEAL,
 	ATTACK,

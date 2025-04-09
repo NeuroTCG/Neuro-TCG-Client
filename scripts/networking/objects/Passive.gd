@@ -2,6 +2,7 @@ class_name Passive
 
 enum PassiveEffectType {
 	NONE,
+	NOT_IMPLEMENTED,
 	DRAW_ON_DESTRUCTION,
 	BUFF_ADJACENT,
 }
