@@ -62,6 +62,7 @@ var ram_manager: RamManager = null
 
 #The card the player has currently selected.
 var selected_card: Card = null
+var selected_card_from_hand = false
 
 #When true, prevents the player from selecting another card.
 var card_select_locked = false

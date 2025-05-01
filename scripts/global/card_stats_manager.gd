@@ -22,3 +22,7 @@ func get_deck_master_ids() -> Array[int]:
 		if (card_info_dict[c].card_type == CardStats.CardType.DECK_MASTER):
 			ret.append(c)
 	return ret
+
+func is_deck_master(id: int) -> bool:
+	assert(id in card_info_dict.keys(), "Could not find card with id: %s" % [id])
+	return card_info_dict[id].card_type == CardStats.CardType.DECK_MASTER

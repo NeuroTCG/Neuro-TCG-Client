@@ -121,6 +121,7 @@ func _on_card_selected(card: Card) -> void:
 
 	Global.card_select_locked = true
 	Global.selected_card = card
+	Global.selected_card_from_hand = true
 
 	card.shift_card_y(-30)
 	card.select()
@@ -170,7 +171,7 @@ func _on_action_magic() -> void:
 
 
 func _on_slot_chosen(slot_no: int, _card: Card) -> void:
-	if Global.selected_card:
+	if Global.selected_card and Global.selected_card_from_hand:
 		var summoned_card: Card = Global.selected_card
 
 		_on_card_unselected(summoned_card)

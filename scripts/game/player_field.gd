@@ -114,6 +114,7 @@ func _on_card_selected(card: Card) -> void:
 
 		Global.card_select_locked = true
 		Global.selected_card = card
+		Global.selected_card_from_hand = false
 		card.show_buttons(buttons)
 		selected_slot = card.current_slot
 		selected_slot.stored_card = card

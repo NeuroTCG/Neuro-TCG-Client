@@ -150,6 +150,10 @@ func _on_player_finished() -> void:
 		if state.sealed_turns_left == 0:
 			seal_sprite.visible = false
 
+		#Refresh Deck Master Abilities
+		if CardStatsManager.is_deck_master(state.id):
+			state.ability_was_used = false
+
 
 func _on_opponent_finished() -> void:
 	if not owned_by_player:
@@ -292,6 +296,10 @@ func apply_ability_to(targets: Array[Card]):
 		Ability.AbilityEffect.ADD_HP:
 			for target in targets:
 				target.add_hp(info.ability.value)
+		Ability.AbilityEffect.ADD_ATTACK_HP:
+			for target in targets:
+				target.add_hp(info.ability.value)
+				target.add_attack(info.ability.value)
 		Ability.AbilityEffect.ATTACK:
 			var atk_value := info.ability.value
 			for target in targets:

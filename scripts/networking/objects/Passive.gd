@@ -5,6 +5,7 @@ enum PassiveEffectType {
 	DRAW_ON_DESTRUCTION,
 	BUFF_ADJACENT,
 	CARD_DISCOUNT,
+	REACH_HP_THRESHOLD
 }
 
 var effect: PassiveEffectType
