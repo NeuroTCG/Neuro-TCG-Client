@@ -2,12 +2,14 @@ class_name Ability
 
 enum AbilityEffect {
 	NONE,
+	NOT_IMPLEMENTED,
 	ADD_HP,
 	ADD_ATTACK_HP,
 	SEAL,
 	ATTACK,
 	SHIELD,
 	DRAW_CARD,
+	BUFF_SELF_REMOVE_CARD,
 }
 
 # TODO: Maybe rename the range constants to be more clear.

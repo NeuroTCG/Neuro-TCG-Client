@@ -1,7 +1,8 @@
 extends Control
 
-var game_node := load("res://scenes/game/game.tscn")
+const PLACEHOLDER_GRAPHIC = "res://assets/game/cards/template.png"
 
+var game_node := load("res://scenes/game/game.tscn")
 var player_user_info: UserInfo
 var opponent_user_info: UserInfo
 
@@ -21,10 +22,6 @@ func _ready() -> void:
 	Global.network_manager.opponent_ready.connect(_on_opponent_ready)
 	card_ids = CardStatsManager.get_deck_master_ids()
 	selected_id = 0
-
-
-
-
 	update_card_display()
 
 
@@ -87,4 +84,5 @@ func update_card_display():
 		card_display_image.texture = load(card_info.graphics)
 		card_display_image_path.text = ""
 	else:
+		card_display_image.texture = load(PLACEHOLDER_GRAPHIC)
 		card_display_image_path.text = card_info.graphics
