@@ -23,8 +23,9 @@ enum Placement {
 
 enum TurnPhase {
 	Done = 0,
-	Action = 1,
-	MoveOrAction = 2,
+	AttackOnly = 1,
+	Action = 2,
+	MoveOrAction = 3,
 }
 
 # TODO: remove
@@ -317,6 +318,11 @@ func apply_ability_to(targets: Array[Card]):
 		Ability.AbilityEffect.DRAW_CARD:
 			#Draw card ability is handled by server
 			targets = []
+		Ability.AbilityEffect.BUFF_SELF_REMOVE_CARD:
+			add_hp(info.ability.value)
+			add_attack(info.ability.value)
+			for target in targets:
+				Global.player_field.destroy_card(target.current_slot.slot_no, target)
 		_:
 			assert(false, "no action for AbilityEffect: %s" % [info.ability.effect])
 

@@ -28,6 +28,8 @@ func _on_passive_update(packet: PassiveUpdatePacket):
 					handle_sub_attack_action(user, action)
 				CardActionNames.ATTACK:
 					print_not_implemented_string(CardActionNames.ATTACK, user, action.targets)
+				CardActionNames.SET_PHASE:
+					handle_set_phase(user, action)
 				CardActionNames.SET_ABILITY_USED:
 					print_not_implemented_string(
 						CardActionNames.SET_ABILITY_USED, user, action.targets
@@ -124,6 +126,9 @@ func handle_sub_ability_cost_modifier(user: CardData, action: CardAction):
 		target_card.sub_ability_cost_modifier(action.amount)
 		print("set attack to: %s" % [target_card.current_attack_value])
 
+func handle_set_phase(user: CardData, action: CardAction):
+	var target_card: Card = get_card_from_data(user)
+	target_card.state.phase = action.amount
 
 func handle_sub_hp_action(user: CardData, action: CardAction):
 	var min_hp: int = 0
