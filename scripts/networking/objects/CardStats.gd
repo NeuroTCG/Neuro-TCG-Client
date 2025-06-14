@@ -76,9 +76,9 @@ static func from_dict(d: Dictionary) -> CardStats:
 		d["max_counter_attack"]
 	)
 
-static func convert_tactics_to_enum(tactics: Array) -> Array[Tactic]:
+static func convert_tactics_to_enum(_tactics: Array) -> Array[Tactic]:
 	var new_array: Array[Tactic]
-	for str_tactic in tactics:
+	for str_tactic in _tactics:
 		new_array.append(CardStats.Tactic.get(str_tactic))
 
 	return new_array

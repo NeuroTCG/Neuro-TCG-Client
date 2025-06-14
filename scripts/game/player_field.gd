@@ -223,7 +223,7 @@ func _verify_ability_or_magic(
 			Global.player_hand.discard_hand_card(source)
 
 
-func _on_slot_chosen(slot_no: int, card: Card) -> void:
+func _on_slot_chosen(slot_no: int, card_in_slot: Card) -> void:
 	hide_slots()
 
 	var ability_card: Card = null
@@ -235,9 +235,9 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 
 		ability_card.state.phase = Card.TurnPhase.Action
 
-		if card:
-			card.state.phase = Card.TurnPhase.Action
-			card.unselect()
+		if card_in_slot:
+			card_in_slot.state.phase = Card.TurnPhase.Action
+			card_in_slot.unselect()
 
 		VerifyClientAction.switch.emit(index_to_array(slot_no), get_slot_array(ability_card))
 
@@ -253,6 +253,13 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 
 		ability_card = selected_slot.stored_card
 
+		#Some abilities can destroy other cards.
+		#Ignore ability if the card is trying to destroy itself.
+		if (ability_card == card_in_slot
+			and ability_card.info.ability.effect == Ability.AbilityEffect.BUFF_SELF_REMOVE_CARD):
+			return
+
+
 		ability_card.state.phase = Card.TurnPhase.Done
 
 		# TODO: don't manually write to state
@@ -263,7 +270,7 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 
 		match ability_card.info.ability.range:
 			Ability.AbilityRange.ALLY_CARD:
-				ability_targets.append(card)
+				ability_targets.append(card_in_slot)
 			Ability.AbilityRange.ALLY_FIELD:
 				for n in Global.PLAYER_ROWS:
 					var slot = player_field.get_slot(n)
@@ -272,7 +279,7 @@ func _on_slot_chosen(slot_no: int, card: Card) -> void:
 
 		#Save the position of the card before using the ability, as it may get destroyed.
 
-		var target_card_pos_array := get_slot_array(card)
+		var target_card_pos_array := get_slot_array(card_in_slot)
 
 		ability_card.apply_ability_to(ability_targets)
 
