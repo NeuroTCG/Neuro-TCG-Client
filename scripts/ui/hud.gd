@@ -12,6 +12,7 @@ var main_menu := preload("res://scenes/ui/main_menu.tscn")
 
 
 func _ready() -> void:
+	visible = true
 	Global.show_shortcuts.connect(_on_show_shortcuts)
 	Global.hide_shortcuts.connect(_on_hide_shortcuts)
 	Global.notice.connect(_on_notice)

@@ -75,6 +75,9 @@ var card_select_locked = false
 ## Current order is SLOTS -> CARDS
 var mouse_input_functions: Array[Callable] = []
 
+func reset_values():
+	Global.card_select_locked = false
+
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("click"):
 		for callable in mouse_input_functions:

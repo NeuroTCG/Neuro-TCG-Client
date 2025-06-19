@@ -31,5 +31,7 @@ func load_game_over(message: String) -> void:
 	get_tree().root.add_child(game_over)
 
 	queue_free()
+
 	# stop any connections
 	Global.network_manager.queue_free()
+	Global.reset_values()
