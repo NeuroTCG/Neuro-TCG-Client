@@ -75,6 +75,8 @@ var card_select_locked = false
 ## Current order is SLOTS -> CARDS
 var mouse_input_functions: Array[Callable] = []
 
+var game_over_template = preload("res://scenes/ui/game_over.tscn")
+
 func reset_values():
 	Global.card_select_locked = false
 

@@ -20,6 +20,7 @@ func _ready() -> void:
 	Global.network_manager.game_start.connect(_on_game_start)
 	Global.network_manager.deck_master_selected.connect(_on_deck_master_selected)
 	Global.network_manager.opponent_ready.connect(_on_opponent_ready)
+	Global.network_manager.disconnect.connect(_on_disconnect)
 	card_ids = CardStatsManager.get_deck_master_ids()
 	selected_id = 0
 	update_card_display()
@@ -86,3 +87,19 @@ func update_card_display():
 	else:
 		card_display_image.texture = load(PLACEHOLDER_GRAPHIC)
 		card_display_image_path.text = card_info.graphics
+
+func _on_disconnect(packet: DisconnectPacket) -> void:
+	load_game_over("Disconnect packet received: %s (%s)" % [packet.message, packet.reason])
+
+
+func load_game_over(message: String) -> void:
+	var game_over = Global.game_over_template.instantiate()
+
+	game_over.get_node("VBoxContainer/WinLabel").text = message
+	get_tree().root.add_child(game_over)
+
+	queue_free()
+
+	# stop any connections
+	Global.network_manager.queue_free()
+	Global.reset_values()
