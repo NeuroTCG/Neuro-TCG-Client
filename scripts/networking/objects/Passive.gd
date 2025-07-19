@@ -8,6 +8,7 @@ enum PassiveEffectType {
 	NOT_IMPLEMENTED,
 	DRAW_ON_DESTRUCTION,
 	BUFF_ADJACENT, #atk, hp
+	CANNOT_ATTACK
 }
 
 var effect: PassiveEffectType

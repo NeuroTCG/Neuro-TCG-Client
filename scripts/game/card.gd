@@ -23,9 +23,11 @@ enum Placement {
 
 enum TurnPhase {
 	Done = 0,
-	AttackOnly = 1,
-	Action = 2,
-	MoveOrAction = 3,
+	AbilityOnly = 1,
+	AttackOnly = 2,
+	Action = 3,
+	MoveOrAbility = 4,
+	MoveOrAction = 5,
 }
 
 # TODO: remove
@@ -41,6 +43,10 @@ var current_slot: CardSlot
 var current_attack_value: int:
 	get:
 		return info.base_atk + state.attack_bonus
+
+var current_counter_attack_value: int:
+	get:
+		return clamp(current_attack_value - 1, info.min_counter_attack, info.max_counter_attack)
 
 var current_ability_cost: int:
 	get:

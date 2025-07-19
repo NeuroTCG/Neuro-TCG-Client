@@ -67,6 +67,11 @@ var selected_card_from_hand = false
 #When true, prevents the player from selecting another card.
 var card_select_locked = false
 
+func unselect_card():
+	selected_card = null
+	card_select_locked = false
+	selected_card_from_hand = false
+
 ## Simple mouse input implementation
 ## All functions that process mouse input
 ## should be appended to the array

@@ -114,6 +114,11 @@ func _on_card_selected(card: Card) -> void:
 		elif card.state.phase == Card.TurnPhase.AttackOnly:
 			buttons.erase(MatchManager.Actions.SWITCH)
 			buttons.erase(MatchManager.Actions.ABILITY)
+		elif card.state.phase == Card.TurnPhase.MoveOrAbility:
+			buttons.erase(MatchManager.Actions.ATTACK)
+		elif card.state.phase == Card.TurnPhase.AbilityOnly:
+			buttons.erase(MatchManager.Actions.SWITCH)
+			buttons.erase(MatchManager.Actions.ATTACK)
 
 		Global.card_select_locked = true
 		Global.selected_card = card
@@ -307,9 +312,10 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 
 		#region Enemy counterattack
 		if can_counterattack:
+
 			return
 		else:
-			var counter_attack_value = clamp(enemy_card.current_attack_value - 1, 0, enemy_card.info.max_counter_attack)
+			var counter_attack_value = enemy_card.current_counter_attack_value
 			player_card.take_damage(counter_attack_value, enemy_card)
 
 		#endregion

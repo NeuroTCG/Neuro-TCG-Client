@@ -84,9 +84,10 @@ func _on_attack(packet: AttackPacket) -> void:
 	if target_card.current_slot:  # it did't die
 		assert(target_card.state.shield == packet.target_card.shield)
 
-	atk_card.take_damage(max(target_atk - 1, 0), target_card)
+
 	if atk_card.current_slot:  # it did't die
 		assert(atk_card.state.shield == packet.attacker_card.shield)
+		atk_card.take_damage(target_card.current_counter_attack_value, target_card)
 
 
 func _apply_ability(
