@@ -84,7 +84,6 @@ func _on_attack(packet: AttackPacket) -> void:
 	if target_card.current_slot:  # it did't die
 		assert(target_card.state.shield == packet.target_card.shield)
 
-
 	if atk_card.current_slot:  # it did't die
 		assert(atk_card.state.shield == packet.attacker_card.shield)
 		atk_card.take_damage(target_card.current_counter_attack_value, target_card)
@@ -97,8 +96,6 @@ func _apply_ability(
 	target_card_state: CardState
 ) -> void:
 	#Global.use_enemy_ram.emit(ability.cost)
-
-
 
 	var targets: Array[Card] = []
 
@@ -133,7 +130,6 @@ func _apply_ability(
 			targets.append(target_card)
 
 	ability_card.apply_ability_to(targets)
-
 
 
 func _on_ability(packet: UseAbilityPacket) -> void:

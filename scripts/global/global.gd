@@ -1,12 +1,12 @@
 # Global stuffs for game functionality
 extends Node
 
-const PLAYER_FRONT_ROW : Array[int] = [1, 2, 3, 4]
-const PLAYER_BACK_ROW : Array[int] = [5, 6, 7]
-const PLAYER_ROWS : Array[int] = [1, 2, 3, 4, 5, 6, 7]
-const ENEMY_FRONT_ROW : Array[int] = [11, 12, 13, 14]
-const ENEMY_BACK_ROW : Array[int] = [8, 9, 10]
-const ENEMY_ROWS : Array[int] = [8, 9, 10, 11, 12, 13, 14]
+const PLAYER_FRONT_ROW: Array[int] = [1, 2, 3, 4]
+const PLAYER_BACK_ROW: Array[int] = [5, 6, 7]
+const PLAYER_ROWS: Array[int] = [1, 2, 3, 4, 5, 6, 7]
+const ENEMY_FRONT_ROW: Array[int] = [11, 12, 13, 14]
+const ENEMY_BACK_ROW: Array[int] = [8, 9, 10]
+const ENEMY_ROWS: Array[int] = [8, 9, 10, 11, 12, 13, 14]
 
 # FROM CARD
 
@@ -67,10 +67,12 @@ var selected_card_from_hand = false
 #When true, prevents the player from selecting another card.
 var card_select_locked = false
 
+
 func unselect_card():
 	selected_card = null
 	card_select_locked = false
 	selected_card_from_hand = false
+
 
 ## Simple mouse input implementation
 ## All functions that process mouse input
@@ -82,8 +84,10 @@ var mouse_input_functions: Array[Callable] = []
 
 var game_over_template = preload("res://scenes/ui/game_over.tscn")
 
+
 func reset_values():
 	Global.card_select_locked = false
+
 
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("click"):

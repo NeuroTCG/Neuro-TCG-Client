@@ -11,8 +11,10 @@ func _ready() -> void:
 	Global.network_manager.send_packet(PlayerReadyPacket.new())
 	Global.network_manager.disconnect.connect(_on_disconnect)
 
+
 func _on_opponent_ready(packet: OpponentReadyPacket) -> void:
 	Global.network_manager.send_packet(OpponentReadyPacket.new())
+
 
 func _on_game_over(packet: GameOverPacket) -> void:
 	load_game_over(PLAYER_WON if packet.you_are_winner else PLAYER_LOST)

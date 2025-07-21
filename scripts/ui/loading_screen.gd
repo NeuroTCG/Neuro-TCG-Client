@@ -13,6 +13,7 @@ var player_user_info: UserInfo
 
 var game_over_template = preload("res://scenes/ui/game_over.tscn")
 
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Global.network_manager = NetworkManager.new()

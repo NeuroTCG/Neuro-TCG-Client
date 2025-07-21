@@ -25,6 +25,7 @@ func _ready() -> void:
 	else:
 		hide_end_turn_button()
 
+
 func _on_show_shortcuts(shortcuts: PackedStringArray) -> void:
 	for shortcut in shortcuts:
 		shortcuts_label.text += shortcut
@@ -62,11 +63,14 @@ func _on_notice(msg: String) -> void:
 func _on_close_notice_button_pressed() -> void:
 	notice.visible = false
 
+
 func hide_end_turn_button() -> void:
 	end_turn_button.visible = false
 
+
 func show_end_turn_button() -> void:
 	end_turn_button.visible = true
+
 
 func _on_end_turn_button_pressed() -> void:
 	MatchManager.request_end_turn.emit()

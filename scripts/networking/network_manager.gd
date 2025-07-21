@@ -83,6 +83,7 @@ func __on_authenticate_answer(packet: Packet) -> void:
 	else:
 		print("Waiting for matchmaking")
 
+
 func __on_game_start(packet: Packet) -> void:
 	print("Game is starting...")
 	game_start.emit(packet)

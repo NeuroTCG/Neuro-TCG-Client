@@ -83,14 +83,12 @@ func hide_slots() -> void:
 
 #region SELECT
 func _on_card_selected(card: Card) -> void:
-
 	print("field select")
 
 	if MatchManager.current_action == MatchManager.Actions.SWITCH:
 		MatchManager.current_action = MatchManager.Actions.IDLE
 	else:
-
-		if (Global.card_select_locked):
+		if Global.card_select_locked:
 			return
 
 		var buttons := [
@@ -133,8 +131,6 @@ func _on_card_unselected(card: Card) -> void:
 	card.hide_buttons()
 	card.unselect()
 
-
-
 	# If another card has been selected,
 	# Update these values from the _on_card_selected
 	# that will run from that card being clicked on
@@ -142,7 +138,6 @@ func _on_card_unselected(card: Card) -> void:
 		MatchManager.current_action = MatchManager.Actions.IDLE
 
 	Global.card_select_locked = false
-
 
 
 func another_card_selected(card: Card) -> bool:
@@ -179,13 +174,10 @@ func _on_action_ability() -> void:
 		or selected_slot.stored_card.info.ability.range == Ability.AbilityRange.ENEMY_ROW
 	):
 		enemy_field.show_slots_for_direct_attack()
-	elif (
-		selected_slot.stored_card.info.ability.range == Ability.AbilityRange.PLAYER_DECK
-	):
-		if (selected_slot.stored_card.info.ability.effect == Ability.AbilityEffect.DRAW_CARD):
+	elif selected_slot.stored_card.info.ability.range == Ability.AbilityRange.PLAYER_DECK:
+		if selected_slot.stored_card.info.ability.effect == Ability.AbilityEffect.DRAW_CARD:
 			#Draw card doesn't need to worry about selecting slots, so just handle the ability right here.
 			handle_draw_card_ability()
-
 
 
 #endregion
@@ -194,7 +186,7 @@ func _on_action_ability() -> void:
 func handle_draw_card_ability() -> void:
 	#Check if the player can draw
 	print("%d, %d" % [Global.player_hand.cards.size(), Hand.MAX_HAND_SIZE])
-	if (Global.player_hand.cards.size() >= Hand.MAX_HAND_SIZE):
+	if Global.player_hand.cards.size() >= Hand.MAX_HAND_SIZE:
 		Global.notice.emit("Can't draw! Your hand is full!")
 		return
 
@@ -204,7 +196,7 @@ func handle_draw_card_ability() -> void:
 	var card_as_array := get_slot_array(selected_card)
 	selected_card.state.phase = Card.TurnPhase.Done
 	selected_card.state.ability_was_used = true
-	selected_card.apply_ability_to([]);
+	selected_card.apply_ability_to([])
 
 	VerifyClientAction.ability.emit(card_as_array, card_as_array)
 
@@ -260,10 +252,11 @@ func _on_slot_chosen(slot_no: int, card_in_slot: Card) -> void:
 
 		#Some abilities can destroy other cards.
 		#Ignore ability if the card is trying to destroy itself.
-		if (ability_card == card_in_slot
-			and ability_card.info.ability.effect == Ability.AbilityEffect.BUFF_SELF_REMOVE_CARD):
+		if (
+			ability_card == card_in_slot
+			and ability_card.info.ability.effect == Ability.AbilityEffect.BUFF_SELF_REMOVE_CARD
+		):
 			return
-
 
 		ability_card.state.phase = Card.TurnPhase.Done
 
@@ -312,7 +305,6 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 
 		#region Enemy counterattack
 		if can_counterattack:
-
 			return
 		else:
 			var counter_attack_value = enemy_card.current_counter_attack_value
@@ -321,10 +313,9 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 		#endregion
 
 	elif (
-			MatchManager.current_action == MatchManager.Actions.ABILITY ||
-			MatchManager.current_action == MatchManager.Actions.MAGIC
-		):
-
+		MatchManager.current_action == MatchManager.Actions.ABILITY
+		|| MatchManager.current_action == MatchManager.Actions.MAGIC
+	):
 		var ability_targets: Array[Card] = []
 
 		match player_card.info.ability.range:

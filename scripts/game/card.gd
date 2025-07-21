@@ -120,7 +120,6 @@ func reset_variables() -> void:
 
 
 func _on_mouse_clicked() -> void:
-
 	for button in buttons.get_children():
 		if button.mouse_over:
 			return
@@ -332,13 +331,13 @@ func apply_ability_to(targets: Array[Card]):
 		_:
 			assert(false, "no action for AbilityEffect: %s" % [info.ability.effect])
 
-	if (self in Global.enemy_hand.cards or (current_slot != null and current_slot.slot_no in Global.ENEMY_ROWS)):
+	if (
+		self in Global.enemy_hand.cards
+		or (current_slot != null and current_slot.slot_no in Global.ENEMY_ROWS)
+	):
 		Global.use_enemy_ram.emit(current_ability_cost)
 	else:
 		Global.use_ram.emit(current_ability_cost)
-
-
-
 
 
 func add_hp(amount: int) -> void:
@@ -363,9 +362,11 @@ func sub_attack(amount: int) -> void:
 	assert(amount > 0)
 	state.attack_bonus -= amount
 
+
 func add_ability_cost_modifier(amount: int) -> void:
 	assert(amount > 0)
 	state.ability_cost_modifier += amount
+
 
 func sub_ability_cost_modifier(amount: int) -> void:
 	assert(amount > 0)

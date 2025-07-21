@@ -12,7 +12,6 @@ func _on_passive_update(packet: PassiveUpdatePacket):
 		var user: CardData = u.card
 
 		for action in u.actions:
-
 			#TODO: Use a function variable to consolidate this.
 
 			match action.action_name:
@@ -114,11 +113,13 @@ func handle_sub_attack_action(user: CardData, action: CardAction):
 		target_card.sub_attack(action.amount)
 		print("set attack to: %s" % [target_card.current_attack_value])
 
+
 func handle_add_ability_cost_modifier(user: CardData, action: CardAction):
 	for target: CardActionTarget in action.targets:
 		var target_card: Card = get_card_from_target(target)
 		target_card.add_ability_cost_modifier(action.amount)
 		print("set attack to: %s" % [target_card.current_attack_value])
+
 
 func handle_sub_ability_cost_modifier(user: CardData, action: CardAction):
 	for target: CardActionTarget in action.targets:
@@ -126,9 +127,11 @@ func handle_sub_ability_cost_modifier(user: CardData, action: CardAction):
 		target_card.sub_ability_cost_modifier(action.amount)
 		print("set attack to: %s" % [target_card.current_attack_value])
 
+
 func handle_set_phase(user: CardData, action: CardAction):
 	var target_card: Card = get_card_from_data(user)
 	target_card.state.phase = action.amount
+
 
 func handle_sub_hp_action(user: CardData, action: CardAction):
 	var min_hp: int = 0

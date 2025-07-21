@@ -46,6 +46,7 @@ func _on_draw_card(packet: DrawCardPacket) -> void:
 	assert(packet.card_id >= 0, "The server sent an invalid opponent action")
 	add_card(packet.card_id)
 
+
 func _on_deck_master_init(packet: DeckMasterInitPacket) -> void:
 	var slot_no := Field.array_to_index(packet.position.to_array(), Field.Side.Enemy)
 	var slot := Global.enemy_field.get_slot(slot_no)
@@ -92,7 +93,7 @@ func discard_hand_card_by_hand_pos(hand_pos: int) -> void:
 	var card = cards.pop_at(hand_pos)
 
 	#Make sure to unlock card select
-	if (Global.selected_card == card):
+	if Global.selected_card == card:
 		Global.selected_card = null
 		Global.card_select_locked = false
 
@@ -101,9 +102,8 @@ func discard_hand_card_by_hand_pos(hand_pos: int) -> void:
 
 
 func discard_hand_card(card: Card) -> void:
-
 	#Make sure to unlock card select
-	if (Global.selected_card == card):
+	if Global.selected_card == card:
 		Global.selected_card = null
 		Global.card_select_locked = false
 

@@ -25,8 +25,13 @@ func _on_view(card: Card) -> void:
 
 	description.text = (
 		"Card Name: %s \nHP: %d \nAtk: %d \nSummon Cost: %d\nAbility Cost: %d"
-		% [card.info.name, card.state.health, card.current_attack_value,
-			card.info.cost, card.info.ability.cost]
+		% [
+			card.info.name,
+			card.state.health,
+			card.current_attack_value,
+			card.info.cost,
+			card.info.ability.cost
+		]
 	)
 
 

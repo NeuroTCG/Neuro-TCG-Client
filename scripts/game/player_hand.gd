@@ -57,8 +57,8 @@ func rearrange_player_hand():
 	for i in range(0, cards.size()):
 		cards[i].move_and_reanchor(card_positions[i].global_position)
 
-func _on_deck_master_init(packet: DeckMasterInitPacket):
 
+func _on_deck_master_init(packet: DeckMasterInitPacket):
 	var slot_no := Field.array_to_index(packet.position.to_array(), Field.Side.Player)
 	var slot := Global.player_field.get_slot(slot_no)
 
@@ -73,6 +73,7 @@ func _on_deck_master_init(packet: DeckMasterInitPacket):
 	Global.player_field.cards.append(deck_master)
 
 	deck_master.placement = Card.Placement.PLAYMAT  # Update card
+
 
 func summon(hand_pos: int, slot_no: int) -> void:
 	assert(cards.size() > 0, "Cards should exist at hand when summoning")
@@ -112,9 +113,8 @@ func _hand_magic() -> void:
 
 
 func _on_card_selected(card: Card) -> void:
-
 	#Here to keep the player from selecting another card mid action.
-	if (Global.card_select_locked):
+	if Global.card_select_locked:
 		return
 
 	print("hand select")
@@ -156,7 +156,10 @@ func _on_action_summon() -> void:
 
 
 func _on_action_magic() -> void:
-	assert(Global.selected_card.info.card_type == CardStats.CardType.MAGIC, "card should be of type magic")
+	assert(
+		Global.selected_card.info.card_type == CardStats.CardType.MAGIC,
+		"card should be of type magic"
+	)
 
 	match Global.selected_card.info.ability.range:
 		Ability.AbilityRange.ENEMY_CARD, Ability.AbilityRange.ENEMY_ROW:
@@ -184,7 +187,7 @@ func discard_hand_card(card: Card) -> void:
 	assert(hand_pos != -1, "Can't discard a card that doesn't exist")
 	cards.remove_at(hand_pos)
 
-	if (Global.selected_card == card):
+	if Global.selected_card == card:
 		Global.selected_card = null
 		Global.card_select_locked = false
 

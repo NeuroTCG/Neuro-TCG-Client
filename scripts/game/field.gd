@@ -161,7 +161,7 @@ func destroy_card(slot: int, card: Card) -> void:
 	if card.current_slot != null:
 		card.remove_from_slot()
 
-	if (card == Global.selected_card):
+	if card == Global.selected_card:
 		Global.unselect_card()
 
 	player_field.on_card_destroyed.emit(slot, card)

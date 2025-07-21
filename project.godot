@@ -37,7 +37,7 @@ window/stretch/aspect="expand"
 
 [editor]
 
-run/main_run_args="--server-url localhost:9933"
+run/main_run_args="--server-url 127.0.0.1:9933"
 
 [gui]
 
