@@ -198,7 +198,7 @@ func handle_draw_card_ability() -> void:
 	selected_card.state.ability_was_used = true
 	selected_card.apply_ability_to([])
 
-	VerifyClientAction.ability.emit(card_as_array, card_as_array)
+	assert(await VerifyClientAction.emit(card_as_array, card_as_array))
 
 
 #region ON SLOT CHOSEN
@@ -209,13 +209,15 @@ func _verify_ability_or_magic(
 ) -> void:
 	match action:
 		MatchManager.Actions.ABILITY:
-			VerifyClientAction.ability.emit(get_slot_array(source), target_slot)
+			assert(await VerifyClientAction.ability(get_slot_array(source), target_slot))
 
 		MatchManager.Actions.MAGIC:
-			VerifyClientAction.magic.emit(
-				source.state.id,
-				null if target_slot == null else target_slot,
-				Global.player_hand.get_card_pos(source)
+			assert(
+				await VerifyClientAction.magic(
+					source.state.id,
+					null if target_slot == null else CardPosition.from_array(target_slot),
+					Global.player_hand.get_card_pos(source)
+				)
 			)
 			Global.player_hand.discard_hand_card(source)
 
@@ -236,7 +238,9 @@ func _on_slot_chosen(slot_no: int, card_in_slot: Card) -> void:
 			card_in_slot.state.phase = Card.TurnPhase.Action
 			card_in_slot.unselect()
 
-		VerifyClientAction.switch.emit(index_to_array(slot_no), get_slot_array(ability_card))
+		assert(
+			await VerifyClientAction.switch(index_to_array(slot_no), get_slot_array(ability_card))
+		)
 
 		var selected_slot_no = get_slot_no(ability_card)
 
@@ -281,7 +285,9 @@ func _on_slot_chosen(slot_no: int, card_in_slot: Card) -> void:
 
 		ability_card.apply_ability_to(ability_targets)
 
-		VerifyClientAction.ability.emit(target_card_pos_array, get_slot_array(ability_card))
+		assert(
+			await VerifyClientAction.ability(target_card_pos_array, get_slot_array(ability_card))
+		)
 
 
 func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
@@ -294,21 +300,40 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 	if MatchManager.current_action == MatchManager.Actions.ATTACK:
 		var player_slot_no := get_slot_no(player_card)
 
-		VerifyClientAction.attack.emit(
+		var response := await VerifyClientAction.attack(
 			player_card.state.id, index_to_array(enemy_slot_no), index_to_array(player_slot_no)
 		)
+		assert(response.valid)
 
-		# take_damage deletes the card if it dies
-		var can_counterattack := not slot_is_reachable(player_slot_no, enemy_card)
+		assert(
+			(
+				player_slot_no
+				== array_to_index(response.attacker_position.to_array(), Field.Side.Player)
+			)
+		)
+		assert(
+			enemy_slot_no == array_to_index(response.target_position.to_array(), Field.Side.Enemy)
+		)
+		assert(enemy_slot_no == get_slot_no(enemy_card))
 
-		enemy_card.take_damage(player_card.current_attack_value, player_card)
+		var can_counterattack := slot_is_reachable(player_slot_no, enemy_card)
 
-		#region Enemy counterattack
+		# take_damage destroys the card if it dies so we have to read the value here
+		var counter_attack_value = enemy_card.current_counter_attack_value
+
+		var target_died = enemy_card.take_damage(player_card.current_attack_value, player_card)
+
+		var player_died = false
 		if can_counterattack:
-			return
-		else:
-			var counter_attack_value = enemy_card.current_counter_attack_value
-			player_card.take_damage(counter_attack_value, enemy_card)
+			player_died = player_card.take_damage(counter_attack_value, enemy_card)
+
+		assert(target_died == (response.target_card == null))
+		assert(player_died == (response.attacker_card == null))
+
+		if not player_died:
+			assert(player_card.state.health == (response.attacker_card.health))
+		if not target_died:
+			assert(enemy_card.state.health == (response.target_card.health))
 
 		#endregion
 

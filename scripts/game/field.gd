@@ -88,8 +88,14 @@ func get_row_for_card_slot(slot_no: int) -> RowPositions:
 func slot_is_reachable(target_slot_no: int, atk_card: Card) -> bool:
 	var atk_slot_no := get_slot_no(atk_card)
 
-	var is_player_front_empty := slots_empty(Global.PLAYER_FRONT_ROW)
-	var is_opponent_front_empty := slots_empty(Global.ENEMY_FRONT_ROW)
+	var from_player := atk_slot_no in Global.PLAYER_ROWS
+
+	var is_player_front_empty := slots_empty(
+		Global.PLAYER_FRONT_ROW if from_player else Global.ENEMY_FRONT_ROW
+	)
+	var is_opponent_front_empty := slots_empty(
+		Global.ENEMY_FRONT_ROW if from_player else Global.PLAYER_FRONT_ROW
+	)
 
 	var attacker_has_reach := atk_card.info.tactics.has(CardStats.Tactic.REACH)
 
