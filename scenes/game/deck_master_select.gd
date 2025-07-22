@@ -21,6 +21,7 @@ func _ready() -> void:
 	Global.network_manager.deck_master_selected.connect(_on_deck_master_selected)
 	Global.network_manager.opponent_ready.connect(_on_opponent_ready)
 	Global.network_manager.disconnect.connect(_on_disconnect)
+	Global.network_manager.connection.connection_failed.connect(_on_connection_failed)
 	card_ids = CardStatsManager.get_deck_master_ids()
 	selected_id = 0
 	update_card_display()
@@ -90,6 +91,8 @@ func update_card_display():
 
 func _on_disconnect(packet: DisconnectPacket) -> void:
 	load_game_over("Disconnect packet received: %s (%s)" % [packet.message, packet.reason])
+func _on_connection_failed(url: String, error: String) -> void:
+	load_game_over("Connection to %s failed: %s" % [url, error])
 
 
 func load_game_over(message: String) -> void:

@@ -10,6 +10,7 @@ func _ready() -> void:
 	Global.network_manager.opponent_ready.connect(_on_opponent_ready)
 	Global.network_manager.send_packet(PlayerReadyPacket.new())
 	Global.network_manager.disconnect.connect(_on_disconnect)
+	Global.network_manager.connection.connection_failed.connect(_on_connection_failed)
 
 
 func _on_opponent_ready(packet: OpponentReadyPacket) -> void:
@@ -22,6 +23,9 @@ func _on_game_over(packet: GameOverPacket) -> void:
 
 func _on_disconnect(packet: DisconnectPacket) -> void:
 	load_game_over("Disconnect packet received: %s (%s)" % [packet.message, packet.reason])
+
+func _on_connection_failed(url: String, error: String) -> void:
+	load_game_over("Connection to %s failed: %s" % [url, error])
 
 
 func load_game_over(message: String) -> void:
