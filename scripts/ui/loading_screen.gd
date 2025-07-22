@@ -1,8 +1,7 @@
 extends Control
 class_name LoadingScreen
 
-var game_node := load("res://scenes/game/game.tscn")
-var game_over_template = preload("res://scenes/ui/game_over.tscn")
+var dm_select_node := load("res://scenes/game/deck_master_select.tscn")
 
 var loading_text: String = "Loading...":
 	set(new_text):
@@ -11,6 +10,8 @@ var loading_text: String = "Loading...":
 var duration := 2.0
 
 var player_user_info: UserInfo
+
+var game_over_template = preload("res://scenes/ui/game_over.tscn")
 
 
 # Called when the node enters the scene tree for the first time.
@@ -28,17 +29,11 @@ func _ready() -> void:
 
 func __on_match_found(packet: MatchFoundPacket) -> void:
 	loading_text = "Match found"
-	var game = game_node.instantiate()
-	get_parent().add_child(game)
+	var dm_select = dm_select_node.instantiate()
+	get_parent().add_child(dm_select)
 
-	Global.player_field = game.get_node("PlayerField")
-	Global.enemy_field = game.get_node("EnemyField")
-
-	Global.ram_manager = game.get_tree().get_first_node_in_group("ram_manager")
-	Global.ram_manager.reset_ram(packet.is_first_player)
-
-	(game.get_node("OpponentProfileDisplay") as ProfileDisplay).user_info = packet.opponent
-	(game.get_node("PlayerProfileDisplay") as ProfileDisplay).user_info = player_user_info
+	dm_select.player_user_info = player_user_info
+	dm_select.opponent_user_info = packet.opponent
 
 	queue_free()
 

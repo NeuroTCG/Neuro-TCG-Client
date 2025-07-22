@@ -11,10 +11,15 @@ signal match_found(packet: MatchFoundPacket)
 signal unknown_packet(packet: UnknownPacketPacket)
 signal switch_place(packet: SwitchPlacePacket)
 signal use_ability(packet: UseAbilityPacket)
+signal deck_master_init(packet: DeckMasterInitPacket)
 signal start_turn(packet: StartTurnPacket)
 signal draw_card(packet: DrawCardPacket)
 signal game_over(packet: GameOverPacket)
+signal game_start(packet: GameStartPacket)
+signal deck_master_selected(packet: DeckMasterSelectedPacket)
 signal passive_update(packet: PassiveUpdatePacket)
+signal opponent_ready(packet: OpponentReadyPacket)
+signal player_ready(packet: PlayerReadyPacket)
 
 signal attack(packet: AttackPacket)
 #endregion
@@ -27,6 +32,8 @@ signal on_packet_received(packet: Packet)
 var connection: Connection
 
 const PROTOCOL_VERSION := 1
+
+var is_first_player := true
 
 
 func _ready() -> void:
@@ -77,6 +84,11 @@ func __on_authenticate_answer(packet: Packet) -> void:
 		print("Waiting for matchmaking")
 
 
+func __on_game_start(packet: Packet) -> void:
+	print("Game is starting...")
+	game_start.emit(packet)
+
+
 func __on_rules_packet(packet: Packet) -> void:
 	print("Rules received")
 	print((packet as RuleInfoPacket).card_id_mapping)
@@ -86,8 +98,10 @@ func __on_match_found(packet: MatchFoundPacket) -> void:
 	print("Match found")
 	if packet.is_first_player:
 		print("We are first")
+		is_first_player = true
 	else:
 		print("We are second")
+		is_first_player = false
 
 
 func send_packet(packet: Packet) -> void:
@@ -117,6 +131,20 @@ func receive_command(msg: String) -> void:
 			unknown_packet.emit(packet)
 		PacketType.GetBoardStateResponse:
 			get_board_state_response.emit(packet)
+		PacketType.OpponentReady:
+			opponent_ready.emit(packet)
+		PacketType.PlayerReady:
+			player_ready.emit(packet)
+		PacketType.DeckMasterInit:
+			if packet.is_you:
+				if packet.valid:
+					deck_master_init.emit(packet)
+				else:
+					assert(false, "deck_master_init failed.")
+			else:
+				RenderOpponentAction.deck_master_init.emit(packet)
+		PacketType.DeckMasterSelected:
+			deck_master_selected.emit(packet)
 		PacketType.Summon:
 			if packet.is_you:
 				if not packet.valid:
@@ -170,6 +198,8 @@ func receive_command(msg: String) -> void:
 
 		PacketType.PassiveUpdate:
 			PassiveManager.update_passive.emit(packet)
+		PacketType.GameStart:
+			game_start.emit(packet)
 
 		var type:
 			assert(false, "Received unhandled packet type '%s'" % type)

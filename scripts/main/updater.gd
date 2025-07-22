@@ -41,7 +41,7 @@ func _ready() -> void:
 		print("--no-copy-back specified. Not performing copy")
 	elif OS.get_cmdline_args().count("--no-update"):
 		# this program is running from the temporary binary
-		await get_tree().create_timer(1).timeout # wait for the parent process to exit and close the file
+		await get_tree().create_timer(1).timeout  # wait for the parent process to exit and close the file
 
 		print("--no-update argument specified. --no-copy-back not specified")
 		print("copying '%s' to '%s'" % [OS.get_executable_path(), normal_executable_name])

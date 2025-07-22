@@ -50,9 +50,11 @@ func _ready() -> void:
 	Global.network_manager.match_found.connect(_on_match_found)
 	request_end_turn.connect(end_turn)
 
+
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("end_turn"):
 		end_turn()
+
 
 func end_turn() -> void:
 	if _opponent_turn:  # Can't end turn when its the opponent's turn ofc
@@ -62,6 +64,7 @@ func end_turn() -> void:
 	for callable in Global.mouse_input_functions:
 		callable.call()
 	VerifyClientAction.player_finished.emit()
+
 
 func player_index():
 	if first_player:

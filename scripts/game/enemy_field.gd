@@ -84,9 +84,9 @@ func _on_attack(packet: AttackPacket) -> void:
 	if target_card.current_slot:  # it did't die
 		assert(target_card.state.shield == packet.target_card.shield)
 
-	atk_card.take_damage(max(target_atk - 1, 0), target_card)
 	if atk_card.current_slot:  # it did't die
 		assert(atk_card.state.shield == packet.attacker_card.shield)
+		atk_card.take_damage(target_card.current_counter_attack_value, target_card)
 
 
 func _apply_ability(
@@ -95,9 +95,7 @@ func _apply_ability(
 	target_position: CardPosition,
 	target_card_state: CardState
 ) -> void:
-	Global.use_enemy_ram.emit(ability.cost)
-
-	Global.use_enemy_ram.emit(ability_card.info.ability.cost)
+	#Global.use_enemy_ram.emit(ability.cost)
 
 	var targets: Array[Card] = []
 
@@ -124,6 +122,8 @@ func _apply_ability(
 				target_position.to_array(), Field.Side.Player
 			)
 			targets.append(player_field.get_slot(target_slot_no).stored_card)
+		Ability.AbilityRange.PLAYER_DECK:
+			targets = []
 		_:  #Sheild and Heal abilities target allies.
 			var target_slot_no := Field.array_to_index(target_position.to_array(), Field.Side.Enemy)
 			var target_card = player_field.get_slot(target_slot_no).stored_card
@@ -144,7 +144,7 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 
 
 func _on_magic(packet: UseMagicCardPacket) -> void:
-	var magic_user: Card = enemy_field.get_slot(packet.hand_pos).stored_card
+	var magic_user := Global.enemy_hand.cards[packet.hand_pos]
 	_apply_ability(magic_user, packet.ability, packet.target_position, packet.target_card)
 	Global.enemy_hand.discard_hand_card_by_hand_pos(packet.hand_pos)
 

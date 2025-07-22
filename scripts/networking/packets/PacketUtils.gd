@@ -28,6 +28,10 @@ static var _type_to_class: Dictionary = {
 	PacketType.GameOver: GameOverPacket,
 	PacketType.PassiveUpdate: PassiveUpdatePacket,
 	PacketType.Keepalive: KeepalivePacket,
+	PacketType.DeckMasterInit: DeckMasterInitPacket,
+	PacketType.DeckMasterSelected: DeckMasterSelectedPacket,
+	PacketType.GameStart: GameStartPacket,
+	PacketType.OpponentReady: OpponentReadyPacket
 }
 
 

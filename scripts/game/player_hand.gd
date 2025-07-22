@@ -11,6 +11,7 @@ func _ready() -> void:
 	MatchManager.action_summon.connect(_on_action_summon)
 	MatchManager.action_magic.connect(_on_action_magic)
 	Global.network_manager.draw_card.connect(_on_draw_card)
+	Global.network_manager.deck_master_init.connect(_on_deck_master_init)
 	Global.player_hand = self
 
 	# Set hand positions
@@ -45,6 +46,9 @@ func add_card(id: int) -> void:
 	cards.append(new_card)
 	new_card.move_and_reanchor(card_positions[cards.size() - 1].global_position)
 
+	#Move the card up to the front of the game tree
+	game.move_child(new_card, -1)
+
 	# Make Hand command available (Summon)
 	new_card.placement = Card.Placement.HAND
 
@@ -52,6 +56,23 @@ func add_card(id: int) -> void:
 func rearrange_player_hand():
 	for i in range(0, cards.size()):
 		cards[i].move_and_reanchor(card_positions[i].global_position)
+
+
+func _on_deck_master_init(packet: DeckMasterInitPacket):
+	var slot_no := Field.array_to_index(packet.position.to_array(), Field.Side.Player)
+	var slot := Global.player_field.get_slot(slot_no)
+
+	# Create new card
+	var deck_master := Card.create_card(game, packet.new_card.id)
+	deck_master.global_position = game.get_node("PlayerDeck").global_position
+	deck_master.flip_card()
+	deck_master.set_slot(slot)
+	deck_master.move_and_reanchor(slot.global_position)
+	deck_master.set_card_visibility()
+
+	Global.player_field.cards.append(deck_master)
+
+	deck_master.placement = Card.Placement.PLAYMAT  # Update card
 
 
 func summon(hand_pos: int, slot_no: int) -> void:
@@ -86,11 +107,22 @@ func summon(hand_pos: int, slot_no: int) -> void:
 ## ranges that is handled includes enemy field, player field, both fields, hands as target
 func _hand_magic() -> void:
 	# TODO: to implement in the future
-	discard_hand_card(selected_card)
+	discard_hand_card(Global.selected_card)
+	Global.selected_card = null
+	Global.card_select_locked = false
 
 
 func _on_card_selected(card: Card) -> void:
-	selected_card = card
+	#Here to keep the player from selecting another card mid action.
+	if Global.card_select_locked:
+		return
+
+	print("hand select")
+
+	Global.card_select_locked = true
+	Global.selected_card = card
+	Global.selected_card_from_hand = true
+
 	card.shift_card_y(-30)
 	card.select()
 	if card.info.card_type == CardStats.CardType.MAGIC:
@@ -107,7 +139,8 @@ func _on_card_unselected(card: Card) -> void:
 	card.unselect()
 
 	if not another_card_selected(card):
-		selected_card = null
+		Global.selected_card = null
+	Global.card_select_locked = false
 
 
 func another_card_selected(card: Card) -> bool:
@@ -123,23 +156,26 @@ func _on_action_summon() -> void:
 
 
 func _on_action_magic() -> void:
-	assert(selected_card.info.card_type == CardStats.CardType.MAGIC, "card should be of type magic")
+	assert(
+		Global.selected_card.info.card_type == CardStats.CardType.MAGIC,
+		"card should be of type magic"
+	)
 
-	match selected_card.info.ability.range:
+	match Global.selected_card.info.ability.range:
 		Ability.AbilityRange.ENEMY_CARD, Ability.AbilityRange.ENEMY_ROW:
 			Global.show_enemy_slots_for_magic.emit()
 		Ability.AbilityRange.ALLY_CARD:
 			Global.show_player_slots_for_magic.emit()
 		_:
 			VerifyClientAction.magic.emit(
-				selected_card.state.id, null, Global.player_hand.get_card_pos(selected_card)
+				Global.selected_card.state.id, null, Global.player_hand.get_card_pos(selected_card)
 			)
 			_hand_magic()
 
 
 func _on_slot_chosen(slot_no: int, _card: Card) -> void:
-	if selected_card:
-		var summoned_card: Card = selected_card
+	if Global.selected_card and Global.selected_card_from_hand:
+		var summoned_card: Card = Global.selected_card
 
 		_on_card_unselected(summoned_card)
 		VerifyClientAction.summon.emit(summoned_card.state.id, Field.index_to_array(slot_no))
@@ -150,6 +186,10 @@ func discard_hand_card(card: Card) -> void:
 	var hand_pos = cards.find(card)
 	assert(hand_pos != -1, "Can't discard a card that doesn't exist")
 	cards.remove_at(hand_pos)
+
+	if Global.selected_card == card:
+		Global.selected_card = null
+		Global.card_select_locked = false
 
 	get_parent().remove_child(card)
 	rearrange_player_hand()

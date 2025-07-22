@@ -12,3 +12,29 @@ func _ready() -> void:
 
 func _on_rule_info(packet: RuleInfoPacket) -> void:
 	card_info_dict = packet.card_id_mapping
+	Global.card_info_received.emit()
+
+
+func get_deck_master_ids() -> Array[int]:
+	var ret: Array[int] = []
+	for c: int in card_info_dict.keys():
+		print(card_info_dict[c])
+		if (
+			card_info_dict[c].card_type == CardStats.CardType.DECK_MASTER
+			and (not is_not_implemented(c))
+		):
+			ret.append(c)
+	return ret
+
+
+#Check if a card's passive or ability has not been implemented.
+func is_not_implemented(id: int) -> bool:
+	return (
+		card_info_dict[id].ability.effect == Ability.AbilityEffect.NOT_IMPLEMENTED
+		or card_info_dict[id].passive.effect == Passive.PassiveEffectType.NOT_IMPLEMENTED
+	)
+
+
+func is_deck_master(id: int) -> bool:
+	assert(id in card_info_dict.keys(), "Could not find card with id: %s" % [id])
+	return card_info_dict[id].card_type == CardStats.CardType.DECK_MASTER

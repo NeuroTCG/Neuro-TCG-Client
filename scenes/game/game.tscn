@@ -24,8 +24,6 @@ scale = Vector2(0.3, 0.3)
 texture = ExtResource("2_rdgcq")
 metadata/_edit_lock_ = true
 
-[node name="HUD" parent="." instance=ExtResource("2_846mn")]
-
 [node name="PlayerHand" parent="." node_paths=PackedStringArray("game") instance=ExtResource("3_tjohb")]
 position = Vector2(431, 566)
 game = NodePath("..")
@@ -37,6 +35,9 @@ game = NodePath("..")
 [node name="EnemyDeck" parent="." instance=ExtResource("4_kbisd")]
 position = Vector2(83, 78)
 rotation = 3.14159
+
+[node name="RamManager" type="Node2D" parent="."]
+script = ExtResource("12_ft7rt")
 
 [node name="PlayerDeck" parent="." instance=ExtResource("4_kbisd")]
 position = Vector2(1069, 571)
@@ -106,9 +107,6 @@ position = Vector2(246, 242)
 rotation = 3.14159
 enemy = true
 
-[node name="RamManager" type="Node2D" parent="."]
-script = ExtResource("12_ft7rt")
-
 [node name="PassiveManager" type="Node2D" parent="."]
 script = ExtResource("13_wjgx5")
 
@@ -137,6 +135,8 @@ offset_right = 186.0
 offset_bottom = 596.0
 grow_horizontal = 0
 grow_vertical = 1
+
+[node name="HUD" parent="." instance=ExtResource("2_846mn")]
 
 [editable path="PlayerField"]
 [editable path="EnemyField"]

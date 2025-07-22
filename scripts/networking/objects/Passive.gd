@@ -2,9 +2,13 @@ class_name Passive
 
 enum PassiveEffectType {
 	NONE,
+	CARD_DISCOUNT,
+	REACH_HP_THRESHOLD,
+	ATTACK_AFTER_ABILITY,
 	NOT_IMPLEMENTED,
 	DRAW_ON_DESTRUCTION,
-	BUFF_ADJACENT,
+	BUFF_ADJACENT, #atk, hp
+	CANNOT_ATTACK
 }
 
 var effect: PassiveEffectType

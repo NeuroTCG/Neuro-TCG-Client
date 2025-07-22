@@ -8,6 +8,7 @@ extends Hand
 func _ready() -> void:
 	RenderOpponentAction.summon.connect(_on_summon)
 	RenderOpponentAction.draw_card.connect(_on_draw_card)
+	RenderOpponentAction.deck_master_init.connect(_on_deck_master_init)
 
 	# Set hand positions
 	for i in range(5):
@@ -46,6 +47,21 @@ func _on_draw_card(packet: DrawCardPacket) -> void:
 	add_card(packet.card_id)
 
 
+func _on_deck_master_init(packet: DeckMasterInitPacket) -> void:
+	var slot_no := Field.array_to_index(packet.position.to_array(), Field.Side.Enemy)
+	var slot := Global.enemy_field.get_slot(slot_no)
+
+	# Create new card
+	var deck_master := Card.create_card(game, packet.new_card.id)
+	deck_master.global_position = game.get_node("EnemyDeck").global_position
+	deck_master.flip_card(true)
+	deck_master.set_slot(slot)
+	deck_master.move_and_reanchor(slot.global_position)
+	deck_master.set_card_visibility()
+
+	deck_master.owned_by_player = false
+
+
 func get_hand_pos_from_id(id: int) -> int:
 	for card in cards:
 		if card.state.id == id:
@@ -75,11 +91,22 @@ func discard_hand_card_by_hand_pos(hand_pos: int) -> void:
 	assert(hand_pos >= 0, "Can't discard a card that doesn't exist")
 
 	var card = cards.pop_at(hand_pos)
+
+	#Make sure to unlock card select
+	if Global.selected_card == card:
+		Global.selected_card = null
+		Global.card_select_locked = false
+
 	get_parent().remove_child(card)
 	rearrange_enemy_hand()
 
 
 func discard_hand_card(card: Card) -> void:
+	#Make sure to unlock card select
+	if Global.selected_card == card:
+		Global.selected_card = null
+		Global.card_select_locked = false
+
 	var hand_pos = cards.find(card)
 	assert(hand_pos != -1, "Can't discard a card that doesn't exist")
 	discard_hand_card_by_hand_pos(hand_pos)

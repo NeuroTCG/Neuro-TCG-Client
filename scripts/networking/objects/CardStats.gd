@@ -22,6 +22,8 @@ var tactics: Array[Tactic]
 var card_type: CardType
 var ability: Ability
 var passive: Passive
+var min_counter_attack: int
+var max_counter_attack: int
 
 
 func _init(
@@ -33,7 +35,9 @@ func _init(
 	_tactics: Array[Tactic],
 	_card_type: CardType,
 	_ability: Ability,
-	_passive: Passive
+	_passive: Passive,
+	_min_counter_attack: int,
+	_max_counter_attack: int
 ) -> void:
 	name = _name
 	graphics = _graphics
@@ -44,6 +48,8 @@ func _init(
 	card_type = _card_type
 	ability = _ability
 	passive = _passive
+	min_counter_attack = _min_counter_attack
+	max_counter_attack = _max_counter_attack
 
 func to_dict() -> Dictionary:
 	return {
@@ -56,6 +62,7 @@ func to_dict() -> Dictionary:
 		"card_type": card_type,
 		"ability": ability.to_dict(),
 		"passive": passive.to_dict(),
+		"max_counter_attack": max_counter_attack
 	}
 
 static func from_dict(d: Dictionary) -> CardStats:
@@ -69,11 +76,13 @@ static func from_dict(d: Dictionary) -> CardStats:
 		CardStats.CardType.get(d["card_type"]),
 		Ability.from_dict(d["ability"]),
 		Passive.from_dict(d["passive"]),
+		d["min_counter_attack"],
+		d["max_counter_attack"]
 	)
 
-static func convert_tactics_to_enum(tactics: Array) -> Array[Tactic]:
+static func convert_tactics_to_enum(_tactics: Array) -> Array[Tactic]:
 	var new_array: Array[Tactic]
-	for str_tactic in tactics:
+	for str_tactic in _tactics:
 		new_array.append(CardStats.Tactic.get(str_tactic))
 
 	return new_array

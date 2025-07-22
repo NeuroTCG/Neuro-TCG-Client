@@ -3,6 +3,8 @@ class_name Hand
 
 const CARD_LENGTH := 31 * 2 + 10
 
+const MAX_HAND_SIZE := 5
+
 @onready var card_positions: Array[Marker2D] = [$Pos1, $Pos2, $Pos3, $Pos4, $Pos5]
 var cards: Array[Card] = []
 

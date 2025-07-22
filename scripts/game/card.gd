@@ -23,8 +23,11 @@ enum Placement {
 
 enum TurnPhase {
 	Done = 0,
-	Action = 1,
-	MoveOrAction = 2,
+	AbilityOnly = 1,
+	AttackOnly = 2,
+	Action = 3,
+	MoveOrAbility = 4,
+	MoveOrAction = 5,
 }
 
 # TODO: remove
@@ -40,6 +43,14 @@ var current_slot: CardSlot
 var current_attack_value: int:
 	get:
 		return info.base_atk + state.attack_bonus
+
+var current_counter_attack_value: int:
+	get:
+		return clamp(current_attack_value - 1, info.min_counter_attack, info.max_counter_attack)
+
+var current_ability_cost: int:
+	get:
+		return info.ability.cost + state.ability_cost_modifier
 
 #region STATUS
 var summon_sickness := false:
@@ -74,6 +85,9 @@ static func create_card(parent_scene: Node2D, id: int) -> Card:
 	var card_info: CardStats = CardStatsManager.card_info_dict[id]
 
 	parent_scene.add_child(new_card)
+
+	#Bring
+	parent_scene.move_child(new_card, -1)
 
 	new_card.state = CardState.fromCardStats(id, card_info)
 	new_card.info = card_info
@@ -141,6 +155,10 @@ func _on_player_finished() -> void:
 			state.sealed_turns_left -= 1
 		if state.sealed_turns_left == 0:
 			seal_sprite.visible = false
+
+		#Refresh Deck Master Abilities
+		if CardStatsManager.is_deck_master(state.id):
+			state.ability_was_used = false
 
 
 func _on_opponent_finished() -> void:
@@ -284,9 +302,14 @@ func apply_ability_to(targets: Array[Card]):
 		Ability.AbilityEffect.ADD_HP:
 			for target in targets:
 				target.add_hp(info.ability.value)
+		Ability.AbilityEffect.ADD_ATTACK_HP:
+			for target in targets:
+				target.add_hp(info.ability.value)
+				target.add_attack(info.ability.value)
 		Ability.AbilityEffect.ATTACK:
 			var atk_value := info.ability.value
 			for target in targets:
+				#assert(false, "player took damage")
 				target.take_damage(current_attack_value, self)
 		Ability.AbilityEffect.SEAL:
 			print("APPLYING SEAL TO CARD")
@@ -297,8 +320,24 @@ func apply_ability_to(targets: Array[Card]):
 			for target in targets:
 				target.set_shield(info.ability.value)
 				print(target.state.shield)
+		Ability.AbilityEffect.DRAW_CARD:
+			#Draw card ability is handled by server
+			targets = []
+		Ability.AbilityEffect.BUFF_SELF_REMOVE_CARD:
+			add_hp(info.ability.value)
+			add_attack(info.ability.value)
+			for target in targets:
+				Global.player_field.destroy_card(target.current_slot.slot_no, target)
 		_:
 			assert(false, "no action for AbilityEffect: %s" % [info.ability.effect])
+
+	if (
+		self in Global.enemy_hand.cards
+		or (current_slot != null and current_slot.slot_no in Global.ENEMY_ROWS)
+	):
+		Global.use_enemy_ram.emit(current_ability_cost)
+	else:
+		Global.use_ram.emit(current_ability_cost)
 
 
 func add_hp(amount: int) -> void:
@@ -322,6 +361,16 @@ func add_attack(amount: int) -> void:
 func sub_attack(amount: int) -> void:
 	assert(amount > 0)
 	state.attack_bonus -= amount
+
+
+func add_ability_cost_modifier(amount: int) -> void:
+	assert(amount > 0)
+	state.ability_cost_modifier += amount
+
+
+func sub_ability_cost_modifier(amount: int) -> void:
+	assert(amount > 0)
+	state.ability_cost_modifier -= amount
 
 
 ## By default sets z index to 0
