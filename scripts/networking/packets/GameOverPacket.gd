@@ -10,10 +10,16 @@ func _init(you_are_winner_: bool):
 
 
 func to_dict() -> Dictionary:
-	return {
-		"type": type,
-		"you_are_winner": you_are_winner,
-	}
+	var dict = super.to_dict()
+	(
+		dict
+		. merge(
+			{
+				"you_are_winner": you_are_winner,
+			}
+		)
+	)
+	return dict
 
 
 static func from_dict(d: Dictionary):

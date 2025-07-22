@@ -32,11 +32,17 @@ func _init(reason_: String, message_: String) -> void:
 
 
 func to_dict() -> Dictionary:
-	return {
-		"type": type,
-		"message": message,
-		"reason": reason,
-	}
+	var dict = super.to_dict()
+	(
+		dict
+		. merge(
+			{
+				"message": message,
+				"reason": reason,
+			}
+		)
+	)
+	return dict
 
 
 static func from_dict(d: Dictionary) -> DisconnectPacket:

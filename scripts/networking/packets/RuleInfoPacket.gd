@@ -10,10 +10,16 @@ func _init(card_id_mapping_: Dictionary) -> void:
 
 
 func to_dict() -> Dictionary:
-	return {
-		"type": type,
-		"card_id_mapping": card_id_mapping,
-	}
+	var dict = super.to_dict()
+	(
+		dict
+		. merge(
+			{
+				"card_id_mapping": card_id_mapping,
+			}
+		)
+	)
+	return dict
 
 
 static func from_dict(d: Dictionary) -> RuleInfoPacket:

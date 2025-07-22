@@ -1,6 +1,6 @@
 class_name UseAbilityPacket
 
-extends Packet
+extends PacketWithResponseId
 
 var is_you: bool
 var valid: bool
@@ -11,6 +11,7 @@ var ability_card: CardState
 
 
 func _init(
+	response_id_: int,
 	is_you_: bool,
 	valid_: bool,
 	target_position_: CardPosition,
@@ -18,7 +19,7 @@ func _init(
 	target_card_: CardState,
 	attacker_card_: CardState
 ) -> void:
-	super(PacketType.UseAbility)
+	super(PacketType.UseAbility, response_id_)
 	is_you = is_you_
 	valid = valid_
 	target_position = target_position_
@@ -28,19 +29,26 @@ func _init(
 
 
 func to_dict() -> Dictionary:
-	return {
-		"type": type,
-		"is_you": is_you,
-		"valid": valid,
-		"target_position": target_position.to_array(),
-		"ability_position": ability_position.to_array(),
-		"target_card": target_card.to_dict(),
-		"ability_card": ability_card.to_dict(),
-	}
+	var dict := super.to_dict()
+	(
+		dict
+		. merge(
+			{
+				"is_you": is_you,
+				"valid": valid,
+				"target_position": target_position.to_array(),
+				"ability_position": ability_position.to_array(),
+				"target_card": target_card.to_dict(),
+				"ability_card": ability_card.to_dict(),
+			}
+		)
+	)
+	return dict
 
 
 static func from_dict(d: Dictionary) -> UseAbilityPacket:
 	return UseAbilityPacket.new(
+		d["response_id"],
 		d["is_you"],
 		d["valid"],
 		CardPosition.from_array(d["target_position"]),

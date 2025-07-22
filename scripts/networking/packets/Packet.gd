@@ -9,5 +9,13 @@ func _init(type_: String) -> void:
 
 
 func to_dict() -> Dictionary:
-	assert(false, "Abstract method 'to_dict' was called on Packet. Please override it.")
-	return {}
+	return {"type": type}
+
+
+static var last_response_id: int = 0
+
+
+static func next_response_id() -> int:
+	var tmp = last_response_id
+	last_response_id += 1
+	return tmp

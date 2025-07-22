@@ -11,5 +11,10 @@ func _init(d: Dictionary):
 		updates.append(CardActionList.from_dict(u))
 
 
+func to_dict():
+	# if you need this, you need to write it
+	assert(false, "Not yet implemented")
+
+
 static func from_dict(d: Dictionary) -> PassiveUpdatePacket:
 	return PassiveUpdatePacket.new(d)
