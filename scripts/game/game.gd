@@ -24,6 +24,7 @@ func _on_game_over(packet: GameOverPacket) -> void:
 func _on_disconnect(packet: DisconnectPacket) -> void:
 	load_game_over("Disconnect packet received: %s (%s)" % [packet.message, packet.reason])
 
+
 func _on_connection_failed(url: String, error: String) -> void:
 	load_game_over("Connection to %s failed: %s" % [url, error])
 
