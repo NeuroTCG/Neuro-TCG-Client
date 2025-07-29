@@ -14,14 +14,24 @@ func _init(_is_you: bool, _valid: bool, _position: CardPosition, _new_card: Card
 	position = _position
 	new_card = _new_card
 
+
 func to_dict() -> Dictionary:
-	return {
-		"type":type,
-		"is_you":is_you,
-		"valid": valid,
-		"position": position.to_array(),
-		"new_card": new_card.to_dict()
-	}
+	var dict = super.to_dict()
+	dict.merge(
+		{
+			"is_you": is_you,
+			"valid": valid,
+			"position": position.to_array(),
+			"new_card": new_card.to_dict()
+		}
+	)
+	return dict
+
 
 static func from_dict(d: Dictionary) -> DeckMasterInitPacket:
-	return DeckMasterInitPacket.new(d["is_you"], d["valid"], CardPosition.from_array(d["position"]), CardState.from_dict(d["new_card"]))
+	return DeckMasterInitPacket.new(
+		d["is_you"],
+		d["valid"],
+		CardPosition.from_array(d["position"]),
+		CardState.from_dict(d["new_card"])
+	)

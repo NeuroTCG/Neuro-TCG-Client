@@ -7,9 +7,9 @@ func _init() -> void:
 
 
 func to_dict() -> Dictionary:
-	return {
-		"type": type,
-	}
+	var dict = super.to_dict()
+	dict.merge({})
+	return dict
 
 
 static func from_dict(_d: Dictionary) -> void:

@@ -66,7 +66,6 @@ var placement := Placement.DECK:
 		return placement
 var mouse_over := false
 var selected := false
-# Card is sealed at any level higher then 0.
 
 var dont_show_view := false
 #endregion
@@ -86,7 +85,6 @@ static func create_card(parent_scene: Node2D, id: int) -> Card:
 
 	parent_scene.add_child(new_card)
 
-	#Bring
 	parent_scene.move_child(new_card, -1)
 
 	new_card.state = CardState.fromCardStats(id, card_info)
@@ -275,10 +273,11 @@ func set_seal(num_turns: int) -> void:
 	seal_sprite.visible = num_turns > 0
 
 
+## returns true if the card died
 func take_damage(
 	amount: int,
 	attacker: Card = null,
-) -> void:
+) -> bool:
 	assert(amount >= 0)
 
 	#var dmg_event_info = DamageEventInfo.new(attacker, self, amount, source)
@@ -288,13 +287,15 @@ func take_damage(
 
 		if state.shield == 0:
 			shield_sprite.visible = false
-		return
+		return false
 
 	state.health -= amount
+	render_attack(state.health)
 	if state.health <= 0:
 		Global.player_field.destroy_card(current_slot.slot_no, self)
+		return true
 
-	render_attack(state.health)
+	return false
 
 
 func apply_ability_to(targets: Array[Card]):

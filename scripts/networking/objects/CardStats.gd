@@ -51,6 +51,7 @@ func _init(
 	min_counter_attack = _min_counter_attack
 	max_counter_attack = _max_counter_attack
 
+
 func to_dict() -> Dictionary:
 	return {
 		"name": name,
@@ -64,6 +65,7 @@ func to_dict() -> Dictionary:
 		"passive": passive.to_dict(),
 		"max_counter_attack": max_counter_attack
 	}
+
 
 static func from_dict(d: Dictionary) -> CardStats:
 	return CardStats.new(
@@ -79,6 +81,7 @@ static func from_dict(d: Dictionary) -> CardStats:
 		d["min_counter_attack"],
 		d["max_counter_attack"]
 	)
+
 
 static func convert_tactics_to_enum(_tactics: Array) -> Array[Tactic]:
 	var new_array: Array[Tactic]

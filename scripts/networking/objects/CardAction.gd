@@ -6,7 +6,9 @@ var amount: int
 var other_args: Dictionary
 
 
-func _init(_action_name: String, _targets: Array[CardActionTarget], _amount: int, _other_args: Dictionary):
+func _init(
+	_action_name: String, _targets: Array[CardActionTarget], _amount: int, _other_args: Dictionary
+):
 	action_name = _action_name
 	targets = _targets
 	amount = _amount

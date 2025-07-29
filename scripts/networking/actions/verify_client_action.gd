@@ -1,61 +1,63 @@
 extends Node
 
-signal summon(card_id: int, position: Array)
-signal magic(card_id: int, target_position: Array, hand_pos: int)
-signal attack(card_id: int, target_position: Array, attacker_position: Array)
-signal switch(pos1: Array, pos2: Array)
-signal ability(target_position: Array, ability_position: Array)
-
 signal player_finished
 
 
 func _ready() -> void:
-	summon.connect(_on_summon)
-	magic.connect(_on_magic)
-	attack.connect(_on_attack)
 	player_finished.connect(_on_player_finished)
-	switch.connect(_on_switch)
-	ability.connect(_on_ability)
 
 
-func _on_summon(card_id: int, position: Array[int]) -> void:
+func summon(card_id: int, position: Array[int]) -> bool:
 	print("Summon")
-	Global.network_manager.send_packet(
-		SummonRequestPacket.new(card_id, CardPosition.from_array(position))
-	)
-
-
-func _on_magic(card_id: int, target_position: Array[int], hand_pos: int) -> void:
-	print("Magic")
-	Global.network_manager.send_packet(
-		UseMagicCardRequestPacket.new(card_id, CardPosition.from_array(target_position), hand_pos)
-	)
-
-
-func _on_attack(_card_id: int, target_pos: Array[int], attack_pos: Array[int]) -> void:
-	print("Attack")
-	Global.network_manager.send_packet(
-		AttackRequestPacket.new(
-			CardPosition.from_array(target_pos), CardPosition.from_array(attack_pos)
+	var response: SummonPacket = await Global.network_manager.send_packet_and_await_response(
+		SummonRequestPacket.new(
+			Packet.next_response_id(), card_id, CardPosition.from_array(position)
 		)
 	)
+	return response.valid
+
+
+func magic(card_id: int, target_position: CardPosition, hand_pos: int) -> bool:
+	print("Magic")
+	var response: UseMagicCardPacket = await Global.network_manager.send_packet_and_await_response(
+		UseMagicCardRequestPacket.new(Packet.next_response_id(), card_id, target_position, hand_pos)
+	)
+	return response.valid
+
+
+func attack(_card_id: int, target_pos: Array[int], attack_pos: Array[int]) -> AttackPacket:
+	print("Attack")
+	var response: AttackPacket = await Global.network_manager.send_packet_and_await_response(
+		AttackRequestPacket.new(
+			Packet.next_response_id(),
+			CardPosition.from_array(target_pos),
+			CardPosition.from_array(attack_pos)
+		)
+	)
+	return response
 
 
 func _on_player_finished() -> void:
 	Global.network_manager.send_packet(EndTurnPacket.new())
 
 
-func _on_switch(pos1: Array[int], pos2: Array[int]) -> void:
+func switch(pos1: Array[int], pos2: Array[int]) -> bool:
 	print("Switch")
-	Global.network_manager.send_packet(
-		SwitchPlaceRequestPacket.new(CardPosition.from_array(pos1), CardPosition.from_array(pos2))
-	)
-
-
-func _on_ability(target_pos: Array[int], ability_pos: Array[int]) -> void:
-	print("Ability")
-	Global.network_manager.send_packet(
-		UseAbilityRequestPacket.new(
-			CardPosition.from_array(target_pos), CardPosition.from_array(ability_pos)
+	var response: SwitchPlacePacket = await Global.network_manager.send_packet_and_await_response(
+		SwitchPlaceRequestPacket.new(
+			Packet.next_response_id(), CardPosition.from_array(pos1), CardPosition.from_array(pos2)
 		)
 	)
+	return response.valid
+
+
+func ability(target_pos: Array[int], ability_pos: Array[int]) -> bool:
+	print("Ability")
+	var response: UseAbilityPacket = await Global.network_manager.send_packet_and_await_response(
+		UseAbilityRequestPacket.new(
+			Packet.next_response_id(),
+			CardPosition.from_array(target_pos),
+			CardPosition.from_array(ability_pos)
+		)
+	)
+	return response.valid

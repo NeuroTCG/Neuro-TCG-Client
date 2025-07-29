@@ -1,5 +1,5 @@
 class_name SummonPacket
-extends Packet
+extends PacketWithResponseId
 
 var valid: bool
 var is_you: bool
@@ -9,9 +9,14 @@ var new_ram: int
 
 
 func _init(
-	is_you_: bool, valid_: bool, position_: CardPosition, new_card_: CardState, new_ram_: int
+	response_id_: int,
+	is_you_: bool,
+	valid_: bool,
+	position_: CardPosition,
+	new_card_: CardState,
+	new_ram_: int
 ) -> void:
-	super(PacketType.Summon)
+	super(PacketType.Summon, response_id_)
 	is_you = is_you_
 	valid = valid_
 	position = position_
@@ -20,18 +25,25 @@ func _init(
 
 
 func to_dict() -> Dictionary:
-	return {
-		"type": type,
-		"is_you": is_you,
-		"valid": valid,
-		"position": position.to_array(),
-		"new_card": new_card.to_dict(),
-		"new_ram": new_ram,
-	}
+	var dict := super.to_dict()
+	(
+		dict
+		. merge(
+			{
+				"is_you": is_you,
+				"valid": valid,
+				"position": position.to_array(),
+				"new_card": new_card.to_dict(),
+				"new_ram": new_ram,
+			}
+		)
+	)
+	return dict
 
 
 static func from_dict(d: Dictionary) -> SummonPacket:
 	return SummonPacket.new(
+		d["response_id"],
 		d["is_you"],
 		d["valid"],
 		CardPosition.from_array(d["position"]),

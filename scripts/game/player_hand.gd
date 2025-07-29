@@ -27,7 +27,7 @@ func _process(_delta) -> void:
 
 	if Input.is_action_just_pressed("draw_card") and cards.size() < 5:
 		print("Is opponent turn is ", MatchManager._opponent_turn)
-		Global.network_manager.send_packet(DrawCardRequestPacket.new())
+		Global.network_manager.send_packet(DrawCardRequestPacket.new(Packet.next_response_id()))
 
 
 func _on_draw_card(packet: DrawCardPacket) -> void:
@@ -167,8 +167,12 @@ func _on_action_magic() -> void:
 		Ability.AbilityRange.ALLY_CARD:
 			Global.show_player_slots_for_magic.emit()
 		_:
-			VerifyClientAction.magic.emit(
-				Global.selected_card.state.id, null, Global.player_hand.get_card_pos(selected_card)
+			assert(
+				await VerifyClientAction.magic(
+					Global.selected_card.state.id,
+					null,
+					Global.player_hand.get_card_pos(selected_card)
+				)
 			)
 			_hand_magic()
 
@@ -178,7 +182,10 @@ func _on_slot_chosen(slot_no: int, _card: Card) -> void:
 		var summoned_card: Card = Global.selected_card
 
 		_on_card_unselected(summoned_card)
-		VerifyClientAction.summon.emit(summoned_card.state.id, Field.index_to_array(slot_no))
+		assert(
+			await VerifyClientAction.summon(summoned_card.state.id, Field.index_to_array(slot_no))
+		)
+
 		summon(cards.find(summoned_card), slot_no)
 
 

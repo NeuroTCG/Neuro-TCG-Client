@@ -12,7 +12,9 @@ func _init(_playerIdx: int, _position: CardPosition, _state: CardState):
 
 
 static func from_dict(d: Dictionary) -> CardData:
-	return CardData.new(d["playerIdx"], CardPosition.from_array(d["position"]), CardState.from_dict(d["state"]))
+	return CardData.new(
+		d["playerIdx"], CardPosition.from_array(d["position"]), CardState.from_dict(d["state"])
+	)
 
 
 func _to_string() -> String:

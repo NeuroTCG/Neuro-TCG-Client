@@ -10,10 +10,16 @@ func _init(message_: String) -> void:
 
 
 func to_dict() -> Dictionary:
-	return {
-		"type": type,
-		"message": message,
-	}
+	var dict = super.to_dict()
+	(
+		dict
+		. merge(
+			{
+				"message": message,
+			}
+		)
+	)
+	return dict
 
 
 static func from_dict(d: Dictionary) -> UnknownPacketPacket:

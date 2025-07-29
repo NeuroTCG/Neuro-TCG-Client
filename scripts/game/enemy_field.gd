@@ -77,16 +77,11 @@ func _on_attack(packet: AttackPacket) -> void:
 	var target_card := player_field.get_slot(target_slot_no).stored_card
 	var atk_card := player_field.get_slot(atk_slot_no).stored_card
 
-	# take_damage deletes the card if it dies so it may not exist after
-	var target_atk := target_card.current_attack_value
-
-	target_card.take_damage(atk_card.current_attack_value, atk_card)
-	if target_card.current_slot:  # it did't die
+	if not target_card.take_damage(atk_card.current_attack_value, atk_card):
 		assert(target_card.state.shield == packet.target_card.shield)
 
-	if atk_card.current_slot:  # it did't die
+	if not atk_card.take_damage(target_card.current_counter_attack_value, target_card):
 		assert(atk_card.state.shield == packet.attacker_card.shield)
-		atk_card.take_damage(target_card.current_counter_attack_value, target_card)
 
 
 func _apply_ability(
