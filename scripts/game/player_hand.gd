@@ -169,7 +169,7 @@ func _on_action_magic() -> void:
 		_:
 			assert(
 				await VerifyClientAction.magic(
-					Global.selected_card.state.id,
+					Global.selected_card.state,
 					null,
 					Global.player_hand.get_card_pos(selected_card)
 				)
@@ -183,7 +183,7 @@ func _on_slot_chosen(slot_no: int, _card: Card) -> void:
 
 		_on_card_unselected(summoned_card)
 		assert(
-			await VerifyClientAction.summon(summoned_card.state.id, Field.index_to_array(slot_no))
+			await VerifyClientAction.summon(summoned_card.state, Field.index_to_array(slot_no))
 		)
 
 		summon(cards.find(summoned_card), slot_no)

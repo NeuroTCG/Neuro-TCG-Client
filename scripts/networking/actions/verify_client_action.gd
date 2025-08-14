@@ -7,20 +7,20 @@ func _ready() -> void:
 	player_finished.connect(_on_player_finished)
 
 
-func summon(card_id: int, position: Array[int]) -> bool:
+func summon(card_state: CardState, position: Array[int]) -> bool:
 	print("Summon")
 	var response: SummonPacket = await Global.network_manager.send_packet_and_await_response(
 		SummonRequestPacket.new(
-			Packet.next_response_id(), card_id, CardPosition.from_array(position)
+			Packet.next_response_id(), card_state, CardPosition.from_array(position)
 		)
 	)
 	return response.valid
 
 
-func magic(card_id: int, target_position: CardPosition, hand_pos: int) -> bool:
+func magic(card_state: CardState, target_position: CardPosition, hand_pos: int) -> bool:
 	print("Magic")
 	var response: UseMagicCardPacket = await Global.network_manager.send_packet_and_await_response(
-		UseMagicCardRequestPacket.new(Packet.next_response_id(), card_id, target_position, hand_pos)
+		UseMagicCardRequestPacket.new(Packet.next_response_id(), card_state, target_position, hand_pos)
 	)
 	return response.valid
 

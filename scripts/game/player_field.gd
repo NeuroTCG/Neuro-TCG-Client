@@ -214,7 +214,7 @@ func _verify_ability_or_magic(
 		MatchManager.Actions.MAGIC:
 			assert(
 				await VerifyClientAction.magic(
-					source.state.id,
+					source.state,
 					null if target_slot == null else CardPosition.from_array(target_slot),
 					Global.player_hand.get_card_pos(source)
 				)

@@ -1,13 +1,13 @@
 extends PacketWithResponseId
 class_name SummonRequestPacket
 
-var card_id: int
+var card_state: CardState
 var position: CardPosition
 
 
-func _init(response_id_: int, card_id_: int, position_: CardPosition) -> void:
+func _init(response_id_: int, card_state_: CardState, position_: CardPosition) -> void:
 	super(PacketType.SummonRequest, response_id_)
-	card_id = card_id_
+	card_state = card_state_
 	position = position_
 
 
@@ -18,7 +18,7 @@ func to_dict() -> Dictionary:
 		dict
 		. merge(
 			{
-				"card_id": card_id,
+				"card_state": card_state.to_dict(),
 				"position": position.to_array(),
 			}
 		)
@@ -29,5 +29,5 @@ func to_dict() -> Dictionary:
 
 static func from_dict(d: Dictionary) -> SummonRequestPacket:
 	return SummonRequestPacket.new(
-		d["response_id"], d["card_id"], CardPosition.from_array(d["position"])
+		d["response_id"], CardState.from_dict(["card_state"]), CardPosition.from_array(d["position"])
 	)
