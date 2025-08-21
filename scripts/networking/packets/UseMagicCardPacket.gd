@@ -6,7 +6,7 @@ var is_you: bool
 var hand_pos: int
 var ability: Ability
 var target_position: CardPosition
-var target_card: CardState
+var target_card: CardData
 
 
 func _init(
@@ -16,7 +16,7 @@ func _init(
 	hand_pos_: int,
 	ability_: Ability,
 	target_position_: CardPosition,
-	target_card_: CardState
+	target_card_: CardData
 ) -> void:
 	super(PacketType.UseMagicCard, response_id_)
 	is_you = is_you_
@@ -53,5 +53,5 @@ static func from_dict(d: Dictionary) -> UseMagicCardPacket:
 		d["hand_pos"],
 		Ability.from_dict(d["ability"]),
 		CardPosition.from_array(d["target_position"]),
-		CardState.from_dict(d["target_card"])
+		CardData.from_dict(d["target_card"])
 	)

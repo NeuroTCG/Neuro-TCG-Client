@@ -50,7 +50,7 @@ var current_counter_attack_value: int:
 
 var current_ability_cost: int:
 	get:
-		return info.ability.cost + state.ability_cost_modifier
+		return info.ability.cost - state.ability_cost_modifier
 
 #region STATUS
 var summon_sickness := false:
@@ -148,7 +148,10 @@ func _on_mouse_clicked() -> void:
 func _on_player_finished() -> void:
 	if owned_by_player:
 		summon_sickness = false
-		state.phase = TurnPhase.MoveOrAction
+		if (Global.player_hand.cards.has(self)):
+			state.phase = TurnPhase.Done
+		else:
+			state.phase = TurnPhase.MoveOrAction
 		if state.sealed_turns_left > 0:
 			state.sealed_turns_left -= 1
 		if state.sealed_turns_left == 0:
@@ -340,6 +343,24 @@ func apply_ability_to(targets: Array[Card]):
 	else:
 		Global.use_ram.emit(current_ability_cost)
 
+
+func get_card_position() -> CardPosition:
+	if (placement == Placement.HAND):
+		var hand: Hand = null
+		if owned_by_player:
+			hand = Global.player_hand
+		else:
+			hand = Global.enemy_hand
+		return CardPosition.new(-1, hand.cards.find(self))
+	elif (placement == Placement.PLAYMAT):
+		var field: Field = null
+		if owned_by_player:
+			field = Global.player_field
+		else:
+			field = Global.enemy_field
+		return CardPosition.from_array(field.get_slot_array(self))
+	else:
+		return null
 
 func add_hp(amount: int) -> void:
 	assert(amount > 0)

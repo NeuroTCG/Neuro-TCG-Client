@@ -163,7 +163,7 @@ func _on_action_attack() -> void:
 # TODO: either rename this if it only checks for ram or merge it with other stuff
 func _on_action_ability() -> void:
 	var player_ram := Global.ram_manager.player_ram
-	if selected_slot.stored_card.info.ability.cost > player_ram:
+	if selected_slot.stored_card.current_ability_cost > player_ram:
 		Global.notice.emit("Insufficent Ram to use this ability!")
 		return
 
@@ -214,7 +214,7 @@ func _verify_ability_or_magic(
 		MatchManager.Actions.MAGIC:
 			assert(
 				await VerifyClientAction.magic(
-					source.state,
+					source,
 					null if target_slot == null else CardPosition.from_array(target_slot),
 					Global.player_hand.get_card_pos(source)
 				)

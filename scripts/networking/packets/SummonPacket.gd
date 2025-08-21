@@ -4,7 +4,7 @@ extends PacketWithResponseId
 var valid: bool
 var is_you: bool
 var position: CardPosition
-var new_card: CardState
+var new_card: CardData
 var new_ram: int
 
 
@@ -13,7 +13,7 @@ func _init(
 	is_you_: bool,
 	valid_: bool,
 	position_: CardPosition,
-	new_card_: CardState,
+	new_card_: CardData,
 	new_ram_: int
 ) -> void:
 	super(PacketType.Summon, response_id_)
@@ -47,6 +47,6 @@ static func from_dict(d: Dictionary) -> SummonPacket:
 		d["is_you"],
 		d["valid"],
 		CardPosition.from_array(d["position"]),
-		CardState.from_dict(d["new_card"]),
+		CardData.from_dict(d["new_card"]),
 		d["new_ram"]
 	)

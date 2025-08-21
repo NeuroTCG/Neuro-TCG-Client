@@ -140,7 +140,7 @@ func _on_ability(packet: UseAbilityPacket) -> void:
 
 func _on_magic(packet: UseMagicCardPacket) -> void:
 	var magic_user := Global.enemy_hand.cards[packet.hand_pos]
-	_apply_ability(magic_user, packet.ability, packet.target_position, packet.target_card)
+	_apply_ability(magic_user, packet.ability, packet.target_position, packet.target_card.state)
 	Global.enemy_hand.discard_hand_card_by_hand_pos(packet.hand_pos)
 
 #endregion

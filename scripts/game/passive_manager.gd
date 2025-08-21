@@ -35,24 +35,28 @@ func _on_passive_update(packet: PassiveUpdatePacket):
 					)
 				CardActionNames.DRAW_CARD:
 					handle_draw_card_action(user, action)
+				CardActionNames.ADD_ABILITY_COST_MODIFIER:
+					handle_add_ability_cost_modifier(user, action)
+				CardActionNames.SUB_ABILITY_COST_MODIFIER:
+					handle_sub_ability_cost_modifier(user, action)
 				var name:
 					assert(false, "unknown action name was received from packet. %s" % [name])
 
 
-func get_hand(card_idx: int) -> Hand:
+func get_hand(card_player_idx: int) -> Hand:
 	var my_index = MatchManager.player_index()
 	var hand: Hand = null
-	if my_index == card_idx:
+	if my_index == card_player_idx:
 		hand = Global.player_hand
 	else:
 		hand = Global.enemy_hand
 	return hand
 
 
-func get_field(card_idx: int) -> Field:
+func get_field(card_player_idx: int) -> Field:
 	var my_index = MatchManager.player_index()
 	var field: Field = null
-	if my_index == card_idx:
+	if my_index == card_player_idx:
 		field = Global.player_field
 	else:
 		field = Global.enemy_field
@@ -76,6 +80,11 @@ func get_card_from_data(card_data: CardData) -> Card:
 
 
 func get_card_from_target(card_target: CardActionTarget) -> Card:
+	#If the target is a card in the hand, then the row will be -1
+	if (card_target.position.row == -1):
+		var hand: Hand = get_hand(card_target.playerIdx)
+		return hand.cards[card_target.position.column]
+
 	var field = get_field(card_target.playerIdx)
 	var side = get_side_of_field(field)
 	var target_slot := field.get_slot(field.array_to_index(card_target.position.to_array(), side))
@@ -118,14 +127,14 @@ func handle_add_ability_cost_modifier(user: CardData, action: CardAction):
 	for target: CardActionTarget in action.targets:
 		var target_card: Card = get_card_from_target(target)
 		target_card.add_ability_cost_modifier(action.amount)
-		print("set attack to: %s" % [target_card.current_attack_value])
+		print("set ability cost modifier to: %s" % [target_card.current_attack_value])
 
 
 func handle_sub_ability_cost_modifier(user: CardData, action: CardAction):
 	for target: CardActionTarget in action.targets:
 		var target_card: Card = get_card_from_target(target)
 		target_card.sub_ability_cost_modifier(action.amount)
-		print("set attack to: %s" % [target_card.current_attack_value])
+		print("ability cost modifier to: %s" % [target_card.current_attack_value])
 
 
 func handle_set_phase(user: CardData, action: CardAction):

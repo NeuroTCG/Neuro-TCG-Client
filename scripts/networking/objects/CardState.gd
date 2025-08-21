@@ -52,7 +52,7 @@ func _to_string() -> String:
 
 
 static func fromCardStats(id_: int, stats: CardStats) -> CardState:
-	return CardState.new(id_, stats.max_hp, false, Card.TurnPhase.MoveOrAction, 0, 0)
+	return CardState.new(id_, stats.max_hp, false, Card.TurnPhase.Done, 0, 0)
 
 
 # NOTE: no type because godot doesn't have a way to write nullable types

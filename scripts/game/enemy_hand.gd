@@ -28,7 +28,7 @@ func _on_summon(packet: SummonPacket) -> void:
 
 	var slot_no := Field.array_to_index(packet.position.to_array(), Field.Side.Enemy)
 	var slot := Global.enemy_field.get_slot(slot_no)
-	var hand_pos := get_hand_pos_from_id(packet.new_card.id)
+	var hand_pos := get_hand_pos_from_id(packet.new_card.state.id)
 	var summon_card: Card = cards.pop_at(hand_pos)
 
 	# Shift all cards right of summoned card
