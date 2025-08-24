@@ -198,7 +198,7 @@ func handle_draw_card_ability() -> void:
 	selected_card.state.ability_was_used = true
 	selected_card.apply_ability_to([])
 
-	assert(await VerifyClientAction.emit(card_as_array, card_as_array))
+	assert(await VerifyClientAction.ability(card_as_array, card_as_array))
 
 
 #region ON SLOT CHOSEN

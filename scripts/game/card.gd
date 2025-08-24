@@ -314,7 +314,8 @@ func apply_ability_to(targets: Array[Card]):
 			var atk_value := info.ability.value
 			for target in targets:
 				#assert(false, "player took damage")
-				target.take_damage(current_attack_value, self)
+				# TODO: Verify if attack modifiers apply to ability attack values as well.
+				target.take_damage(atk_value, self)
 		Ability.AbilityEffect.SEAL:
 			print("APPLYING SEAL TO CARD")
 			for target in targets:
