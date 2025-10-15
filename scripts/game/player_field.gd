@@ -130,6 +130,7 @@ func _on_card_selected(card: Card) -> void:
 func _on_card_unselected(card: Card) -> void:
 	card.hide_buttons()
 	card.unselect()
+	Global.hide_all_slots()
 
 	# If another card has been selected,
 	# Update these values from the _on_card_selected

@@ -87,6 +87,11 @@ var game_over_template = preload("res://scenes/ui/game_over.tscn")
 
 func reset_values():
 	Global.card_select_locked = false
+	
+#Disable any active slots on the game board. 
+func hide_all_slots():
+	Global.player_field.hide_slots()
+	Global.enemy_field.hide_slots()
 
 
 func _process(_delta: float) -> void:
