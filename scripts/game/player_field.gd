@@ -36,6 +36,7 @@ func _ready() -> void:
 
 #region SHOW SLOT
 func show_slots_for_summon() -> void:
+	Global.hide_enemy_cards.emit()
 	for slot in get_children():
 		if not slot is CardSlot:
 			continue
@@ -47,6 +48,7 @@ func show_slots_for_summon() -> void:
 
 
 func show_slots_for_transfer() -> void:
+	Global.hide_enemy_cards.emit()
 	for slot in get_children():
 		if not slot is CardSlot:
 			continue

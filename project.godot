@@ -35,10 +35,6 @@ CardActionNames="*res://scripts/game/CardActionNames.gd"
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
-[editor]
-
-run/main_run_args="--server-url 127.0.0.1:9933"
-
 [gui]
 
 theme/custom="res://assets/Themes/Default-UI.tres"
