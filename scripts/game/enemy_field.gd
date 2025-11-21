@@ -27,6 +27,7 @@ func _ready() -> void:
 
 #region SHOW SLOTS
 func show_slots_for_attack(card: Card) -> void:
+	Global.hide_player_slots.emit()
 	for slot in get_children():
 		if not slot is CardSlot:
 			continue
@@ -41,6 +42,7 @@ func show_slots_for_attack(card: Card) -> void:
 
 
 func show_slots_for_direct_attack() -> void:
+	Global.hide_player_slots.emit()
 	for slot in get_children():
 		if not slot is CardSlot:
 			continue
