@@ -27,9 +27,7 @@ func _ready() -> void:
 
 
 func _on_show_shortcuts(shortcuts: PackedStringArray) -> void:
-	for shortcut in shortcuts:
-		shortcuts_label.text += shortcut
-	shortcuts_label.text.rstrip(",")
+	shortcuts_label.text = ", ".join(shortcuts)
 
 
 func _on_hide_shortcuts() -> void:
