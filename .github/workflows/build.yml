@@ -117,6 +117,11 @@ jobs:
           EXPORT_DIR="$(readlink -f build)"
           cd $PROJECT_PATH
           godot --headless --verbose --export-release "web" "$EXPORT_DIR/web/index.html"
+          LAST_PWD=$PWD
+          TOOLS_DIR=$PWD/tools/
+          cd $EXPORT_DIR/web/
+          bash $TOOLS_DIR/rename_hashed.sh
+          cd $LAST_PWD
       - name: Setup nodejs
         run: |
           apt update

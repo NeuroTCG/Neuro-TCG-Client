@@ -210,19 +210,23 @@ func show_buttons(actions: Array) -> void:
 	for button in buttons.get_children():
 		if button.button_action in actions:
 			button.visible = true
-			match button.button_action:
-				MatchManager.Actions.SUMMON:
-					shortcut_strings.append("S: Summon, ")
-				MatchManager.Actions.SWITCH:
-					shortcut_strings.append("W: Switch, ")
-				MatchManager.Actions.ATTACK:
-					shortcut_strings.append("A: Attack, ")
-				MatchManager.Actions.ABILITY:
-					shortcut_strings.append("E: Ability, ")
-				MatchManager.Actions.VIEW:
-					shortcut_strings.append("V: View, ")
-				MatchManager.Actions.MAGIC:
-					shortcut_strings.append("M: Magic, ")
+			if (button as ActionChoiceButton).update_conditions():
+				match button.button_action:
+					MatchManager.Actions.SUMMON:
+						shortcut_strings.append("S: Summon")
+					MatchManager.Actions.SWITCH:
+						shortcut_strings.append("W: Switch")
+					MatchManager.Actions.ATTACK:
+						shortcut_strings.append("A: Attack")
+					MatchManager.Actions.ABILITY:
+						shortcut_strings.append("E: Ability")
+					MatchManager.Actions.VIEW:
+						shortcut_strings.append("V: View")
+					MatchManager.Actions.MAGIC:
+						shortcut_strings.append("M: Magic")
+					_:
+						assert(false, "Unhandled card action")
+
 		else:
 			button.visible = false
 
