@@ -212,7 +212,7 @@ func _verify_ability_or_magic(
 ) -> void:
 	match action:
 		MatchManager.Actions.ABILITY:
-			assert(await VerifyClientAction.ability(get_slot_array(source), target_slot))
+			assert(await VerifyClientAction.ability(target_slot, get_slot_array(source)))
 
 		MatchManager.Actions.MAGIC:
 			assert(
@@ -287,6 +287,7 @@ func _on_slot_chosen(slot_no: int, card_in_slot: Card) -> void:
 		var target_card_pos_array := get_slot_array(card_in_slot)
 
 		ability_card.apply_ability_to(ability_targets)
+
 
 		assert(
 			await VerifyClientAction.ability(target_card_pos_array, get_slot_array(ability_card))
@@ -367,6 +368,8 @@ func _on_enemy_slot_chosen(enemy_slot_no: int, enemy_card: Card) -> void:
 		_verify_ability_or_magic(
 			MatchManager.current_action, player_card, index_to_array(enemy_slot_no)
 		)
+		
+		player_card.state.ability_was_used = true
 
 
 #endregion
